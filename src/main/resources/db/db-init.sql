@@ -9,7 +9,8 @@ create table bonuses(
     name varchar(60) unique not null,
     description text,
     price int default 1 check(price > 0),
-    time_of_end timestamp
+    count int default 1 check(count > 0),
+    time_of_end timestamp not null
 );
 
 create table accounts(
@@ -77,9 +78,9 @@ create table accounts_groups(
     group_id bigint references groups(id)
 );
 
-create table accounts_transactions(
+create table cards_transactions(
     id bigserial primary key,
-    account_id bigint references accounts(id),
+    card_id bigint references cards(id),
     transaction_id bigint references transactions(id)
 );
 

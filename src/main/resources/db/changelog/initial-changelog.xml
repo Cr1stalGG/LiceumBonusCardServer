@@ -53,8 +53,8 @@
         <sqlFile encoding="utf8" path="./initial/11.create-accounts_groups-table.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
-    <changeSet id="initial-accounts_transactions" author="Alexander Savickij">
-        <sqlFile encoding="utf8" path="./initial/12.create-accounts_transactions-table.sql" relativeToChangelogFile="true"/>
+    <changeSet id="initial-cards_transactions" author="Alexander Savickij">
+        <sqlFile encoding="utf8" path="./initial/12.create-cards_transactions-table.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
     <changeSet id="initial-accounts_activities" author="Alexander Savickij">
