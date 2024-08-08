@@ -1,10 +1,12 @@
 package by.grsu.liceum.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -25,11 +27,30 @@ import java.util.List;
 public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long id;
+    @Column(name = "number")
     private String number;
+    @Column(name = "balance")
     private int balance;
-    @OneToOne
+
+    @OneToOne(
+            fetch = FetchType.LAZY,
+            mappedBy = "card"
+    )
     private Account account;
-    @ManyToMany
-    private List<Transaction> transactions;
+
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "fromCard",
+            orphanRemoval = true
+    )
+    private List<Transaction> sendedTransactions;
+
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "toCard",
+            orphanRemoval = true
+    )
+    private List<Transaction> takenTransactions;
 }
