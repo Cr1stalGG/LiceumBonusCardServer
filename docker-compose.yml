@@ -3,7 +3,7 @@ version: '3.9'
 services:
   app:
     build: .
-    image: liceum_server/app:vtest1
+    image: liceum_server/app:vtest3
     container_name: app
     ports:
       - '8080:8080'
