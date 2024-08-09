@@ -1,4 +1,4 @@
-package by.grsu.liceum.dto.ticket;
+package by.grsu.liceum.dto.account;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +11,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TicketShortcutDto {
-    private long uuid;
-    private String bonusName;
-    private String code;
+public class AccountUpdateDto {
+    private String firstName;
+    private String lastName;
+    private String fatherName;
+    private String phoneNumber;
 }

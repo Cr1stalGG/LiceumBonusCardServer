@@ -13,5 +13,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AuthResponse {
     private String token;
-    private String role;
+    private String role; //todo optional change to number
 }
