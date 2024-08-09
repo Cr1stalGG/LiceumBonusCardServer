@@ -45,7 +45,7 @@ public class Card {
             mappedBy = "fromCard",
             orphanRemoval = true
     )
-    private List<Transaction> sendedTransactions;
+    private List<Transaction> sentTransactions;
 
     @OneToMany(
             fetch = FetchType.LAZY,
