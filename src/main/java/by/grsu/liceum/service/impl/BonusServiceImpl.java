@@ -20,7 +20,9 @@ public class BonusServiceImpl implements BonusService {
 
     @Override
     public List<BonusShortcutDto> findAll() {
-        return List.of();
+        return bonusRepository.findAll().stream()
+                .map(BonusDtoMapper::convertEntityToShortcutDto)
+                .toList();
     }
 
     @Override
