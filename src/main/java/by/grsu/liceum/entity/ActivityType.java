@@ -38,5 +38,5 @@ public class ActivityType {
             mappedBy = "activityType",
             orphanRemoval = true
     )
-    private List<Activity> activity;
+    private List<Activity> activities;
 }

@@ -45,5 +45,5 @@ public class Bonus {
             mappedBy = "bonus",
             orphanRemoval = true
     )
-    private List<Ticket> ticket;
+    private List<Ticket> tickets;
 }
