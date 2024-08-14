@@ -6,6 +6,7 @@ import by.grsu.liceum.dto.account.AccountFullDto;
 import by.grsu.liceum.dto.account.AccountShortcutDto;
 import by.grsu.liceum.dto.group.GroupShortcutDto;
 import by.grsu.liceum.dto.ticket.TicketShortcutDto;
+import by.grsu.liceum.dto.utils.GeneratorLoginDto;
 import by.grsu.liceum.entity.Account;
 import by.grsu.liceum.entity.Group;
 import by.grsu.liceum.entity.Ticket;
@@ -40,6 +41,21 @@ public class AccountDtoMapper {
         return Optional.ofNullable(source)
                 .map(AccountDtoMapper::buildCreationResponse)
                 .orElse(null);
+    }
+    
+    public static GeneratorLoginDto convertCreationDtoToGeneratorDto(AccountCreationDto source){
+        return Optional.ofNullable(source)
+                .map(AccountDtoMapper::buildGeneratorDto)
+                .orElse(null);//todo mb exception with 401 status
+    }
+
+    private static GeneratorLoginDto buildGeneratorDto(AccountCreationDto source) {
+        return GeneratorLoginDto.builder()
+                .firstName(source.getFirstName())
+                .lastName(source.getLastName())
+                .fatherName(source.getFatherName())
+                .yearOfStartOfStudies(source.getYearOfStartOfStudies())
+                .build();
     }
 
     private static AccountCreationResponse buildCreationResponse(Account source) {
