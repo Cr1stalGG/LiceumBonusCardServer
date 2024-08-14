@@ -1,5 +1,6 @@
 package by.grsu.liceum.service.impl;
 
+import by.grsu.liceum.dto.bonus.BonusCreationDto;
 import by.grsu.liceum.dto.bonus.BonusFullDto;
 import by.grsu.liceum.dto.bonus.BonusShortcutDto;
 import by.grsu.liceum.dto.mapper.BonusDtoMapper;
@@ -31,5 +32,21 @@ public class BonusServiceImpl implements BonusService {
                 .orElseThrow(() -> new BonusWithIdNotFoundException(id));
 
         return BonusDtoMapper.convertEntityToFullDto(bonus);
+    }
+
+    @Override //todo ADMIN_ROLE
+    public BonusFullDto createBonus(BonusCreationDto creationDto) {
+        Bonus bonus = BonusDtoMapper.convertDtoToEntity(creationDto);
+
+        bonusRepository.save(bonus);
+
+        return BonusDtoMapper.convertEntityToFullDto(bonus);
+    }
+
+    @Override
+    public void deleteById(long id) {
+        findById(id);
+
+        bonusRepository.deleteById(id);
     }
 }

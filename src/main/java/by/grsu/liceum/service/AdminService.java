@@ -1,14 +1,9 @@
 package by.grsu.liceum.service;
 
-import by.grsu.liceum.dto.account.AccountCreationDto;
-import by.grsu.liceum.dto.account.AccountCreationResponse;
-import by.grsu.liceum.dto.bonus.BonusCreationDto;
+import by.grsu.liceum.dto.admin.RatingDto;
 
 public interface AdminService {
-    AccountCreationResponse createUserWithRole(AccountCreationDto creationDto);
-    void deleteUser(long id);
-    void addRating(long accountId, int value);
-    void getRating(long accountId, int value);
-    void createBonus(BonusCreationDto creationDto);
+    void addRating(RatingDto ratingDto);
+    void getRating(RatingDto ratingDto);
     //todo activity_type, activity
 }
