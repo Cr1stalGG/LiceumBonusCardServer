@@ -48,7 +48,6 @@ public class ActivityServiceImpl implements ActivityService {
                 .orElseThrow(() -> new ActivityTypeWithIdNotFoundException(creationDto.getActivityTypeId()));
 
         activityType.getActivities().add(activity);
-        activityTypeRepository.save(activityType);
 
         activity.setActivityType(activityType);
         activityRepository.save(activity);

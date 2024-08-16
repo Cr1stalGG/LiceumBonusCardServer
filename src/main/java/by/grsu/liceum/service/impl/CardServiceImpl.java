@@ -44,9 +44,7 @@ public class CardServiceImpl implements CardService {
                 .build();
 
         //todo test
-        cardRepository.save(card);
-
-        return card;
+        return cardRepository.save(card);
     }
 
     @Override

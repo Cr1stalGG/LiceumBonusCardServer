@@ -1,6 +1,6 @@
 package by.grsu.liceum.controller;
 
-import by.grsu.liceum.dto.account.AccountCreationDto;
+import by.grsu.liceum.dto.activity_type.ActivityTypeCreationDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-public class AccountControllerTest {
+public class ActivityTypeControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -26,37 +26,34 @@ public class AccountControllerTest {
 
     @Test
     void findByIdTest() throws Exception {
-        this.mockMvc.perform(get("/api/v1/accounts/1")
+        this.mockMvc.perform(get("/api/v1/activities/types/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     @Test
     void findAllTest() throws Exception {
-        this.mockMvc.perform(get("/api/v1/accounts")
+        this.mockMvc.perform(get("/api/v1/activities/types")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void saveTest() throws Exception {
-        AccountCreationDto creationDto = AccountCreationDto.builder()
-                .firstName("Даниил")
-                .lastName("Савко")
-                .fatherName("Андреевич")
-                .phoneNumber("+375295252525")
-                .yearOfStartOfStudies(2022)
+    void createActivityTypeTest() throws Exception {
+        ActivityTypeCreationDto activityTypeCreationDto = ActivityTypeCreationDto.builder()
+                .name("test")
+                .cost(22)
                 .build();
 
-        this.mockMvc.perform(post("/api/v1/accounts")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(creationDto)))
+        this.mockMvc.perform(post("/api/v1/activities/types")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(activityTypeCreationDto)))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void deleteById() throws Exception {
-        this.mockMvc.perform(delete("/api/v1/accounts/1"))
+    void deleteByIdTest() throws Exception {
+        this.mockMvc.perform(delete("/api/v1/activities/types/1"))
                 .andExpect(status().isOk());
     }
 }

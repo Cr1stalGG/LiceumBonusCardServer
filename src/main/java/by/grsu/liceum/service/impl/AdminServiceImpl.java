@@ -24,8 +24,6 @@ public class AdminServiceImpl implements AdminService {
                 .orElseThrow(() -> new AccountWithIdNotFoundException(ratingDto.getAccountId()));
 
         account.getCard().setBalance(account.getCard().getBalance() + ratingDto.getValue());
-
-        accountRepository.save(account);
     }
 
     @Override
@@ -38,7 +36,5 @@ public class AdminServiceImpl implements AdminService {
             throw new NotEnoughBalanceError(ratingDto.getAccountId(), account.getCard().getBalance());
 
         account.getCard().setBalance(account.getCard().getBalance() - ratingDto.getValue());
-
-        accountRepository.save(account);
     }
 }

@@ -1,6 +1,6 @@
 package by.grsu.liceum.controller;
 
-import by.grsu.liceum.dto.account.AccountCreationDto;
+import by.grsu.liceum.dto.bonus.BonusCreationDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
@@ -10,6 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.sql.Date;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -18,45 +20,45 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-public class AccountControllerTest {
+public class BonusControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
 
     @Test
-    void findByIdTest() throws Exception {
-        this.mockMvc.perform(get("/api/v1/accounts/1")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-    }
-
-    @Test
     void findAllTest() throws Exception {
-        this.mockMvc.perform(get("/api/v1/accounts")
+        this.mockMvc.perform(get("/api/v1/bonuses")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void saveTest() throws Exception {
-        AccountCreationDto creationDto = AccountCreationDto.builder()
-                .firstName("Даниил")
-                .lastName("Савко")
-                .fatherName("Андреевич")
-                .phoneNumber("+375295252525")
-                .yearOfStartOfStudies(2022)
+    void findByIdTest() throws Exception {
+        this.mockMvc.perform(get("/api/v1/bonuses/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void createBonusTest() throws Exception {
+        BonusCreationDto bonusCreationDto = BonusCreationDto.builder()
+                .name("test")
+                .description("test")
+                .count(1)
+                .price(12)
+                .timeOfEnd(new Date(System.currentTimeMillis()))
                 .build();
 
-        this.mockMvc.perform(post("/api/v1/accounts")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(creationDto)))
+        this.mockMvc.perform(post("/api/v1/bonuses")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(bonusCreationDto)))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void deleteById() throws Exception {
-        this.mockMvc.perform(delete("/api/v1/accounts/1"))
+    void deleteByIdTest() throws Exception {
+        this.mockMvc.perform(delete("/api/v1/bonuses/1"))
                 .andExpect(status().isOk());
     }
 }

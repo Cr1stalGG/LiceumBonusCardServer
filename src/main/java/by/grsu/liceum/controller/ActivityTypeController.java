@@ -31,7 +31,7 @@ public class ActivityTypeController {
     }
 
     @PostMapping
-    public ActivityTypeDto createActivity(@RequestBody ActivityTypeCreationDto creationDto){
+    public ActivityTypeDto createActivityType(@RequestBody ActivityTypeCreationDto creationDto){
         return activityTypeService.save(creationDto);
     }
 

@@ -5,7 +5,6 @@ import by.grsu.liceum.dto.account.AccountCreationResponse;
 import by.grsu.liceum.dto.account.AccountFullDto;
 import by.grsu.liceum.dto.account.AccountShortcutDto;
 import by.grsu.liceum.dto.mapper.AccountDtoMapper;
-import by.grsu.liceum.dto.utils.GeneratorLoginDto;
 import by.grsu.liceum.entity.Account;
 import by.grsu.liceum.entity.Card;
 import by.grsu.liceum.exception.AccountWithIdNotFoundException;
@@ -56,7 +55,6 @@ public class AccountServiceImpl implements AccountService {
 
         //todo test if account_id in card
         account.setCard(card);
-        accountRepository.save(account);
 
         return AccountDtoMapper.convertEntityToCreationResponse(account);
     }
