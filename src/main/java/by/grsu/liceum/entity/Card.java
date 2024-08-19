@@ -42,15 +42,8 @@ public class Card {
 
     @OneToMany(
             fetch = FetchType.LAZY,
-            mappedBy = "fromCard",
+            mappedBy = "card",
             orphanRemoval = true
     )
-    private List<Transaction> sentTransactions;
-
-    @OneToMany(
-            fetch = FetchType.LAZY,
-            mappedBy = "toCard",
-            orphanRemoval = true
-    )
-    private List<Transaction> takenTransactions;
+    private List<Transaction> transactions;
 }

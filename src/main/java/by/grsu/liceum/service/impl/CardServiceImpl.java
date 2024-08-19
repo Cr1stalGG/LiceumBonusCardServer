@@ -39,8 +39,7 @@ public class CardServiceImpl implements CardService {
         Card card = Card.builder()
                 .number(Generator.generateCardNumber())
                 .balance(0)
-                .sentTransactions(new ArrayList<>())
-                .takenTransactions(new ArrayList<>())
+                .transactions(new ArrayList<>())
                 .build();
 
         //todo test

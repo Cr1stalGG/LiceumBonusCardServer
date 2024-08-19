@@ -13,4 +13,9 @@
         <sqlFile encoding="utf8" path="./insert-base/01.insert-roles-changeset.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <changeSet id="insert-statuses" author="Alexander Savickij">
+        <sqlFile encoding="utf8" path="./insert-base/02.insert-statuses-changeset.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+
 </databaseChangeLog>

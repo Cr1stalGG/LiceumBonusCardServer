@@ -25,36 +25,36 @@
         <sqlFile encoding="utf8" path="./initial/04.create-accounts-table.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <changeSet id="initial-statuses" author="Alexander Savickij">
+        <sqlFile encoding="utf8" path="./initial/05.create-statuses-table.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
     <changeSet id="initial-transactions" author="Alexander Savickij">
-        <sqlFile encoding="utf8" path="./initial/05.create-transactions-table.sql" relativeToChangelogFile="true"/>
+        <sqlFile encoding="utf8" path="./initial/06.create-transactions-table.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
     <changeSet id="initial-groups" author="Alexander Savickij">
-        <sqlFile encoding="utf8" path="./initial/06.create-groups-table.sql" relativeToChangelogFile="true"/>
+        <sqlFile encoding="utf8" path="./initial/07.create-groups-table.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
     <changeSet id="initial-activity_types" author="Alexander Savickij">
-        <sqlFile encoding="utf8" path="./initial/07.create-activity_types-table.sql" relativeToChangelogFile="true"/>
+        <sqlFile encoding="utf8" path="./initial/08.create-activity_types-table.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
     <changeSet id="initial-activities" author="Alexander Savickij">
-        <sqlFile encoding="utf8" path="./initial/08.create-activities-table.sql" relativeToChangelogFile="true"/>
+        <sqlFile encoding="utf8" path="./initial/09.create-activities-table.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
     <changeSet id="initial-tickets" author="Alexander Savickij">
-        <sqlFile encoding="utf8" path="./initial/09.create-tickets-table.sql" relativeToChangelogFile="true"/>
+        <sqlFile encoding="utf8" path="./initial/10.create-tickets-table.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
     <changeSet id="initial-accounts_roles" author="Alexander Savickij">
-        <sqlFile encoding="utf8" path="./initial/10.create-accounts_roles-table.sql" relativeToChangelogFile="true"/>
+        <sqlFile encoding="utf8" path="./initial/11.create-accounts_roles-table.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
     <changeSet id="initial-accounts_groups" author="Alexander Savickij">
-        <sqlFile encoding="utf8" path="./initial/11.create-accounts_groups-table.sql" relativeToChangelogFile="true"/>
-    </changeSet>
-
-    <changeSet id="initial-cards_transactions" author="Alexander Savickij">
-        <sqlFile encoding="utf8" path="./initial/12.create-cards_transactions-table.sql" relativeToChangelogFile="true"/>
+        <sqlFile encoding="utf8" path="./initial/12.create-accounts_groups-table.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
     <changeSet id="initial-accounts_activities" author="Alexander Savickij">

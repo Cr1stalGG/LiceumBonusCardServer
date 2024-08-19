@@ -1,7 +1,6 @@
 package by.grsu.liceum.dto.card;
 
-import by.grsu.liceum.dto.transaction.SentTransactionDto;
-import by.grsu.liceum.dto.transaction.TakenTransactionDto;
+import by.grsu.liceum.dto.transaction.TransactionDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,6 +18,5 @@ public class CardDto {
     private long uuid;
     private String number;
     private int balance;
-    private List<SentTransactionDto> sentTransactions;
-    private List<TakenTransactionDto> takenTransactions;
+    private List<TransactionDto> transactions;
 }

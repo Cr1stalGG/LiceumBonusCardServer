@@ -1,5 +1,6 @@
 package by.grsu.liceum.dto.transaction;
 
+import by.grsu.liceum.dto.status.StatusDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,9 +14,10 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TakenTransactionDto {
+public class TransactionDto {
     private long uuid;
     private int balance;
-    private String fromCardNumber; //todo optional switch to ownerName
+    private String cardNumber;
+    private StatusDto status;
     private Date timeOfTransaction;
 }

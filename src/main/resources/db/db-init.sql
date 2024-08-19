@@ -30,11 +30,18 @@ create table cards(
     balance int default 0 check(balance >= 0)
 );
 
+create table statuses(
+    id bigserial primary key,
+    name varchar(30) unique not null,
+    description text not null
+);
+
 create table transactions(
     id bigserial primary key,
     balance int default 1 check(balance > 0),
-    from_card_id bigint references cards(number),
-    to_card_id bigint references cards(number),
+    card_id bigint references cards(id),
+    status_id bigint references statuses(id),
+    message text not null,
     transaction_time timestamp not null
 );
 
@@ -76,12 +83,6 @@ create table accounts_groups(
     id bigserial primary key,
     account_id bigint references accounts(id),
     group_id bigint references groups(id)
-);
-
-create table cards_transactions(
-    id bigserial primary key,
-    card_id bigint references cards(id),
-    transaction_id bigint references transactions(id)
 );
 
 create table accounts_activities(

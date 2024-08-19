@@ -1,5 +1,5 @@
 package by.grsu.liceum.service;
 
-public class TransactionService {
+public interface TransactionService {
     //todo
 }

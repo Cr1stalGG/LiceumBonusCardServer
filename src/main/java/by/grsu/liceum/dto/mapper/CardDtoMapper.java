@@ -1,8 +1,7 @@
 package by.grsu.liceum.dto.mapper;
 
 import by.grsu.liceum.dto.card.CardDto;
-import by.grsu.liceum.dto.transaction.SentTransactionDto;
-import by.grsu.liceum.dto.transaction.TakenTransactionDto;
+import by.grsu.liceum.dto.transaction.TransactionDto;
 import by.grsu.liceum.entity.Card;
 import by.grsu.liceum.entity.Transaction;
 import lombok.experimental.UtilityClass;
@@ -24,26 +23,25 @@ public class CardDtoMapper {
                 .uuid(source.getId())
                 .number(source.getNumber())
                 .balance(source.getBalance())
-                .sentTransactions(buildSentTransactions(source.getSentTransactions()))
-                .takenTransactions(buildTakenTransactions(source.getTakenTransactions()))
+                .transactions(buildTransactionDtos(source.getTransactions()))
                 .build();
     }
 
-    private static List<TakenTransactionDto> buildTakenTransactions(List<Transaction> source) {
+    private static List<TransactionDto> buildTransactionDtos(List<Transaction> source) {
         if(source == null)
             return new ArrayList<>();
 
         return source.stream()
-                .map(TransactionDtoMapper::convertEntityToTakenDto)
+                .map(TransactionDtoMapper::convertEntityToDto)
                 .toList();
     }
 
-    private static List<SentTransactionDto> buildSentTransactions(List<Transaction> source) {
+    private static List<TransactionDto> buildSentTransactions(List<Transaction> source) {
         if(source == null)
             return new ArrayList<>();
 
         return source.stream()
-                .map(TransactionDtoMapper::convertEntityToSentDto)
+                .map(TransactionDtoMapper::convertEntityToDto)
                 .toList();
     }
 }
