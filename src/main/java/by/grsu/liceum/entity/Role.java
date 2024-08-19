@@ -1,5 +1,6 @@
 package by.grsu.liceum.entity;
 
+import by.grsu.liceum.entity.enums.RoleConstant;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -31,7 +32,7 @@ public class Role {
     @Column(name = "id")
     private long id;
     @Column(name = "name")
-    private String name;
+    private RoleConstant name;
     @Column(name = "description")
     private String description;
 
