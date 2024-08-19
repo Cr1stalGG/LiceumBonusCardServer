@@ -1,8 +1,10 @@
 package by.grsu.liceum.controller;
 
+import by.grsu.liceum.dto.bonus.BonusBuyDto;
 import by.grsu.liceum.dto.bonus.BonusCreationDto;
 import by.grsu.liceum.dto.bonus.BonusFullDto;
 import by.grsu.liceum.dto.bonus.BonusShortcutDto;
+import by.grsu.liceum.dto.ticket.TicketFullDto;
 import by.grsu.liceum.service.BonusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,6 +36,11 @@ public class BonusController {
     @PostMapping
     public BonusFullDto createBonus(@RequestBody BonusCreationDto creationDto){
         return bonusService.createBonus(creationDto);
+    }
+
+    @PostMapping("/buy")
+    public TicketFullDto buyBonus(@RequestBody BonusBuyDto buyDto){
+        return bonusService.buyBonus(buyDto);
     }
 
     @DeleteMapping("/{id}")
