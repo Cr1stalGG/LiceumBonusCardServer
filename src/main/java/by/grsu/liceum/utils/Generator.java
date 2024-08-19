@@ -43,7 +43,7 @@ public class Generator {
         return cardNumber.toString();
     }
 
-    public static String generateBonusToken(byte LENGTH){
+    public static String generateBonusToken(){
         final String dict = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         StringBuilder token = new StringBuilder();
