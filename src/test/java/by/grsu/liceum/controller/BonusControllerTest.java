@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -26,16 +27,19 @@ public class BonusControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Value("${controller.bonus.url}")
+    private String URL;
+
     @Test
     void findAllTest() throws Exception {
-        this.mockMvc.perform(get("/api/v1/bonuses")
+        this.mockMvc.perform(get(this.URL)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     @Test
     void findByIdTest() throws Exception {
-        this.mockMvc.perform(get("/api/v1/bonuses/1")
+        this.mockMvc.perform(get(this.URL + "/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -50,7 +54,7 @@ public class BonusControllerTest {
                 .timeOfEnd(new Date(System.currentTimeMillis()))
                 .build();
 
-        this.mockMvc.perform(post("/api/v1/bonuses")
+        this.mockMvc.perform(post(this.URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(bonusCreationDto)))
                 .andExpect(status().isOk());
@@ -58,7 +62,7 @@ public class BonusControllerTest {
 
     @Test
     void deleteByIdTest() throws Exception {
-        this.mockMvc.perform(delete("/api/v1/bonuses/1"))
+        this.mockMvc.perform(delete(this.URL + "/1"))
                 .andExpect(status().isOk());
     }
 }

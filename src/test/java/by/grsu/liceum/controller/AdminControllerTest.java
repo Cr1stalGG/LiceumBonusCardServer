@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -22,6 +23,9 @@ public class AdminControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Value("${controller.admin.url}")
+    private String URL;
+
     @Test
     void addRatingTest() throws Exception {
         RatingDto ratingDto = RatingDto.builder()
@@ -29,7 +33,7 @@ public class AdminControllerTest {
                 .value(12)
                 .build();
 
-        this.mockMvc.perform(post("/api/v1/admins/add")
+        this.mockMvc.perform(post(this.URL + "/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(ratingDto)))
                 .andExpect(status().isOk());
@@ -42,7 +46,7 @@ public class AdminControllerTest {
                 .value(12)
                 .build();
 
-        this.mockMvc.perform(post("/api/v1/admins/get")
+        this.mockMvc.perform(post(this.URL + "/get")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(ratingDto)))
                 .andExpect(status().isOk());

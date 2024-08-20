@@ -1,9 +1,5 @@
 package by.grsu.liceum.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,26 +9,37 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-public class CardControllerTest {
+public class TransactionControllerTest {
     @Autowired
     private MockMvc mockMvc;
-
-    @Value("${controller.card.url}")
+    
+    @Value("${controller.transaction.url}")
     private String URL;
 
     @Test
-    void findByIdTest() throws Exception {
-        this.mockMvc.perform(get(this.URL + "/1")
+    void findAllTest() throws Exception {
+        this.mockMvc.perform(get(this.URL)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void findAllTest() throws Exception {
-        this.mockMvc.perform(get(this.URL)
+    void findAllByCardIdTest() throws Exception {
+        this.mockMvc.perform(get(this.URL + "/card/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void findByIdTest() throws Exception {
+        this.mockMvc.perform(get(this.URL + "/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }

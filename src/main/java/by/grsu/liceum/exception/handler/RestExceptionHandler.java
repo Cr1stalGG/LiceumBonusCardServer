@@ -7,6 +7,7 @@ import by.grsu.liceum.exception.BonusWithIdNotFoundException;
 import by.grsu.liceum.exception.CardWithIdNotFoundException;
 import by.grsu.liceum.exception.InvalidBonusCountException;
 import by.grsu.liceum.exception.InvalidTicketCodeException;
+import by.grsu.liceum.exception.InvalidTransactionStatusException;
 import by.grsu.liceum.exception.NotEnoughBalanceError;
 import by.grsu.liceum.exception.NullableAccountCreationDtoException;
 import by.grsu.liceum.exception.TicketWithIdNotFoundException;
@@ -32,7 +33,8 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(value = {
             InvalidBonusCountException.class,
-            InvalidTicketCodeException.class
+            InvalidTicketCodeException.class,
+            InvalidTransactionStatusException.class
     })
     public ResponseEntity<String> handleInvalidException(Exception e){
         return new ResponseEntity<>("Invalid error: " + e.getMessage(), HttpStatus.BAD_REQUEST);

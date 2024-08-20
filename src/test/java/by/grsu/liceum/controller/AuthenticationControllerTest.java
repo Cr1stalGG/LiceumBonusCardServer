@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -22,6 +23,9 @@ public class AuthenticationControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Value("${controller.authentication.url}")
+    private String URL;
+
     @Test
     void authenticateTest() throws Exception {
         AuthRequest authRequest = AuthRequest.builder()
@@ -29,7 +33,7 @@ public class AuthenticationControllerTest {
                 .password("smthPassword")
                 .build();
 
-        this.mockMvc.perform(post("/api/v1/auth/login")
+        this.mockMvc.perform(post(this.URL + "/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(authRequest)))
                 .andExpect(status().isOk());

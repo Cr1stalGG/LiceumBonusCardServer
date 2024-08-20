@@ -1,6 +1,7 @@
 package by.grsu.liceum.controller;
 
-import by.grsu.liceum.dto.activity_type.ActivityTypeCreationDto;
+import by.grsu.liceum.dto.ticket.SetTicketDto;
+import by.grsu.liceum.dto.ticket.TicketReadCodeDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
@@ -19,21 +20,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-public class ActivityTypeControllerTest {
+public class TicketControllerTest {
     @Autowired
     private MockMvc mockMvc;
+    
     @Autowired
     private ObjectMapper objectMapper;
-
-    @Value("${controller.activity_type.url}")
+    
+    @Value("${controller.ticket.url}")
     private String URL;
-
-    @Test
-    void findByIdTest() throws Exception {
-        this.mockMvc.perform(get(this.URL + "/1")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-    }
 
     @Test
     void findAllTest() throws Exception {
@@ -43,18 +38,45 @@ public class ActivityTypeControllerTest {
     }
 
     @Test
-    void createActivityTypeTest() throws Exception {
-        ActivityTypeCreationDto activityTypeCreationDto = ActivityTypeCreationDto.builder()
-                .name("test")
-                .cost(22)
-                .build();
-
-        this.mockMvc.perform(post(this.URL)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(activityTypeCreationDto)))
+    void findByIdTest() throws Exception {
+        this.mockMvc.perform(get(this.URL + "/1")
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
+    @Test
+    void setTicketToTheAccountTest() throws Exception {
+        SetTicketDto ticketDto = SetTicketDto.builder()
+                .accountId(1)
+                .bonusId(1)
+                .build();
+        
+        this.mockMvc.perform(post(this.URL + "/set")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(this.objectMapper.writeValueAsString(ticketDto)))
+                .andExpect(status().isOk());
+        
+    }
+    
+    @Test
+    void rollTicketBackTest() throws Exception {
+        this.mockMvc.perform(post(this.URL + "/1"))
+                .andExpect(status().isOk());
+    }
+    
+    @Test
+    void readCodeTest() throws Exception {
+        TicketReadCodeDto readCodeDto = TicketReadCodeDto.builder()
+                .uuid(1)
+                .code("#asdasd")
+                .build();
+        
+        this.mockMvc.perform(post(this.URL + "/code")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(this.objectMapper.writeValueAsString(readCodeDto)))
+                .andExpect(status().isOk());
+    }
+    
     @Test
     void deleteByIdTest() throws Exception {
         this.mockMvc.perform(delete(this.URL + "/1"))
