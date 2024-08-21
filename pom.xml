@@ -24,6 +24,7 @@
 
 		<spring-doc.version>2.3.0</spring-doc.version>
 		<jwt.api.version>0.11.5</jwt.api.version>
+		<micrometer.prometheus.version>0.2.0</micrometer.prometheus.version>
 	</properties>
 
 	<dependencies>
@@ -107,19 +108,19 @@
 		<dependency>
 			<groupId>io.prometheus</groupId>
 			<artifactId>simpleclient_hotspot</artifactId>
-			<version>0.2.0</version>
+			<version>${micrometer.prometheus.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>io.prometheus</groupId>
 			<artifactId>simpleclient_logback</artifactId>
-			<version>0.2.0</version>
+			<version>${micrometer.prometheus.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>io.prometheus</groupId>
 			<artifactId>simpleclient_spring_boot</artifactId>
-			<version>0.2.0</version>
+			<version>${micrometer.prometheus.version}</version>
 		</dependency>
 
 
