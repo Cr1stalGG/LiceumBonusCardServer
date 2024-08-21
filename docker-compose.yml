@@ -20,7 +20,7 @@ services:
       replicas: 3
     image: liceum_server/app:vtest3
     ports:
-      - '9090-9093:90'
+      - '9000-9003:90'
     depends_on:
       - db
     restart: always
