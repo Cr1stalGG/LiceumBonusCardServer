@@ -21,12 +21,19 @@ import by.grsu.liceum.service.BonusService;
 import by.grsu.liceum.utils.Generator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
+@PropertySource("classpath:application.properties")
 @RequiredArgsConstructor
 public class BonusServiceImpl implements BonusService {
     private final BonusRepository bonusRepository;
@@ -92,6 +99,32 @@ public class BonusServiceImpl implements BonusService {
 
         return TicketDtoMapper.convertEntitToFullDto(ticket);
     }
+
+
+    //@Scheduled(cron = "${scheduler.cron.interval}") - real
+    @Scheduled(fixedDelay = 60_000L) // test every minute
+    public void checkIfBonuseTimeEnded(){
+        log.info("=======DELETE ALL USELESS BONUSES(time out off)=======");
+        List<Bonus> bonuses = Optional.ofNullable(bonusRepository.findAll())
+                .orElse(new ArrayList<>());
+
+        for(Bonus bonus : bonuses){
+            if(bonus.getTimeOfEnd() != null && bonus.getTimeOfEnd().compareTo(new Date(System.currentTimeMillis())) < 0){
+
+                for(Ticket ticket : bonus.getTickets()){
+                    log.info("Ticket with id {} removed", ticket.getId());
+                    //todo add message(mb new entity) with status of deleted tickets(mb put some percent of rating back)
+                    ticketRepository.deleteById(ticket.getId());
+                }
+
+                log.info("Bonus with id {} removed", bonus.getId());
+                bonusRepository.deleteById(bonus.getId());
+
+            log.info("======================================================");
+            }
+        }
+    }
+
 
     @Override
     public void deleteById(long id) {
