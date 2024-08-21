@@ -1,5 +1,7 @@
 FROM maven:3.9.6-sapmachine-17 as build
 
+LABEL Maintaner = "Aliaksandr Savitski"
+
 COPY pom.xml .
 COPY src src
 
