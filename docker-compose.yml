@@ -18,7 +18,7 @@ services:
     deploy:
       mode: replicated
       replicas: 3
-    image: liceum_server/app:vtest4
+    image: liceum_server/app:vtest6
     ports:
       - '9000-9003:90'
     depends_on:

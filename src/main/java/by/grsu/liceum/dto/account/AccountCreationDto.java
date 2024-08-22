@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Builder
 @Getter
 @Setter
@@ -18,5 +20,5 @@ public class AccountCreationDto {
     private String fatherName;
     private String phoneNumber;
     private int yearOfStartOfStudies;
-    private RoleConstant roleName; //todo optional change to number(1 - user, 2 - admin...)
+    private List<RoleConstant> roleNames; //todo optional change to number(1 - user, 2 - admin...)
 }

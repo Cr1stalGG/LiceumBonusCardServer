@@ -119,7 +119,6 @@ public class BonusServiceImpl implements BonusService {
 
                 log.info("Bonus with id {} removed", bonus.getId());
                 bonusRepository.deleteById(bonus.getId());
-
             }
         }
         log.info("======================================================");

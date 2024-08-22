@@ -1,5 +1,5 @@
-insert into roles (name, description) values ('USER_ROLE', 'role for students');
-insert into roles (name, description) values ('TEACHER_ROLE', 'role for teachers');
-insert into roles (name, description) values ('DIRECTOR_ROLE', 'role for director');
-insert into roles (name, description) values ('SALE_UNIT_ROLE', 'role with permits of scanning of tickets');
-insert into roles (name, description) values ('ADMIN_ROLE', 'role for admin, full permition');
+insert into roles (name, description) values ('ROLE_USER', 'role for students');
+insert into roles (name, description) values ('ROLE_TEACHER', 'role for teachers');
+insert into roles (name, description) values ('ROLE_DIRECTOR', 'role for director');
+insert into roles (name, description) values ('ROLE_SALE_UNIT', 'role with permits of scanning of tickets');
+insert into roles (name, description) values ('ROLE_ADMIN', 'role for admin, full permition');

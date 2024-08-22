@@ -1,9 +1,9 @@
 package by.grsu.liceum.entity.enums;
 
 public enum RoleConstant {
-    USER_ROLE,  //students
-    TEACHER_ROLE,  //teachers
-    DIRECTOR_ROLE,  //director
-    SALE_UNIT_ROLE, //permits to scan tickets
-    ADMIN_ROLE  //admin
+    ROLE_USER,  //students
+    ROLE_TEACHER,  //teachers
+    ROLE_DIRECTOR,  //director
+    ROLE_SALE_UNIT, //permits to scan tickets
+    ROLE_ADMIN  //admin
 }

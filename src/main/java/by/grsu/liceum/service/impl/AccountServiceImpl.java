@@ -7,8 +7,12 @@ import by.grsu.liceum.dto.account.AccountShortcutDto;
 import by.grsu.liceum.dto.mapper.AccountDtoMapper;
 import by.grsu.liceum.entity.Account;
 import by.grsu.liceum.entity.Card;
+import by.grsu.liceum.entity.Role;
+import by.grsu.liceum.entity.enums.RoleConstant;
 import by.grsu.liceum.exception.AccountWithIdNotFoundException;
+import by.grsu.liceum.exception.InvalidRoleNameException;
 import by.grsu.liceum.repository.AccountRepository;
+import by.grsu.liceum.repository.RoleRepository;
 import by.grsu.liceum.service.AccountService;
 import by.grsu.liceum.service.CardService;
 import by.grsu.liceum.utils.Generator;
@@ -23,6 +27,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
+    private final RoleRepository roleRepository;
     private final CardService cardService;
 
     @Override
@@ -50,10 +55,16 @@ public class AccountServiceImpl implements AccountService {
 
         accountRepository.save(account);
 
-        //todo migrate to card service
+        for(RoleConstant roleConstant : creationDto.getRoleNames()){
+            Role role = Optional.ofNullable(roleRepository.findByName(roleConstant))
+                    .orElseThrow(() -> new InvalidRoleNameException(roleConstant));
+
+            role.getAccounts().add(account);
+            account.getRoles().add(role);
+        }
+
         Card card = cardService.generateCard();
 
-        //todo test if account_id in card
         account.setCard(card);
 
         return AccountDtoMapper.convertEntityToCreationResponse(account);

@@ -1,6 +1,7 @@
 package by.grsu.liceum.controller;
 
 import by.grsu.liceum.dto.admin.RatingDto;
+import by.grsu.liceum.dto.transaction.TransactionDto;
 import by.grsu.liceum.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,13 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminController {
     private final AdminService adminService;
 
-    @PostMapping("/add")
-    public void addRating(@RequestBody RatingDto ratingDto){
-        adminService.addRating(ratingDto);
+    @PostMapping("/push")
+    public TransactionDto addRating(@RequestBody RatingDto ratingDto){
+        return adminService.addRating(ratingDto);
     }
 
-    @PostMapping("/get")
-    public void getRating(@RequestBody RatingDto ratingDto){
-        adminService.getRating(ratingDto);
+    @PostMapping("/take")
+    public TransactionDto getRating(@RequestBody RatingDto ratingDto){
+        return adminService.getRating(ratingDto);
     }
 }

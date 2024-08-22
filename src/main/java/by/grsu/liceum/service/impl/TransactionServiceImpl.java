@@ -40,7 +40,7 @@ public class TransactionServiceImpl implements TransactionService {
         Card card = Optional.ofNullable(cardRepository.findById(cardId))
                 .orElseThrow(() -> new CardWithIdNotFoundException(cardId));
 
-        return card.getTransactions().stream()//todo mb optional
+        return card.getTransactions().stream()
                 .map(TransactionDtoMapper::convertEntityToDto)
                 .toList();
     }
