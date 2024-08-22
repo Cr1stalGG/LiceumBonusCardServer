@@ -4,6 +4,7 @@ import by.grsu.liceum.dto.activity_type.ActivityTypeCreationDto;
 import by.grsu.liceum.dto.activity_type.ActivityTypeDto;
 import by.grsu.liceum.service.ActivityTypeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,11 +32,13 @@ public class ActivityTypeController {
     }
 
     @PostMapping
+    @Secured(value = "ROLE_ADMIN")
     public ActivityTypeDto createActivityType(@RequestBody ActivityTypeCreationDto creationDto){
         return activityTypeService.save(creationDto);
     }
 
     @DeleteMapping("/{id}")
+    @Secured(value = "ROLE_ADMIN")
     public void deleteById(@PathVariable("id") long id){
         activityTypeService.deleteById(id);
     }
