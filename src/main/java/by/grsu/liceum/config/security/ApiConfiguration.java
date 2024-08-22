@@ -31,6 +31,7 @@ public class ApiConfiguration {
         http.authorizeHttpRequests(request -> request.requestMatchers(new AntPathRequestMatcher("/swagger-ui/**"), new AntPathRequestMatcher( "/v3/api-docs/**")).permitAll());
         http.authorizeHttpRequests(request -> request.requestMatchers(new AntPathRequestMatcher("/actuator/**")).permitAll());
         http.authorizeHttpRequests(request -> request.requestMatchers(new AntPathRequestMatcher("/admins/**")).hasRole("ADMIN"));
+        http.authorizeHttpRequests(request -> request.requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll());
         http.authorizeHttpRequests(request -> request.anyRequest().authenticated());
 
         http.authenticationProvider(authenticationProvider).addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
