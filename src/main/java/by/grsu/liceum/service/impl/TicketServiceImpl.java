@@ -48,7 +48,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    @Transactional //todo если удалить бонус, в тикете его не будет, нужен какой-то метабонус который будет удаляться с завершением тайма этого бонуса или последнего экземпляра тикета
+    @Transactional
     public TicketFullDto setTicketToTheAccount(SetTicketDto ticketDto) {
         Account account = Optional.ofNullable(accountRepository.findById(ticketDto.getAccountId()))
                 .orElseThrow(() -> new AccountWithIdNotFoundException(ticketDto.getAccountId()));
@@ -56,10 +56,8 @@ public class TicketServiceImpl implements TicketService {
         Bonus bonus = Optional.ofNullable(bonusRepository.findById(ticketDto.getBonusId()))
                 .orElseThrow(() -> new BonusWithIdNotFoundException(ticketDto.getBonusId()));
 
-        if(bonus.getCount() > 1)
+        if(bonus.getCount() > 0)
             bonus.setCount(bonus.getCount() - 1);
-        else if (bonus.getCount() == 1)
-            bonusRepository.deleteById(bonus.getId()); //todo test
         else
             throw new InvalidBonusCountException(bonus.getId(), bonus.getCount());
 
@@ -104,9 +102,12 @@ public class TicketServiceImpl implements TicketService {
         Ticket ticket = Optional.ofNullable(ticketRepository.findById(readCodeDto.getUuid()))
                 .orElseThrow(() -> new TicketWithIdNotFoundException(readCodeDto.getUuid()));
 
-        if(ticket.getCode().equals(readCodeDto.getCode())) //todo check user
+        if(ticket.getCode().equals(readCodeDto.getCode())) { //todo check user
             ticketRepository.deleteById(readCodeDto.getUuid());
-        else
+
+            if (ticket.getBonus().getCount() == 0 && ticket.getBonus().getTickets().isEmpty()) //todo mb logical error
+                bonusRepository.deleteById(ticket.getId());
+        } else
             throw new InvalidTicketCodeException(readCodeDto.getCode());
     }
 

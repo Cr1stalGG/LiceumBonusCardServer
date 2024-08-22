@@ -43,6 +43,7 @@ public class BonusServiceImpl implements BonusService {
     @Override
     public List<BonusShortcutDto> findAll() {
         return bonusRepository.findAll().stream()
+                .filter(x -> x.getCount() > 0)
                 .map(BonusDtoMapper::convertEntityToShortcutDto)
                 .toList();
     }
@@ -56,7 +57,7 @@ public class BonusServiceImpl implements BonusService {
     }
 
     @Override
-    @Transactional//todo ADMIN_ROLE
+    @Transactional
     public BonusFullDto createBonus(BonusCreationDto creationDto) {
         Bonus bonus = BonusDtoMapper.convertDtoToEntity(creationDto);
 
@@ -77,10 +78,8 @@ public class BonusServiceImpl implements BonusService {
         if(account.getCard().getBalance() < bonus.getPrice())
             throw new NotEnoughBalanceError(account.getId(), bonus.getPrice());
 
-        if(bonus.getCount() > 1)
+        if(bonus.getCount() > 0)
             bonus.setCount(bonus.getCount() - 1);
-        else if (bonus.getCount() == 1)
-            bonusRepository.deleteById(bonus.getId()); //todo придумать норм решение чтоб тикеты при удалении бонуса не полетели нахуй
         else
             throw new InvalidBonusCountException(bonus.getId(), bonus.getCount());
 
@@ -99,7 +98,6 @@ public class BonusServiceImpl implements BonusService {
 
         return TicketDtoMapper.convertEntitToFullDto(ticket);
     }
-
 
     //@Scheduled(cron = "${scheduler.cron.interval}") - real
     @Scheduled(fixedDelay = 60_000L) // test every minute

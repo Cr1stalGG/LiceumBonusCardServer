@@ -7,6 +7,7 @@ import by.grsu.liceum.dto.bonus.BonusShortcutDto;
 import by.grsu.liceum.dto.ticket.TicketFullDto;
 import by.grsu.liceum.service.BonusService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,7 @@ public class BonusController {
     }
 
     @PostMapping
+    @Secured(value = "ROLE_ADMIN")
     public BonusFullDto createBonus(@RequestBody BonusCreationDto creationDto){
         return bonusService.createBonus(creationDto);
     }
@@ -44,6 +46,7 @@ public class BonusController {
     }
 
     @DeleteMapping("/{id}")
+    @Secured(value = "ROLE_ADMIN")
     public void deleteById(@PathVariable("id") long id){
         bonusService.deleteById(id);
     }

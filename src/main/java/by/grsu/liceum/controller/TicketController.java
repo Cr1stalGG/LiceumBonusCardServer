@@ -6,6 +6,7 @@ import by.grsu.liceum.dto.ticket.TicketReadCodeDto;
 import by.grsu.liceum.dto.ticket.TicketShortcutDto;
 import by.grsu.liceum.service.TicketService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +34,7 @@ public class TicketController {
     }
 
     @PostMapping("/set")
+    @Secured(value = "ROLE_ADMIN")
     public TicketFullDto setTicketToTheAccount(@RequestBody SetTicketDto ticketDto){
         return ticketService.setTicketToTheAccount(ticketDto);
     }
@@ -43,11 +45,13 @@ public class TicketController {
     }
 
     @PostMapping("/code")
+    @Secured(value = "ROLE_SALE_UNIT")
     public void readCode(@RequestBody TicketReadCodeDto readCodeDto){
         ticketService.readCode(readCodeDto);
     }
 
     @DeleteMapping("/{id}")
+    @Secured(value = "ROLE_ADMIN")
     public void deleteById(@PathVariable("id") long id){
         ticketService.deleteById(id);
     }
