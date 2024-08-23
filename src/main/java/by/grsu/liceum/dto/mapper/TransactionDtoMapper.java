@@ -2,7 +2,7 @@ package by.grsu.liceum.dto.mapper;
 
 import by.grsu.liceum.dto.status.StatusDto;
 import by.grsu.liceum.dto.transaction.TransactionDto;
-import by.grsu.liceum.entity.Status;
+import by.grsu.liceum.entity.TransactionStatus;
 import by.grsu.liceum.entity.Transaction;
 import lombok.experimental.UtilityClass;
 
@@ -20,12 +20,12 @@ public class TransactionDtoMapper {
         return TransactionDto.builder()
                 .uuid(source.getId())
                 .balance(source.getBalance())
-                .status(buildStatus(source.getStatus()))
+                .status(buildStatus(source.getTransactionStatus()))
                 .timeOfTransaction(source.getTimeOfTransaction())
                 .build();
     }
 
-    private static StatusDto buildStatus(Status source){
+    private static StatusDto buildStatus(TransactionStatus source){
         return Optional.ofNullable(source)
                 .map(StatusDtoMapper::convertEntityToDto)
                 .orElse(null);

@@ -24,7 +24,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Status {
+public class TransactionStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -35,7 +35,7 @@ public class Status {
 
     @OneToMany(
             fetch = FetchType.LAZY,
-            mappedBy = "status",
+            mappedBy = "transactionStatus",
             orphanRemoval = true
     )
     private List<Transaction> transactions;

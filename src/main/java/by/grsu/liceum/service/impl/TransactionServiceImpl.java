@@ -4,7 +4,7 @@ import by.grsu.liceum.dto.mapper.TransactionDtoMapper;
 import by.grsu.liceum.dto.transaction.TransactionCreationDto;
 import by.grsu.liceum.dto.transaction.TransactionDto;
 import by.grsu.liceum.entity.Card;
-import by.grsu.liceum.entity.Status;
+import by.grsu.liceum.entity.TransactionStatus;
 import by.grsu.liceum.entity.Transaction;
 import by.grsu.liceum.exception.CardWithIdNotFoundException;
 import by.grsu.liceum.exception.InvalidTransactionStatusException;
@@ -59,13 +59,13 @@ public class TransactionServiceImpl implements TransactionService {
         Card card = Optional.ofNullable(cardRepository.findById(creationDto.getCardId()))
                 .orElseThrow(() -> new CardWithIdNotFoundException(creationDto.getCardId()));
 
-        Status status = Optional.ofNullable(statusRepository.findByName(creationDto.getStatus()))
+        TransactionStatus status = Optional.ofNullable(statusRepository.findByName(creationDto.getStatus()))
                 .orElseThrow(() -> new InvalidTransactionStatusException(creationDto.getStatus().name()));
 
         Transaction transaction = Transaction.builder()
                 .balance(creationDto.getBalance())
                 .card(card)
-                .status(status)
+                .transactionStatus(status)
                 .timeOfTransaction(new Date(System.currentTimeMillis()))
                 .build();
 

@@ -37,8 +37,8 @@ public class Transaction {
     private Card card;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "status_id")
-    private Status status;
+    @JoinColumn(name = "transaction_status_id")
+    private TransactionStatus transactionStatus;
 
     @Column(name = "time_of_transaction")
     private Date timeOfTransaction;
