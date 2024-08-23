@@ -37,4 +37,6 @@ public class Institution {
             orphanRemoval = true
     )
     private List<Account> accounts;
+
+    //todo add custom roles
 }
