@@ -51,7 +51,7 @@ public class AccountServiceImpl implements AccountService {
         Account account = AccountDtoMapper.convertDtoToEntity(creationDto);
 
         account.setLogin(Generator.generateLogin(AccountDtoMapper.convertCreationDtoToGeneratorDto(creationDto)));
-        account.setPassword(Generator.generatePassword());
+        account.setPassword(Generator.generatePassword(RoleConstant.ROLE_USER));
 
         accountRepository.save(account);
 

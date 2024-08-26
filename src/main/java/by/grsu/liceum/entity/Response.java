@@ -32,6 +32,10 @@ public class Response {
     private String message;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "response_status_id")
+    private ResponseStatus responseStatus;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
 

@@ -6,6 +6,7 @@ import by.grsu.liceum.exception.ActivityTypeWithIdNotFoundException;
 import by.grsu.liceum.exception.ActivityWithIdNotFoundException;
 import by.grsu.liceum.exception.BonusWithIdNotFoundException;
 import by.grsu.liceum.exception.CardWithIdNotFoundException;
+import by.grsu.liceum.exception.InstitutionWithIdNotFoundException;
 import by.grsu.liceum.exception.InvalidBonusCountException;
 import by.grsu.liceum.exception.InvalidRoleNameException;
 import by.grsu.liceum.exception.InvalidTicketCodeException;
@@ -28,7 +29,8 @@ public class RestExceptionHandler {
             BonusWithIdNotFoundException.class,
             CardWithIdNotFoundException.class,
             TicketWithIdNotFoundException.class,
-            AccountWithLoginNotFoundException.class
+            AccountWithLoginNotFoundException.class,
+            InstitutionWithIdNotFoundException.class
     })
     public ResponseEntity<String> handleNotFoundException(Exception e){
         return new ResponseEntity<>("Not found error: " + e.getMessage(), HttpStatus.BAD_REQUEST);

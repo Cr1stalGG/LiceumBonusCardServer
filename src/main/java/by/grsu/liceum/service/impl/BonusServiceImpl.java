@@ -33,7 +33,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:business_settings.properties")
 @RequiredArgsConstructor
 public class BonusServiceImpl implements BonusService {
     private final BonusRepository bonusRepository;
