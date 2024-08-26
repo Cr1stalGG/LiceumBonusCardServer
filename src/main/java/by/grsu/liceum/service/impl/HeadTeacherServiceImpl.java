@@ -3,23 +3,21 @@ package by.grsu.liceum.service.impl;
 import by.grsu.liceum.dto.account.AccountFullDto;
 import by.grsu.liceum.dto.account.AccountShortcutDto;
 import by.grsu.liceum.dto.admin.RatingDto;
-import by.grsu.liceum.dto.mapper.AccountDtoMapper;
+import by.grsu.liceum.dto.group.GroupFullDto;
+import by.grsu.liceum.dto.mapper.GroupDtoMapper;
 import by.grsu.liceum.dto.transaction.TransactionCreationDto;
 import by.grsu.liceum.dto.transaction.TransactionDto;
 import by.grsu.liceum.entity.Account;
-import by.grsu.liceum.entity.Institution;
-import by.grsu.liceum.entity.enums.RoleConstant;
+import by.grsu.liceum.entity.Group;
 import by.grsu.liceum.entity.enums.StatusConstant;
 import by.grsu.liceum.exception.AccountWithIdNotFoundException;
-import by.grsu.liceum.exception.InstitutionWithIdNotFoundException;
+import by.grsu.liceum.exception.GroupWithIdNotFoundException;
 import by.grsu.liceum.exception.InvalidRatingAmountException;
 import by.grsu.liceum.exception.NotEnoughBalanceError;
 import by.grsu.liceum.repository.AccountRepository;
-import by.grsu.liceum.repository.InstitutionRepository;
-import by.grsu.liceum.service.AdminService;
-import by.grsu.liceum.service.CardService;
+import by.grsu.liceum.repository.GroupRepository;
+import by.grsu.liceum.service.HeadTeacherService;
 import by.grsu.liceum.service.TransactionService;
-import by.grsu.liceum.utils.Generator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,16 +30,33 @@ import java.util.Optional;
 @Service
 @PropertySource("${classpath:business_settings.properties}")
 @RequiredArgsConstructor
-public class AdminServiceImpl implements AdminService {
+public class HeadTeacherServiceImpl implements HeadTeacherService {
     private final AccountRepository accountRepository;
     private final TransactionService transactionService;
-    private final InstitutionRepository institutionRepository;
-    private final CardService cardService;
+    private final GroupRepository groupRepository;
 
-    @Value("${property.admin.rating.min_value}")
+    @Value("${property.head_teacher.rating.min_value}")
     private int minRatingValue;
-    @Value("${property.admin.rating.max_value}")
+    @Value("${property.head_teacher.rating.max_value}")
     private int maxRatingValue;
+
+    @Override
+    public GroupFullDto findGroupById(long groupId) {
+        Group group = Optional.ofNullable(groupRepository.findById(groupId))
+                .orElseThrow(() -> new GroupWithIdNotFoundException(groupId));
+
+        return GroupDtoMapper.convertEntityToFullDto();
+    }
+
+    @Override
+    public List<AccountShortcutDto> findAll(long headTeacherId) {
+        return List.of();
+    }
+
+    @Override
+    public AccountFullDto findById(long id) {
+        return null;
+    }
 
     @Override
     @Transactional
@@ -84,58 +99,5 @@ public class AdminServiceImpl implements AdminService {
                 .build();
 
         return transactionService.createTransaction(creationDto);
-    }
-
-    @Override
-    public List<AccountShortcutDto> findAllAdmins() {
-        return accountRepository.findAllByRoles_Name(RoleConstant.ROLE_ADMIN).stream()
-                .map(AccountDtoMapper::convertEntityToShortcutDto)
-                .toList();
-    }
-
-    @Override
-    public List<AccountShortcutDto> findAllAdminsByCity(String cityName) {
-        return accountRepository.findAllByRoles_NameAndInstitution_City(RoleConstant.ROLE_ADMIN, cityName).stream()
-                .map(AccountDtoMapper::convertEntityToShortcutDto)
-                .toList();
-    }
-
-    @Override
-    public AccountFullDto findAdminById(long id) {
-        Account account = Optional.ofNullable(accountRepository.findById(id))
-                .orElseThrow(() -> new AccountWithIdNotFoundException(id)); //todo mb check of role
-
-        return AccountDtoMapper.convertEntityToFullDto(account);
-    }
-
-    @Override
-    @Transactional
-    public AccountFullDto createAdmin(long institutionId) {
-        Institution institution = Optional.ofNullable(institutionRepository.findById(institutionId))
-                .orElseThrow(() -> new InstitutionWithIdNotFoundException(institutionId));
-
-        Account account = Account.builder()
-                .firstName("admin")
-                .lastName(institution.getName())
-                .fatherName(institution.getCity())
-                .phoneNumber("no phone") //todo check this
-                .login(Generator.generateAdminLogin(institution.getName()))
-                .password(Generator.generatePassword(RoleConstant.ROLE_ADMIN))
-                .card(cardService.generateCard())
-                .institution(institution)
-                .build();
-
-        accountRepository.save(account);
-
-        institution.getAccounts().add(account);
-
-        return AccountDtoMapper.convertEntityToFullDto(account);
-    }
-
-    @Override
-    public void deleteAdminById(long id) {
-        findAdminById(id);
-
-        accountRepository.deleteById(id); //todo check of role mb
     }
 }
