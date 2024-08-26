@@ -1,9 +1,8 @@
 package by.grsu.liceum.service.impl;
 
-import by.grsu.liceum.dto.account.AccountFullDto;
-import by.grsu.liceum.dto.account.AccountShortcutDto;
 import by.grsu.liceum.dto.admin.RatingDto;
 import by.grsu.liceum.dto.group.GroupFullDto;
+import by.grsu.liceum.dto.group.GroupShortcutDto;
 import by.grsu.liceum.dto.mapper.GroupDtoMapper;
 import by.grsu.liceum.dto.transaction.TransactionCreationDto;
 import by.grsu.liceum.dto.transaction.TransactionDto;
@@ -49,13 +48,13 @@ public class HeadTeacherServiceImpl implements HeadTeacherService {
     }
 
     @Override
-    public List<AccountShortcutDto> findAll(long headTeacherId) {
-        return List.of();
-    }
+    public List<GroupShortcutDto> findAll(long headTeacherId) {
+        Account account = Optional.ofNullable(accountRepository.findById(headTeacherId))
+                .orElseThrow(() -> new AccountWithIdNotFoundException(headTeacherId));
 
-    @Override
-    public AccountFullDto findById(long id) {
-        return null;
+        return groupRepository.findAllByMembers_Institution_Id(account.getInstitution().getId()).stream()
+                .map(GroupDtoMapper::convertEntityToShortcutDto)
+                .toList();
     }
 
     @Override
