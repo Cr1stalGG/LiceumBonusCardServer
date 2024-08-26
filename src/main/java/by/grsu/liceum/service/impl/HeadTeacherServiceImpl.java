@@ -45,7 +45,7 @@ public class HeadTeacherServiceImpl implements HeadTeacherService {
         Group group = Optional.ofNullable(groupRepository.findById(groupId))
                 .orElseThrow(() -> new GroupWithIdNotFoundException(groupId));
 
-        return GroupDtoMapper.convertEntityToFullDto();
+        return GroupDtoMapper.convertEntityToFullDto(group);
     }
 
     @Override
