@@ -29,9 +29,9 @@ public class ApiConfiguration {
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.authorizeHttpRequests(request -> request.requestMatchers(new AntPathRequestMatcher("/swagger-ui/**"), new AntPathRequestMatcher( "/v3/api-docs/**")).permitAll());
-        http.authorizeHttpRequests(request -> request.requestMatchers(new AntPathRequestMatcher("/admins/**")).hasRole("ADMIN"));
+        http.authorizeHttpRequests(request -> request.requestMatchers(new AntPathRequestMatcher("/api/v1/admins/**")).hasRole("ADMIN"));
         http.authorizeHttpRequests(request -> request.requestMatchers(new AntPathRequestMatcher("/actuator/**")).permitAll());
-        http.authorizeHttpRequests(request -> request.requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll());
+        http.authorizeHttpRequests(request -> request.requestMatchers(new AntPathRequestMatcher("/api/v1/auth/**")).permitAll());
         http.authorizeHttpRequests(request -> request.requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll());
         http.authorizeHttpRequests(request -> request.anyRequest().authenticated());
 
