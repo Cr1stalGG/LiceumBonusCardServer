@@ -30,21 +30,26 @@ public class ApiConfiguration {
         http.csrf(AbstractHttpConfigurer::disable);
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
+        http.authenticationProvider(authenticationProvider).addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
         http.authorizeHttpRequests(request -> request.requestMatchers(
                 new AntPathRequestMatcher("/swagger-ui/**"),
                 new AntPathRequestMatcher("/v3/api-docs/**"),
                 new AntPathRequestMatcher("/actuator/**"),
                 new AntPathRequestMatcher("/api/v1/auth/**"),
                 new AntPathRequestMatcher("/h2-console/**"),
-                toH2Console()
-        ).permitAll());
+                toH2Console())
+            .permitAll());
         //http.headers(AbstractHttpConfigurer::disable);
 
         http.authorizeHttpRequests(request -> request.requestMatchers(new AntPathRequestMatcher("/api/v1/admins/**")).hasAuthority("ROLE_ADMIN"));
 
-        http.authorizeHttpRequests(request -> request.anyRequest().authenticated());
+        http.authorizeHttpRequests(request -> request.requestMatchers(
+                new AntPathRequestMatcher("/api/v1/root/institutes"),
+                new AntPathRequestMatcher("/api/v1/root/admins"))
+            .hasAuthority("ROLE_SUPER_ADMIN"));
 
-        http.authenticationProvider(authenticationProvider).addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        http.authorizeHttpRequests(request -> request.anyRequest().authenticated());
 
         return http.build();
     }

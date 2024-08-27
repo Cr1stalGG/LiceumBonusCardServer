@@ -1,6 +1,7 @@
 package by.grsu.liceum.repository;
 
 import by.grsu.liceum.entity.Account;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +13,8 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     List<Account> findAll();
     List<Account> findAllByRoles_Name(String name);
     List<Account> findAllByRoles_NameAndInstitution_City(String name, String city);
+    @EntityGraph(value = "account-with-roles", type = EntityGraph.EntityGraphType.LOAD)
     Account findByLogin(String login);
     void deleteById(long id);
+
 }

@@ -8,12 +8,14 @@ import by.grsu.liceum.dto.transaction.TransactionCreationDto;
 import by.grsu.liceum.dto.transaction.TransactionDto;
 import by.grsu.liceum.entity.Account;
 import by.grsu.liceum.entity.Institution;
+import by.grsu.liceum.entity.Role;
 import by.grsu.liceum.exception.AccountWithIdNotFoundException;
 import by.grsu.liceum.exception.InstitutionWithIdNotFoundException;
 import by.grsu.liceum.exception.InvalidRatingAmountException;
 import by.grsu.liceum.exception.NotEnoughBalanceError;
 import by.grsu.liceum.repository.AccountRepository;
 import by.grsu.liceum.repository.InstitutionRepository;
+import by.grsu.liceum.repository.RoleRepository;
 import by.grsu.liceum.service.AdminService;
 import by.grsu.liceum.service.CardService;
 import by.grsu.liceum.service.TransactionService;
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @PropertySource("${classpath:business_settings.properties}")
@@ -34,6 +37,7 @@ public class AdminServiceImpl implements AdminService {
     private final AccountRepository accountRepository;
     private final TransactionService transactionService;
     private final InstitutionRepository institutionRepository;
+    private final RoleRepository roleRepository;
     private final CardService cardService;
 
     @Value("${property.admin.rating.min_value}")
@@ -112,6 +116,8 @@ public class AdminServiceImpl implements AdminService {
         Institution institution = Optional.ofNullable(institutionRepository.findById(institutionId))
                 .orElseThrow(() -> new InstitutionWithIdNotFoundException(institutionId));
 
+        Role role = roleRepository.findByName("ROLE_ADMIN");//todo optional
+
         Account account = Account.builder()
                 .firstName("admin")
                 .lastName(institution.getName())
@@ -121,10 +127,12 @@ public class AdminServiceImpl implements AdminService {
                 .password(Generator.generatePassword("ROLE_ADMIN"))
                 .card(cardService.generateCard())
                 .institution(institution)
+                .roles(List.of(role))
                 .build();
 
         accountRepository.save(account);
 
+        role.getAccounts().add(account);
         institution.getAccounts().add(account);
 
         return AccountDtoMapper.convertEntityToFullDto(account);

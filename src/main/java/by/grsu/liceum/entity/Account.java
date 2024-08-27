@@ -10,6 +10,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -21,6 +23,12 @@ import lombok.Setter;
 
 import java.util.List;
 
+@NamedEntityGraph(
+    name = "account-with-roles",
+    attributeNodes = {
+            @NamedAttributeNode("roles")
+    }
+)
 @Entity
 @Table(name="accounts")
 @Builder
