@@ -8,7 +8,6 @@ import by.grsu.liceum.dto.transaction.TransactionCreationDto;
 import by.grsu.liceum.dto.transaction.TransactionDto;
 import by.grsu.liceum.entity.Account;
 import by.grsu.liceum.entity.Institution;
-import by.grsu.liceum.entity.enums.RoleConstant;
 import by.grsu.liceum.entity.enums.StatusConstant;
 import by.grsu.liceum.exception.AccountWithIdNotFoundException;
 import by.grsu.liceum.exception.InstitutionWithIdNotFoundException;
@@ -88,14 +87,14 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<AccountShortcutDto> findAllAdmins() {
-        return accountRepository.findAllByRoles_Name(RoleConstant.ROLE_ADMIN).stream()
+        return accountRepository.findAllByRoles_Name("ROLE_ADMIN").stream()
                 .map(AccountDtoMapper::convertEntityToShortcutDto)
                 .toList();
     }
 
     @Override
     public List<AccountShortcutDto> findAllAdminsByCity(String cityName) {
-        return accountRepository.findAllByRoles_NameAndInstitution_City(RoleConstant.ROLE_ADMIN, cityName).stream()
+        return accountRepository.findAllByRoles_NameAndInstitution_City("ROLE_ADMIN", cityName).stream()
                 .map(AccountDtoMapper::convertEntityToShortcutDto)
                 .toList();
     }
@@ -120,7 +119,7 @@ public class AdminServiceImpl implements AdminService {
                 .fatherName(institution.getCity())
                 .phoneNumber("no phone") //todo check this
                 .login(Generator.generateAdminLogin(institution.getName()))
-                .password(Generator.generatePassword(RoleConstant.ROLE_ADMIN))
+                .password(Generator.generatePassword("ROLE_ADMIN"))
                 .card(cardService.generateCard())
                 .institution(institution)
                 .build();

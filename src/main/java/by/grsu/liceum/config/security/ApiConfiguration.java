@@ -1,6 +1,6 @@
 package by.grsu.liceum.config.security;
 
-import by.grsu.liceum.security.JwtAuthFilter;
+import by.grsu.liceum.security.jwt.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,9 +14,11 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
+
 @Configuration
 @EnableWebSecurity(debug = true)
-@EnableMethodSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class ApiConfiguration {
     private final JwtAuthFilter jwtAuthFilter;
@@ -30,16 +32,15 @@ public class ApiConfiguration {
 
         http.authorizeHttpRequests(request -> request.requestMatchers(
                 new AntPathRequestMatcher("/swagger-ui/**"),
-                new AntPathRequestMatcher( "/v3/api-docs/**")
-        ).permitAll());
-
-        http.authorizeHttpRequests(request -> request.requestMatchers(new AntPathRequestMatcher("/api/v1/admins/**")).hasRole("ADMIN"));
-
-        http.authorizeHttpRequests(request -> request.requestMatchers(
+                new AntPathRequestMatcher("/v3/api-docs/**"),
                 new AntPathRequestMatcher("/actuator/**"),
                 new AntPathRequestMatcher("/api/v1/auth/**"),
-                new AntPathRequestMatcher("/h2-console/**")
+                new AntPathRequestMatcher("/h2-console/**"),
+                toH2Console()
         ).permitAll());
+        //http.headers(AbstractHttpConfigurer::disable);
+
+        http.authorizeHttpRequests(request -> request.requestMatchers(new AntPathRequestMatcher("/api/v1/admins/**")).hasAuthority("ROLE_ADMIN"));
 
         http.authorizeHttpRequests(request -> request.anyRequest().authenticated());
 

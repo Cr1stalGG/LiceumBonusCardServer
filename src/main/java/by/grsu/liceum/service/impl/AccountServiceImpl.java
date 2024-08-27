@@ -8,7 +8,6 @@ import by.grsu.liceum.dto.mapper.AccountDtoMapper;
 import by.grsu.liceum.entity.Account;
 import by.grsu.liceum.entity.Card;
 import by.grsu.liceum.entity.Role;
-import by.grsu.liceum.entity.enums.RoleConstant;
 import by.grsu.liceum.exception.AccountWithIdNotFoundException;
 import by.grsu.liceum.exception.InvalidRoleNameException;
 import by.grsu.liceum.repository.AccountRepository;
@@ -51,11 +50,11 @@ public class AccountServiceImpl implements AccountService {
         Account account = AccountDtoMapper.convertDtoToEntity(creationDto);
 
         account.setLogin(Generator.generateLogin(AccountDtoMapper.convertCreationDtoToGeneratorDto(creationDto)));
-        account.setPassword(Generator.generatePassword(RoleConstant.ROLE_USER));
+        account.setPassword(Generator.generatePassword("ROLE_USER"));
 
         accountRepository.save(account);
 
-        for(RoleConstant roleConstant : creationDto.getRoleNames()){
+        for(String roleConstant : creationDto.getRoleNames()){
             Role role = Optional.ofNullable(roleRepository.findByName(roleConstant))
                     .orElseThrow(() -> new InvalidRoleNameException(roleConstant));
 

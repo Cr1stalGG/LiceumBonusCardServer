@@ -9,14 +9,16 @@ import java.util.Collection;
 import java.util.List;
 
 public class AccountUserDetailsConfiguration implements UserDetails {
-    private String login;
-    private String password;
-    private List<SimpleGrantedAuthority> authorities;
+    private final String login;
+    private final String password;
+    private final List<SimpleGrantedAuthority> authorities;
 
     public AccountUserDetailsConfiguration(Account account){
         this.login = account.getLogin();
         this.password = account.getPassword();
-        this.authorities = account.getRoles().stream().map(x -> new SimpleGrantedAuthority(x.getName().name())).toList();
+        this.authorities = account.getRoles().stream()
+                .map(x -> new SimpleGrantedAuthority(x.getName()))
+                .toList();
     }
 
     @Override
@@ -25,12 +27,32 @@ public class AccountUserDetailsConfiguration implements UserDetails {
     }
 
     @Override
-    public String getPassword() {
-        return "";
+    public String getUsername() {
+        return this.login;
     }
 
     @Override
-    public String getUsername() {
-        return "";
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

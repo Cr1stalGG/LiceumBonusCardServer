@@ -1,4 +1,4 @@
-package by.grsu.liceum.security;
+package by.grsu.liceum.security.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -20,7 +20,7 @@ import java.util.function.Function;
 @PropertySource("${classpath:application.properties}")
 public class JwtService {
     @Value("${spring.jwt.secret}")
-    private static String SECRET_KEY; //todo change
+    private String SECRET_KEY; //todo change
 
     public String generateToken(Map<String, Object> claims, UserDetails userDetails) {
         return Jwts
@@ -38,7 +38,7 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractEmail(token);
+        final String username = extractLogin(token);
 
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
@@ -51,7 +51,7 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    public String extractEmail(String token) {
+    public String extractLogin(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 

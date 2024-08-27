@@ -1,7 +1,6 @@
 package by.grsu.liceum.utils;
 
 import by.grsu.liceum.dto.utils.GeneratorLoginDto;
-import by.grsu.liceum.entity.enums.RoleConstant;
 import by.grsu.liceum.exception.InvalidRoleNameException;
 import lombok.experimental.UtilityClass;
 
@@ -27,14 +26,14 @@ public class Generator {
         return login.toString().toLowerCase();
     }
 
-    public static String generatePassword(RoleConstant role) {
+    public static String generatePassword(String role) {
         final String dict = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
         StringBuilder password = new StringBuilder();
 
         int length = switch (role){
-            case ROLE_USER -> ACCOUNT_PASSWORD_LENGTH;
-            case ROLE_ADMIN -> ADMIN_PASSWORD_LENGTH;
+            case "ROLE_USER" -> ACCOUNT_PASSWORD_LENGTH;
+            case "ROLE_ADMIN" -> ADMIN_PASSWORD_LENGTH;
             default -> throw new InvalidRoleNameException(role);
         };
 

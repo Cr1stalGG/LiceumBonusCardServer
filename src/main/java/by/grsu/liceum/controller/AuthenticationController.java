@@ -3,6 +3,7 @@ package by.grsu.liceum.controller;
 import by.grsu.liceum.dto.auth.AuthRequest;
 import by.grsu.liceum.dto.auth.AuthResponse;
 import by.grsu.liceum.service.AuthenticationService;
+import jakarta.annotation.security.PermitAll;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +17,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/login")
+    @PermitAll
     public AuthResponse authenticate(@RequestBody AuthRequest request){
         return authenticationService.authenticate(request);
     }
