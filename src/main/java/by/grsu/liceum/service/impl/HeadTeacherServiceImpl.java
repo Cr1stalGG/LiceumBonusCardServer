@@ -8,7 +8,6 @@ import by.grsu.liceum.dto.transaction.TransactionCreationDto;
 import by.grsu.liceum.dto.transaction.TransactionDto;
 import by.grsu.liceum.entity.Account;
 import by.grsu.liceum.entity.Group;
-import by.grsu.liceum.entity.enums.StatusConstant;
 import by.grsu.liceum.exception.AccountWithIdNotFoundException;
 import by.grsu.liceum.exception.GroupWithIdNotFoundException;
 import by.grsu.liceum.exception.InvalidRatingAmountException;
@@ -71,7 +70,7 @@ public class HeadTeacherServiceImpl implements HeadTeacherService {
         TransactionCreationDto creationDto = TransactionCreationDto.builder()
                 .cardId(account.getCard().getId())
                 .balance(ratingDto.getValue())
-                .status(StatusConstant.ADMIN_ACCRUAL_STATUS)
+                .status("ADMIN_ACCRUAL_STATUS")
                 .build();
 
         return transactionService.createTransaction(creationDto);
@@ -94,7 +93,7 @@ public class HeadTeacherServiceImpl implements HeadTeacherService {
         TransactionCreationDto creationDto = TransactionCreationDto.builder()
                 .cardId(account.getCard().getId())
                 .balance(ratingDto.getValue())
-                .status(StatusConstant.ADMIN_ACCRUAL_STATUS)
+                .status("ADMIN_ACCRUAL_STATUS")
                 .build();
 
         return transactionService.createTransaction(creationDto);

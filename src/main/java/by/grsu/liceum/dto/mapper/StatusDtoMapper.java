@@ -17,7 +17,7 @@ public class StatusDtoMapper {
     private static StatusDto buildStatus(TransactionStatus source) {
         return StatusDto.builder()
                 .uuid(source.getId())
-                .name(source.getName().name())
+                .name(source.getName())
                 .description(source.getDescription())
                 .build();
     }

@@ -8,7 +8,6 @@ import by.grsu.liceum.dto.transaction.TransactionCreationDto;
 import by.grsu.liceum.dto.transaction.TransactionDto;
 import by.grsu.liceum.entity.Account;
 import by.grsu.liceum.entity.Institution;
-import by.grsu.liceum.entity.enums.StatusConstant;
 import by.grsu.liceum.exception.AccountWithIdNotFoundException;
 import by.grsu.liceum.exception.InstitutionWithIdNotFoundException;
 import by.grsu.liceum.exception.InvalidRatingAmountException;
@@ -56,7 +55,7 @@ public class AdminServiceImpl implements AdminService {
         TransactionCreationDto creationDto = TransactionCreationDto.builder()
                 .cardId(account.getCard().getId())
                 .balance(ratingDto.getValue())
-                .status(StatusConstant.ADMIN_ACCRUAL_STATUS)
+                .status("ADMIN_ACCRUAL_STATUS")
                 .build();
 
         return transactionService.createTransaction(creationDto);
@@ -79,7 +78,7 @@ public class AdminServiceImpl implements AdminService {
         TransactionCreationDto creationDto = TransactionCreationDto.builder()
                 .cardId(account.getCard().getId())
                 .balance(ratingDto.getValue())
-                .status(StatusConstant.ADMIN_ACCRUAL_STATUS)
+                .status("ADMIN_ACCRUAL_STATUS")
                 .build();
 
         return transactionService.createTransaction(creationDto);

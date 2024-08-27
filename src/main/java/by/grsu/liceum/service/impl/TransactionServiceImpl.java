@@ -60,7 +60,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .orElseThrow(() -> new CardWithIdNotFoundException(creationDto.getCardId()));
 
         TransactionStatus status = Optional.ofNullable(statusRepository.findByName(creationDto.getStatus()))
-                .orElseThrow(() -> new InvalidTransactionStatusException(creationDto.getStatus().name()));
+                .orElseThrow(() -> new InvalidTransactionStatusException(creationDto.getStatus()));
 
         Transaction transaction = Transaction.builder()
                 .balance(creationDto.getBalance())

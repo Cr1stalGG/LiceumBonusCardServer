@@ -1,6 +1,5 @@
 package by.grsu.liceum.entity;
 
-import by.grsu.liceum.entity.enums.ResponseStatusConstant;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -29,7 +28,7 @@ public class ResponseStatus {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "name")
-    private ResponseStatusConstant name;
+    private String name;
     @Column(name = "description")
     private String description;
 
