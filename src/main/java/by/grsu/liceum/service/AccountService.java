@@ -10,6 +10,6 @@ import java.util.List;
 public interface AccountService {
     AccountFullDto findById(long id);
     List<AccountShortcutDto> findAll();
-    AccountCreationResponse createUserWithRole(AccountCreationDto creationDto);
+    AccountCreationResponse createUserWithRole(long adminId, AccountCreationDto creationDto);
     void deleteById(long id);
 }

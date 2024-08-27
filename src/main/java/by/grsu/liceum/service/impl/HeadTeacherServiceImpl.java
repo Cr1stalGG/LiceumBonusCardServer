@@ -39,14 +39,6 @@ public class HeadTeacherServiceImpl implements HeadTeacherService {
     private int maxRatingValue;
 
     @Override
-    public GroupFullDto findGroupById(long groupId) {
-        Group group = Optional.ofNullable(groupRepository.findById(groupId))
-                .orElseThrow(() -> new GroupWithIdNotFoundException(groupId));
-
-        return GroupDtoMapper.convertEntityToFullDto(group);
-    }
-
-    @Override
     public List<GroupShortcutDto> findAll(long headTeacherId) {
         Account account = Optional.ofNullable(accountRepository.findById(headTeacherId))
                 .orElseThrow(() -> new AccountWithIdNotFoundException(headTeacherId));

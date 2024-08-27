@@ -7,6 +7,7 @@ import by.grsu.liceum.dto.account.AccountShortcutDto;
 import by.grsu.liceum.dto.mapper.AccountDtoMapper;
 import by.grsu.liceum.entity.Account;
 import by.grsu.liceum.entity.Card;
+import by.grsu.liceum.entity.Institution;
 import by.grsu.liceum.entity.Role;
 import by.grsu.liceum.exception.AccountWithIdNotFoundException;
 import by.grsu.liceum.exception.InvalidRoleNameException;
@@ -46,16 +47,19 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional //TODO ADMIN_ROLE
-    public AccountCreationResponse createUserWithRole(AccountCreationDto creationDto) {
+    public AccountCreationResponse createUserWithRole(long adminId, AccountCreationDto creationDto) {
+        Institution institution = accountRepository.findById(adminId).getInstitution();
+
         Account account = AccountDtoMapper.convertDtoToEntity(creationDto);
 
         account.setLogin(Generator.generateLogin(AccountDtoMapper.convertCreationDtoToGeneratorDto(creationDto)));
         account.setPassword(Generator.generatePassword("ROLE_USER"));
+        account.setInstitution(institution);
 
         accountRepository.save(account);
 
         for(String roleConstant : creationDto.getRoleNames()){
-            Role role = Optional.ofNullable(roleRepository.findByName(roleConstant))
+            Role role = Optional.ofNullable(roleRepository.findByName(roleConstant.toUpperCase()))
                     .orElseThrow(() -> new InvalidRoleNameException(roleConstant));
 
             role.getAccounts().add(account);
@@ -65,6 +69,8 @@ public class AccountServiceImpl implements AccountService {
         Card card = cardService.generateCard();
 
         account.setCard(card);
+
+        institution.getAccounts().add(account);
 
         return AccountDtoMapper.convertEntityToCreationResponse(account);
     }

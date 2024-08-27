@@ -8,8 +8,8 @@ import by.grsu.liceum.dto.transaction.TransactionDto;
 import java.util.List;
 
 public interface HeadTeacherService {
-    GroupFullDto findGroupById(long groupId);
     List<GroupShortcutDto> findAll(long headTeacherAccountId);
     TransactionDto addRating(RatingDto ratingDto);
     TransactionDto getRating(RatingDto ratingDto);
 }
+//todo раскидать по разным, порешать момент с addRating методами и попытаться вынести их в абстракцию
