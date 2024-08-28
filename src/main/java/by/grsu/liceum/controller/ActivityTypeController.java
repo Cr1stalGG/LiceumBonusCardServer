@@ -16,30 +16,30 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/activities/types")
+@RequestMapping("/api/v1/institutions/{institutionId}/activities/types")
 @RequiredArgsConstructor
 public class ActivityTypeController {
     private final ActivityTypeService activityTypeService;
 
     @GetMapping("/{id}")
-    public ActivityTypeDto findById(@PathVariable("id") long id){
-        return activityTypeService.findById(id);
+    public ActivityTypeDto findById(@PathVariable("institutionId") long institutionId, @PathVariable("id") long id){
+        return activityTypeService.findById(institutionId, id);
     }
 
     @GetMapping
-    public List<ActivityTypeDto> findAll(){
-        return activityTypeService.findAll();
+    public List<ActivityTypeDto> findAll(@PathVariable("institutionId") long institutionId){
+        return activityTypeService.findAll(institutionId);
     }
 
     @PostMapping
     @Secured(value = "ROLE_ADMIN")
-    public ActivityTypeDto createActivityType(@RequestBody ActivityTypeCreationDto creationDto){
-        return activityTypeService.save(creationDto);
+    public ActivityTypeDto createActivityType(@PathVariable("institutionId") long institutionId, @RequestBody ActivityTypeCreationDto creationDto){
+        return activityTypeService.save(institutionId, creationDto);
     }
 
     @DeleteMapping("/{id}")
     @Secured(value = "ROLE_ADMIN")
-    public void deleteById(@PathVariable("id") long id){
-        activityTypeService.deleteById(id);
+    public void deleteById(@PathVariable("institutionId") long institutionId, @PathVariable("id") long id){
+        activityTypeService.deleteById(institutionId, id);
     }
 }

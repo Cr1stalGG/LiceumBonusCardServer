@@ -11,6 +11,7 @@ import java.util.List;
 public interface AccountRepository extends JpaRepository<Account, Long> {
     Account findById(long id);
     List<Account> findAll();
+    List<Account> findAllByInstitution_Id(long institutionId);
     List<Account> findAllByRoles_Name(String name);
     List<Account> findAllByRoles_NameAndInstitution_City(String name, String city);
     @EntityGraph(value = "account-with-roles", type = EntityGraph.EntityGraphType.LOAD)

@@ -6,8 +6,8 @@ import by.grsu.liceum.dto.activity_type.ActivityTypeDto;
 import java.util.List;
 
 public interface ActivityTypeService {
-    ActivityTypeDto findById(long id);
-    List<ActivityTypeDto> findAll();
-    ActivityTypeDto save(ActivityTypeCreationDto creationDto);
-    void deleteById(long id);
+    ActivityTypeDto findById(long institutionId, long id);
+    List<ActivityTypeDto> findAll(long institutionId);
+    ActivityTypeDto save(long institutionId, ActivityTypeCreationDto creationDto);
+    void deleteById(long institutionId, long id);
 }

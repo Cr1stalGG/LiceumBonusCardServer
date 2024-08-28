@@ -31,12 +31,27 @@ public class Institution {
     private String name;
     @Column(name = "city")
     private String city;
+
     @OneToMany(
             fetch = FetchType.LAZY,
             mappedBy = "institution",
             orphanRemoval = true
     )
     private List<Account> accounts;
+
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "institution",
+            orphanRemoval = true
+    )
+    private List<ActivityType> activityTypes;//todo remove unique from name
+
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "institution",
+            orphanRemoval = true
+    )
+    private List<Bonus> bonuses;
 
     //todo add custom roles
 }

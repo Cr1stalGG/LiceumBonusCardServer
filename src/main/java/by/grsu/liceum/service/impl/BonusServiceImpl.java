@@ -9,13 +9,17 @@ import by.grsu.liceum.dto.mapper.TicketDtoMapper;
 import by.grsu.liceum.dto.ticket.TicketFullDto;
 import by.grsu.liceum.entity.Account;
 import by.grsu.liceum.entity.Bonus;
+import by.grsu.liceum.entity.Institution;
 import by.grsu.liceum.entity.Ticket;
 import by.grsu.liceum.exception.AccountWithIdNotFoundException;
 import by.grsu.liceum.exception.BonusWithIdNotFoundException;
+import by.grsu.liceum.exception.InstitutionWithIdNotFoundException;
 import by.grsu.liceum.exception.InvalidBonusCountException;
+import by.grsu.liceum.exception.InvalidPermissionsException;
 import by.grsu.liceum.exception.NotEnoughBalanceError;
 import by.grsu.liceum.repository.AccountRepository;
 import by.grsu.liceum.repository.BonusRepository;
+import by.grsu.liceum.repository.InstitutionRepository;
 import by.grsu.liceum.repository.TicketRepository;
 import by.grsu.liceum.service.BonusService;
 import by.grsu.liceum.utils.Generator;
@@ -39,41 +43,54 @@ public class BonusServiceImpl implements BonusService {
     private final BonusRepository bonusRepository;
     private final AccountRepository accountRepository;
     private final TicketRepository ticketRepository;
+    private final InstitutionRepository institutionRepository;
 
     @Override
-    public List<BonusShortcutDto> findAll() {
-        return bonusRepository.findAll().stream()
+    public List<BonusShortcutDto> findAllByInstitutionId(long institutionId) {
+        return bonusRepository.findAllByInstitution_Id(institutionId).stream()
                 .filter(x -> x.getCount() > 0)
                 .map(BonusDtoMapper::convertEntityToShortcutDto)
                 .toList();
     }
 
     @Override
-    public BonusFullDto findById(long id) {
+    public BonusFullDto findById(long institutionId, long id) {
         Bonus bonus = Optional.ofNullable(bonusRepository.findById(id))
                 .orElseThrow(() -> new BonusWithIdNotFoundException(id));
 
+        if(bonus.getInstitution().getId() != institutionId)
+            throw new InvalidPermissionsException();
+
         return BonusDtoMapper.convertEntityToFullDto(bonus);
     }
 
     @Override
     @Transactional
-    public BonusFullDto createBonus(BonusCreationDto creationDto) {
+    public BonusFullDto createBonus(long institutionId, BonusCreationDto creationDto) {
+        Institution institution = Optional.ofNullable(institutionRepository.findById(institutionId))
+                .orElseThrow(() -> new InstitutionWithIdNotFoundException(institutionId));
+
         Bonus bonus = BonusDtoMapper.convertDtoToEntity(creationDto);
+        bonus.setInstitution(institution);
 
         bonusRepository.save(bonus);
 
+        institution.getBonuses().add(bonus);
+
         return BonusDtoMapper.convertEntityToFullDto(bonus);
     }
 
     @Override
     @Transactional
-    public TicketFullDto buyBonus(BonusBuyDto buyDto) {
+    public TicketFullDto buyBonus(long institutionId, BonusBuyDto buyDto) {
         Account account = Optional.ofNullable(accountRepository.findById(buyDto.getAccountId()))
                 .orElseThrow(() -> new AccountWithIdNotFoundException(buyDto.getAccountId()));
 
         Bonus bonus = Optional.ofNullable(bonusRepository.findById(buyDto.getBonusId()))
                 .orElseThrow(() -> new BonusWithIdNotFoundException(buyDto.getBonusId()));
+
+        if(account.getInstitution().getId() != institutionId || bonus.getInstitution().getId() != institutionId)
+            throw new InvalidPermissionsException();
 
         if(account.getCard().getBalance() < bonus.getPrice())
             throw new NotEnoughBalanceError(account.getId(), bonus.getPrice());
@@ -124,8 +141,12 @@ public class BonusServiceImpl implements BonusService {
 
 
     @Override
-    public void deleteById(long id) {
-        findById(id);
+    public void deleteById(long institutionId, long id) {
+        Bonus bonus = Optional.ofNullable(bonusRepository.findById(id))
+                .orElseThrow(() -> new BonusWithIdNotFoundException(id));
+
+        if (bonus.getInstitution().getId() != institutionId)
+            throw new InvalidPermissionsException();
 
         bonusRepository.deleteById(id);
     }

@@ -10,8 +10,11 @@ import by.grsu.liceum.entity.Card;
 import by.grsu.liceum.entity.Institution;
 import by.grsu.liceum.entity.Role;
 import by.grsu.liceum.exception.AccountWithIdNotFoundException;
+import by.grsu.liceum.exception.InstitutionWithIdNotFoundException;
+import by.grsu.liceum.exception.InvalidPermissionsException;
 import by.grsu.liceum.exception.InvalidRoleNameException;
 import by.grsu.liceum.repository.AccountRepository;
+import by.grsu.liceum.repository.InstitutionRepository;
 import by.grsu.liceum.repository.RoleRepository;
 import by.grsu.liceum.service.AccountService;
 import by.grsu.liceum.service.CardService;
@@ -29,26 +32,31 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final RoleRepository roleRepository;
     private final CardService cardService;
+    private final InstitutionRepository institutionRepository;
 
     @Override
-    public AccountFullDto findById(long id) {
+    public AccountFullDto findById(long institutionId, long id) {
         Account account = Optional.ofNullable(accountRepository.findById(id))
                 .orElseThrow(() -> new AccountWithIdNotFoundException(id));
+
+        if(account.getInstitution().getId() != institutionId)
+            throw new InvalidPermissionsException();
 
         return AccountDtoMapper.convertEntityToFullDto(account);
     }
 
     @Override
-    public List<AccountShortcutDto> findAll() {
-        return accountRepository.findAll().stream()
+    public List<AccountShortcutDto> findAll(long institutionId) {
+        return accountRepository.findAllByInstitution_Id(institutionId).stream()
                 .map(AccountDtoMapper::convertEntityToShortcutDto)
                 .toList();
     }
 
     @Override
     @Transactional //TODO ADMIN_ROLE
-    public AccountCreationResponse createUserWithRole(long adminId, AccountCreationDto creationDto) {
-        Institution institution = accountRepository.findById(adminId).getInstitution();
+    public AccountCreationResponse createUserWithRole(long institutionId, AccountCreationDto creationDto) {
+        Institution institution = Optional.ofNullable(institutionRepository.findById(institutionId))
+                .orElseThrow(() -> new InstitutionWithIdNotFoundException(institutionId));
 
         Account account = AccountDtoMapper.convertDtoToEntity(creationDto);
 
@@ -76,9 +84,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void deleteById(long id) {
-        Optional.ofNullable(accountRepository.findById(id))
+    public void deleteById(long institutionId, long id) {
+        Account account = Optional.ofNullable(accountRepository.findById(id))
                 .orElseThrow(() -> new AccountWithIdNotFoundException(id));
+
+        if(account.getInstitution().getId() != institutionId)
+            throw new InvalidPermissionsException();
 
         accountRepository.deleteById(id);
     }

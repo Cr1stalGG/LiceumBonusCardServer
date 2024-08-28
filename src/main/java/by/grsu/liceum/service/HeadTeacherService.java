@@ -1,7 +1,6 @@
 package by.grsu.liceum.service;
 
 import by.grsu.liceum.dto.admin.RatingDto;
-import by.grsu.liceum.dto.group.GroupFullDto;
 import by.grsu.liceum.dto.group.GroupShortcutDto;
 import by.grsu.liceum.dto.transaction.TransactionDto;
 

@@ -98,7 +98,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     @Transactional
-    public void readCode(TicketReadCodeDto readCodeDto){ //todo mb return response
+    public void readCode(TicketReadCodeDto readCodeDto){
         Ticket ticket = Optional.ofNullable(ticketRepository.findById(readCodeDto.getUuid()))
                 .orElseThrow(() -> new TicketWithIdNotFoundException(readCodeDto.getUuid()));
 

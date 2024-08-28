@@ -7,8 +7,8 @@ import by.grsu.liceum.dto.activity.ActivityShortcutDto;
 import java.util.List;
 
 public interface ActivityService {
-    List<ActivityShortcutDto> findAll();
-    ActivityFullDto findById(long id);
-    ActivityFullDto createActivity(ActivityCreationDto creationDto);
-    void deleteById(long id);
+    List<ActivityShortcutDto> findAll(long institutionId);
+    ActivityFullDto findById(long institutionId, long id);
+    ActivityFullDto createActivity(long institutionId, ActivityCreationDto creationDto);
+    void deleteById(long institutionId, long id);
 }

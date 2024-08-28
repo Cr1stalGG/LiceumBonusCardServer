@@ -13,16 +13,16 @@
         <sqlFile encoding="utf8" path="./initial/01.create-roles-table.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
-    <changeSet id="initial-bonuses" author="Alexander Savickij">
-        <sqlFile encoding="utf8" path="./initial/02.create-bonuses-table.sql" relativeToChangelogFile="true"/>
+    <changeSet id="initial-institutes" author="Alexander Savickij">
+        <sqlFile encoding="utf8" path="./initial/02.create-institutions-table.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
     <changeSet id="initial-cards" author="Alexander Savickij">
         <sqlFile encoding="utf8" path="./initial/03.create-cards-table.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
-    <changeSet id="initial-institutes" author="Alexander Savickij">
-        <sqlFile encoding="utf8" path="./initial/04.create-institutions-table.sql" relativeToChangelogFile="true"/>
+    <changeSet id="initial-bonuses" author="Alexander Savickij">
+        <sqlFile encoding="utf8" path="./initial/04.create-bonuses-table.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
     <changeSet id="initial-accounts" author="Alexander Savickij">

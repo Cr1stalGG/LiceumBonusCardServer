@@ -9,12 +9,14 @@ import by.grsu.liceum.exception.CardWithIdNotFoundException;
 import by.grsu.liceum.exception.GroupWithIdNotFoundException;
 import by.grsu.liceum.exception.InstitutionWithIdNotFoundException;
 import by.grsu.liceum.exception.InvalidBonusCountException;
+import by.grsu.liceum.exception.InvalidPermissionsException;
 import by.grsu.liceum.exception.InvalidRatingAmountException;
 import by.grsu.liceum.exception.InvalidRoleNameException;
 import by.grsu.liceum.exception.InvalidTicketCodeException;
 import by.grsu.liceum.exception.InvalidTransactionStatusException;
 import by.grsu.liceum.exception.NotEnoughBalanceError;
 import by.grsu.liceum.exception.NullableAccountCreationDtoException;
+import by.grsu.liceum.exception.NullableGroupCreationDtoException;
 import by.grsu.liceum.exception.TicketWithIdNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -44,7 +46,8 @@ public class RestExceptionHandler {
             InvalidTicketCodeException.class,
             InvalidTransactionStatusException.class,
             InvalidRoleNameException.class,
-            InvalidRatingAmountException.class
+            InvalidRatingAmountException.class,
+            InvalidPermissionsException.class
     })
     public ResponseEntity<String> handleInvalidException(Exception e){
         return new ResponseEntity<>("Invalid error: " + e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -52,7 +55,8 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(value = {
             NotEnoughBalanceError.class,
-            NullableAccountCreationDtoException.class
+            NullableAccountCreationDtoException.class,
+            NullableGroupCreationDtoException.class
     })
     public ResponseEntity<String> handleInvalidOperationException(Exception e){
         return new ResponseEntity<>("Cannot do operation error: " + e.getMessage(), HttpStatus.BAD_REQUEST);

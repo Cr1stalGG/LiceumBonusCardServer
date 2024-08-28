@@ -32,6 +32,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String jwtToken = jwtService.generateToken(new AccountUserDetailsConfiguration(account));
 
         return AuthResponse.builder()
+                .uuid(account.getId())
+                .institutionId(account.getInstitution().getId())
                 .token(jwtToken)
                 .roles(account.getRoles().stream()
                         .map(Role::getName)

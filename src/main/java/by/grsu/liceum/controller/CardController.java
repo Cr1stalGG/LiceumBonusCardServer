@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/cards")
+@RequestMapping("/api/v1/cards") //todo check
 @RequiredArgsConstructor
 public class CardController {
     private final CardService cardService;

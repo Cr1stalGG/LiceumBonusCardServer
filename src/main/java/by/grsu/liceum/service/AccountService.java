@@ -8,8 +8,8 @@ import by.grsu.liceum.dto.account.AccountShortcutDto;
 import java.util.List;
 
 public interface AccountService {
-    AccountFullDto findById(long id);
-    List<AccountShortcutDto> findAll();
-    AccountCreationResponse createUserWithRole(long adminId, AccountCreationDto creationDto);
-    void deleteById(long id);
+    AccountFullDto findById(long institutionId, long id);
+    List<AccountShortcutDto> findAll(long institutionId);
+    AccountCreationResponse createUserWithRole(long institutionId, AccountCreationDto creationDto);
+    void deleteById(long institutionId, long id);
 }

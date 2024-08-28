@@ -1,4 +1,4 @@
-package by.grsu.liceum.dto.auth;
+package by.grsu.liceum.dto.group;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,9 +13,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthResponse {
-    private long uuid;
-    private long institutionId;
-    private String token;
-    private List<String> roles; //todo optional change to number
+public class GroupCreationDto {
+    private String name;
+    private long adminId;
+    private List<Long> membersId;//todo optional
 }

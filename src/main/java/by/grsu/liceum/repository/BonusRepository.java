@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface BonusRepository extends JpaRepository<Bonus, Long> {
     Bonus findById(long id);
-    List<Bonus> findAll();
+    List<Bonus> findAllByInstitution_Id(long institutionId);
 }
