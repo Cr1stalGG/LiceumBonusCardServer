@@ -14,6 +14,7 @@ public interface AdminService {
     List<AdminShortcutDto> findAllAdminsByCity(String city);
     AdminFullDto findAdminById(long id);
     AdminFullDto createAdmin(long institutionId);
+    AdminFullDto regeneratePassword(long institutionId, long adminId);
     //AccountFullDto updateAdmin(long id, AccountUpdateDto updateDto); todo а в каком случае это вообще может пригодиться?
     void deleteAdminById(long id);
 }

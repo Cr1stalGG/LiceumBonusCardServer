@@ -6,8 +6,8 @@ import by.grsu.liceum.entity.Card;
 import java.util.List;
 
 public interface CardService {
-    CardDto findById(long id);
-    List<CardDto> findAll();
+    CardDto findById(long institutionId, long id);
+    List<CardDto> findAll(long institutionId);
     Card generateCard();
-    void deleteById(long id);
+    void deleteById(long institutionId, long id);
 }

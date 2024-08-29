@@ -25,6 +25,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,6 +40,7 @@ public class AdminServiceImpl implements AdminService {
     private final InstitutionRepository institutionRepository;
     private final RoleRepository roleRepository;
     private final CardService cardService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Value("${property.admin.rating.min_value}")
     private int minRatingValue;
@@ -65,7 +67,7 @@ public class AdminServiceImpl implements AdminService {
                 .status("ADMIN_ACCRUAL_STATUS")
                 .build();
 
-        return transactionService.createTransaction(creationDto);
+        return transactionService.createTransaction(institutionId, creationDto);
     }
 
     @Override
@@ -91,7 +93,7 @@ public class AdminServiceImpl implements AdminService {
                 .status("ADMIN_ACCRUAL_STATUS")
                 .build();
 
-        return transactionService.createTransaction(creationDto);
+        return transactionService.createTransaction(institutionId, creationDto);
     }
 
     @Override
@@ -124,13 +126,15 @@ public class AdminServiceImpl implements AdminService {
 
         Role role = roleRepository.findByName("ROLE_ADMIN");//todo optional
 
+        String password = Generator.generatePassword("ROLE_ADMIN");
+
         Account account = Account.builder()
                 .firstName("admin")
                 .lastName(institution.getName())
                 .fatherName(institution.getCity())
                 .phoneNumber("no phone") //todo check this
                 .login(Generator.generateAdminLogin(institution.getName()))
-                .password(Generator.generatePassword("ROLE_ADMIN"))
+                .password(bCryptPasswordEncoder.encode(password))
                 .card(cardService.generateCard())
                 .institution(institution)
                 .roles(List.of(role))
@@ -141,7 +145,32 @@ public class AdminServiceImpl implements AdminService {
         role.getAccounts().add(account);
         institution.getAccounts().add(account);
 
-        return AdminDtoMapper.convertEntityToFullDto(account);
+        AdminFullDto dto = AdminDtoMapper.convertEntityToFullDto(account);
+        dto.setPassword(password);
+
+        return dto;
+    }
+
+    @Override
+    @Transactional
+    public AdminFullDto regeneratePassword(long institutionId, long adminId) {
+        Account account = Optional.ofNullable(accountRepository.findById(adminId))
+                .orElseThrow(() -> new AccountWithIdNotFoundException(institutionId));
+
+        if(account.getRoles().stream().noneMatch(x -> x.getName().equals("ROLE_ADMIN")))
+            throw new InvalidPermissionsException();
+
+        if(account.getInstitution().getId() != institutionId)
+            throw new InvalidPermissionsException();
+
+        String password = Generator.generatePassword("ROLE_ADMIN");
+
+        account.setPassword(bCryptPasswordEncoder.encode(password));
+
+        AdminFullDto dto = AdminDtoMapper.convertEntityToFullDto(account);
+        dto.setPassword(password);
+
+        return dto;
     }
 
     @Override

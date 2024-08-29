@@ -45,4 +45,8 @@ public class Group {
             inverseJoinColumns = @JoinColumn(name = "account_id")
     )
     private List<Account> members;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "institution_id")
+    private Institution institution;
 }

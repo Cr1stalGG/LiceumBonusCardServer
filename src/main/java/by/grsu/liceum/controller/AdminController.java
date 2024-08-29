@@ -5,7 +5,7 @@ import by.grsu.liceum.dto.transaction.TransactionDto;
 import by.grsu.liceum.service.AccountService;
 import by.grsu.liceum.service.AdminService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,13 +20,13 @@ public class AdminController {
     private final AccountService accountService;
 
     @PostMapping("/push")
-    @Secured(value = "ROLE_ADMIN")
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     public TransactionDto addRating(@PathVariable("institutionId") long institutionId, @RequestBody RatingDto ratingDto){
         return adminService.addRating(institutionId, ratingDto);
     }
 
     @PostMapping("/take")
-    @Secured(value = "ROLE_ADMIN")
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     public TransactionDto getRating(@PathVariable("institutionId") long institutionId, @RequestBody RatingDto ratingDto){
         return adminService.getRating(institutionId, ratingDto);
     }

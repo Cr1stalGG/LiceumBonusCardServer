@@ -11,6 +11,7 @@ import by.grsu.liceum.entity.Ticket;
 import by.grsu.liceum.exception.AccountWithIdNotFoundException;
 import by.grsu.liceum.exception.BonusWithIdNotFoundException;
 import by.grsu.liceum.exception.InvalidBonusCountException;
+import by.grsu.liceum.exception.InvalidPermissionsException;
 import by.grsu.liceum.exception.InvalidTicketCodeException;
 import by.grsu.liceum.exception.TicketWithIdNotFoundException;
 import by.grsu.liceum.repository.AccountRepository;
@@ -33,28 +34,34 @@ public class TicketServiceImpl implements TicketService {
     private final BonusRepository bonusRepository;
 
     @Override
-    public List<TicketShortcutDto> findAll() {
-        return ticketRepository.findAll().stream()
+    public List<TicketShortcutDto> findAll(long institutionId) {
+        return ticketRepository.findAllByBonus_Institution_Id(institutionId).stream()
                 .map(TicketDtoMapper::convertEntityToShortcutDto)
                 .toList();
     }
 
     @Override
-    public TicketFullDto findById(long id) {
+    public TicketFullDto findById(long institutionId, long id) {
         Ticket ticket = Optional.ofNullable(ticketRepository.findById(id))
                 .orElseThrow(() -> new TicketWithIdNotFoundException(id));
+
+        if(ticket.getBonus().getInstitution().getId() != institutionId || ticket.getAccount().getInstitution().getId() != institutionId)
+            throw new InvalidPermissionsException();
 
         return TicketDtoMapper.convertEntitToFullDto(ticket);
     }
 
     @Override
     @Transactional
-    public TicketFullDto setTicketToTheAccount(SetTicketDto ticketDto) {
+    public TicketFullDto setTicketToTheAccount(long institutionId, SetTicketDto ticketDto) {
         Account account = Optional.ofNullable(accountRepository.findById(ticketDto.getAccountId()))
                 .orElseThrow(() -> new AccountWithIdNotFoundException(ticketDto.getAccountId()));
 
         Bonus bonus = Optional.ofNullable(bonusRepository.findById(ticketDto.getBonusId()))
                 .orElseThrow(() -> new BonusWithIdNotFoundException(ticketDto.getBonusId()));
+
+        if(bonus.getInstitution().getId() != institutionId || account.getInstitution().getId() != institutionId)
+            throw new InvalidPermissionsException();
 
         if(bonus.getCount() > 0)
             bonus.setCount(bonus.getCount() - 1);
@@ -79,28 +86,33 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     @Transactional
-    public void rollTicketBack(long id) {
+    public void rollTicketBack(long institutionId, long id) {
         Ticket ticket = Optional.ofNullable(ticketRepository.findById(id))
                 .orElseThrow(() -> new TicketWithIdNotFoundException(id));
 
-        Bonus bonus = Optional.ofNullable(bonusRepository.findById(ticket.getBonus().getId()))
+        if(ticket.getBonus().getInstitution().getId() != institutionId || ticket.getAccount().getInstitution().getId() != institutionId)
+            throw new InvalidPermissionsException();
+
+        Bonus bonus = Optional.of(ticket.getBonus())
                 .orElseThrow(() -> new BonusWithIdNotFoundException(ticket.getBonus().getId()));
 
-        Account account = Optional.ofNullable(accountRepository.findById(ticket.getAccount().getId()))
+        Account account = Optional.of(ticket.getAccount())
                 .orElseThrow(() -> new AccountWithIdNotFoundException(ticket.getAccount().getId()));
 
         account.getCard().setBalance(account.getCard().getBalance() + bonus.getPrice()); //todo mb not full price but with some percent
         bonus.setCount(bonus.getCount() + 1);
-        
-        //todo account tickets -> remove ticket
+
         ticketRepository.deleteById(id);
     }
 
     @Override
     @Transactional
-    public void readCode(TicketReadCodeDto readCodeDto){
+    public void readCode(long institutionId, TicketReadCodeDto readCodeDto){
         Ticket ticket = Optional.ofNullable(ticketRepository.findById(readCodeDto.getUuid()))
                 .orElseThrow(() -> new TicketWithIdNotFoundException(readCodeDto.getUuid()));
+
+        if(ticket.getBonus().getInstitution().getId() != institutionId || ticket.getAccount().getInstitution().getId() != institutionId)
+            throw new InvalidPermissionsException();
 
         if(ticket.getCode().equals(readCodeDto.getCode())) { //todo check user
             ticketRepository.deleteById(readCodeDto.getUuid());
@@ -112,8 +124,12 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public void deleteById(long id) {
-        findById(id);
+    public void deleteById(long institutionId, long id) {
+        Ticket ticket = Optional.ofNullable(ticketRepository.findById(id))
+                .orElseThrow(() -> new TicketWithIdNotFoundException(id));
+
+        if(ticket.getBonus().getInstitution().getId() != institutionId || ticket.getAccount().getInstitution().getId() != institutionId)
+            throw new InvalidPermissionsException();
 
         ticketRepository.deleteById(id);
     }

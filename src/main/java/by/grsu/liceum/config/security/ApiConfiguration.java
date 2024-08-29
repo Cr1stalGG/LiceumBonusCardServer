@@ -42,12 +42,18 @@ public class ApiConfiguration {
             .permitAll());
         //http.headers(AbstractHttpConfigurer::disable);
 
-        http.authorizeHttpRequests(request -> request.requestMatchers(new AntPathRequestMatcher("/api/v1/admins/**")).hasAuthority("ROLE_ADMIN"));
+        http.authorizeHttpRequests(request -> request.requestMatchers(
+                new AntPathRequestMatcher("/api/v1/institutions/{institutionId}/admins/**"))
+            .hasAuthority("ROLE_ADMIN"));
 
         http.authorizeHttpRequests(request -> request.requestMatchers(
                 new AntPathRequestMatcher("/api/v1/root/institutes"),
                 new AntPathRequestMatcher("/api/v1/root/admins"))
             .hasAuthority("ROLE_SUPER_ADMIN"));
+
+        http.authorizeHttpRequests(request -> request.requestMatchers(
+                new AntPathRequestMatcher("/api/v1/institutions/{institutionId}/head"))
+        .hasAnyAuthority("ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_HEAD_TEACHER"));
 
         http.authorizeHttpRequests(request -> request.anyRequest().authenticated());
 

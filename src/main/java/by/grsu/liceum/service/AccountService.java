@@ -11,5 +11,6 @@ public interface AccountService {
     AccountFullDto findById(long institutionId, long id);
     List<AccountShortcutDto> findAll(long institutionId);
     AccountCreationResponse createUserWithRole(long institutionId, AccountCreationDto creationDto);
+    AccountCreationResponse regeneratePassword(long institutionId, long accountId);
     void deleteById(long institutionId, long id);
 }

@@ -10,6 +10,6 @@ import java.util.List;
 public interface ActivityRepository extends JpaRepository<Activity, Long> {
     Activity findById(long id);
     List<Activity> findAll();
-    List<Activity> finaAllByActivityType_Institution_Id(long institutionId);
+    List<Activity> findAllByActivityType_Institution_Id(long institutionId);
 
 }

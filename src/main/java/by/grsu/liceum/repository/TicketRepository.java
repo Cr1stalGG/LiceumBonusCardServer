@@ -10,5 +10,6 @@ import java.util.List;
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
     Ticket findById(long id);
     List<Ticket> findAll();
+    List<Ticket> findAllByBonus_Institution_Id(long institutionId);
     boolean existsByCode(String code);
 }

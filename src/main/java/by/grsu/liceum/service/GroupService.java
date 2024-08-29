@@ -6,8 +6,8 @@ import by.grsu.liceum.dto.group.GroupCreationDto;
 import by.grsu.liceum.dto.group.GroupFullDto;
 
 public interface GroupService {
-    GroupFullDto findGroupById(long id);
-    GroupFullDto createNewGroup(GroupCreationDto creationDto);
-    void addMembersToTheGroup(AddMembersDto addMembersDto);
-    void deleteGroupById(long id);
+    GroupFullDto findGroupById(long institutionId, long id);
+    GroupFullDto createNewGroup(long institutionId, GroupCreationDto creationDto);
+    void addMembersToTheGroup(long institutionId, AddMembersDto addMembersDto);
+    void deleteGroupById(long institutionId, long id);
 }

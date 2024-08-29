@@ -5,6 +5,7 @@ import by.grsu.liceum.dto.group.GroupCreationDto;
 import by.grsu.liceum.dto.group.GroupFullDto;
 import by.grsu.liceum.service.GroupService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,28 +15,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/groups")
+@RequestMapping("/api/v1/institutions/{institutionId}/groups")
 @RequiredArgsConstructor
-public class GroupController { //todo check
+public class GroupController {
     private final GroupService groupService;
 
     @GetMapping("/{id}")
-    public GroupFullDto findGroupById(@PathVariable("id") long id){
-        return groupService.findGroupById(id);
+    @PreAuthorize("isAuthenticated()")
+    public GroupFullDto findGroupById(@PathVariable("institutionId") long institutionId, @PathVariable("id") long id){
+        return groupService.findGroupById(institutionId, id);
     }
 
     @PostMapping
-    public GroupFullDto createNewGroup(@RequestBody GroupCreationDto creationDto){
-        return groupService.createNewGroup(creationDto);
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_HEAD_TEACHER', 'ROLE_TEACHER')")
+    public GroupFullDto createNewGroup(@PathVariable("institutionId")long institutionId, @RequestBody GroupCreationDto creationDto){
+        return groupService.createNewGroup(institutionId, creationDto);
     }
 
     @PostMapping("/add")
-    void addMembersToTheGroup(@RequestBody AddMembersDto addMembersDto){
-        groupService.addMembersToTheGroup(addMembersDto);
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_HEAD_TEACHER', 'ROLE_TEACHER')")
+    void addMembersToTheGroup(@PathVariable("institutionId")long institutionId, @RequestBody AddMembersDto addMembersDto){
+        groupService.addMembersToTheGroup(institutionId, addMembersDto);
     }
 
     @DeleteMapping("/{id}")
-    void deleteGroupById(@PathVariable("id") long id){
-        groupService.deleteGroupById(id);
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_HEAD_TEACHER', 'ROLE_TEACHER')")
+    void deleteGroupById(@PathVariable("institutionId")long institutionId, @PathVariable("id") long id){
+        groupService.deleteGroupById(institutionId, id);
     }
 }

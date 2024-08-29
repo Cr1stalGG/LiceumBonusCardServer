@@ -21,6 +21,7 @@ import by.grsu.liceum.service.CardService;
 import by.grsu.liceum.utils.Generator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,6 +34,7 @@ public class AccountServiceImpl implements AccountService {
     private final RoleRepository roleRepository;
     private final CardService cardService;
     private final InstitutionRepository institutionRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public AccountFullDto findById(long institutionId, long id) {
@@ -53,15 +55,17 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    @Transactional //TODO ADMIN_ROLE
+    @Transactional
     public AccountCreationResponse createUserWithRole(long institutionId, AccountCreationDto creationDto) {
         Institution institution = Optional.ofNullable(institutionRepository.findById(institutionId))
                 .orElseThrow(() -> new InstitutionWithIdNotFoundException(institutionId));
 
         Account account = AccountDtoMapper.convertDtoToEntity(creationDto);
 
+        String password = Generator.generatePassword("ROLE_USER");
+
         account.setLogin(Generator.generateLogin(AccountDtoMapper.convertCreationDtoToGeneratorDto(creationDto)));
-        account.setPassword(Generator.generatePassword("ROLE_USER"));
+        account.setPassword(bCryptPasswordEncoder.encode(password));
         account.setInstitution(institution);
 
         accountRepository.save(account);
@@ -80,7 +84,29 @@ public class AccountServiceImpl implements AccountService {
 
         institution.getAccounts().add(account);
 
-        return AccountDtoMapper.convertEntityToCreationResponse(account);
+        AccountCreationResponse response = AccountDtoMapper.convertEntityToCreationResponse(account);
+        response.setPassword(password);
+
+        return response;
+    }
+
+    @Override
+    @Transactional
+    public AccountCreationResponse regeneratePassword(long institutionId, long accountId) {
+        Account account = Optional.ofNullable(accountRepository.findById(accountId))
+                .orElseThrow(() -> new AccountWithIdNotFoundException(accountId));
+
+        if(account.getInstitution().getId() != institutionId)
+            throw new InvalidPermissionsException();
+
+        String password = Generator.generatePassword("ROLE_USER");
+
+        account.setPassword(bCryptPasswordEncoder.encode(password));
+
+        AccountCreationResponse response = AccountDtoMapper.convertEntityToCreationResponse(account);
+        response.setPassword(password);
+
+        return response;
     }
 
     @Override

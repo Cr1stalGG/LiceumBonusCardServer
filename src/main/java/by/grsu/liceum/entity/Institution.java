@@ -53,5 +53,12 @@ public class Institution {
     )
     private List<Bonus> bonuses;
 
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "institution",
+            orphanRemoval = true
+    )
+    private List<Group> groups;
+
     //todo add custom roles
 }

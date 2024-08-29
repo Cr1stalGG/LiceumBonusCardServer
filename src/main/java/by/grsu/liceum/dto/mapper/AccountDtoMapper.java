@@ -62,7 +62,6 @@ public class AccountDtoMapper {
         return AccountCreationResponse.builder()
                 .uuid(source.getId())
                 .login(source.getLogin())
-                .password(source.getPassword())
                 .card(CardDtoMapper.convertEntityToDto(source.getCard()))
                 .firstName(source.getFirstName())
                 .lastName(source.getLastName())

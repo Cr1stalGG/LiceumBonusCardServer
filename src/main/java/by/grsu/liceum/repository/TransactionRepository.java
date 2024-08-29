@@ -10,5 +10,6 @@ import java.util.List;
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
     List<Transaction> findAll();
     List<Transaction> findAllByTransactionStatusName(String statusConstant);
+    List<Transaction> findAllByCard_Account_Institution_Id(long institutionId);
     Transaction findById(long id);
 }

@@ -27,7 +27,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public List<ActivityShortcutDto> findAll(long institutionId) {
-        return activityRepository.finaAllByActivityType_Institution_Id(institutionId).stream()
+        return activityRepository.findAllByActivityType_Institution_Id(institutionId).stream()
                 .map(ActivityDtoMapper::convertEntityToShortcutDto)
                 .toList();
     }
@@ -45,7 +45,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     @Transactional
-    public ActivityFullDto createActivity(long institutionId, ActivityCreationDto creationDto) { //todo mb migrations activities -> institutions
+    public ActivityFullDto createActivity(long institutionId, ActivityCreationDto creationDto) {
         Activity activity = ActivityDtoMapper.convertDtoToEntity(creationDto);
 
         ActivityType activityType = Optional.ofNullable(activityTypeRepository.findById(creationDto.getActivityTypeId()))

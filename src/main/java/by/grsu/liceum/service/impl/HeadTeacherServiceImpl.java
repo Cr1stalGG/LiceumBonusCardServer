@@ -1,15 +1,12 @@
 package by.grsu.liceum.service.impl;
 
 import by.grsu.liceum.dto.admin.RatingDto;
-import by.grsu.liceum.dto.group.GroupFullDto;
 import by.grsu.liceum.dto.group.GroupShortcutDto;
 import by.grsu.liceum.dto.mapper.GroupDtoMapper;
 import by.grsu.liceum.dto.transaction.TransactionCreationDto;
 import by.grsu.liceum.dto.transaction.TransactionDto;
 import by.grsu.liceum.entity.Account;
-import by.grsu.liceum.entity.Group;
 import by.grsu.liceum.exception.AccountWithIdNotFoundException;
-import by.grsu.liceum.exception.GroupWithIdNotFoundException;
 import by.grsu.liceum.exception.InvalidRatingAmountException;
 import by.grsu.liceum.exception.NotEnoughBalanceError;
 import by.grsu.liceum.repository.AccountRepository;
@@ -39,18 +36,15 @@ public class HeadTeacherServiceImpl implements HeadTeacherService {
     private int maxRatingValue;
 
     @Override
-    public List<GroupShortcutDto> findAll(long headTeacherId) {
-        Account account = Optional.ofNullable(accountRepository.findById(headTeacherId))
-                .orElseThrow(() -> new AccountWithIdNotFoundException(headTeacherId));
-
-        return groupRepository.findAllByMembers_Institution_Id(account.getInstitution().getId()).stream()
+    public List<GroupShortcutDto> findAll(long institutionId) {
+        return groupRepository.findAllByMembers_Institution_Id(institutionId).stream()
                 .map(GroupDtoMapper::convertEntityToShortcutDto)
                 .toList();
     }
 
     @Override
     @Transactional
-    public TransactionDto addRating(RatingDto ratingDto) {
+    public TransactionDto addRating(long institutionId, RatingDto ratingDto) {
         if(ratingDto.getValue() < this.minRatingValue || ratingDto.getValue() > this.maxRatingValue)
             throw new InvalidRatingAmountException(this.minRatingValue, this.maxRatingValue, ratingDto.getValue());
 
@@ -65,12 +59,12 @@ public class HeadTeacherServiceImpl implements HeadTeacherService {
                 .status("ADMIN_ACCRUAL_STATUS")
                 .build();
 
-        return transactionService.createTransaction(creationDto);
+        return transactionService.createTransaction(institutionId, creationDto);
     }
 
     @Override
     @Transactional
-    public TransactionDto getRating(RatingDto ratingDto) {
+    public TransactionDto getRating(long institutionId, RatingDto ratingDto) {
         if(ratingDto.getValue() < this.minRatingValue || ratingDto.getValue() > this.maxRatingValue)
             throw new InvalidRatingAmountException(this.minRatingValue, this.maxRatingValue, ratingDto.getValue());
 
@@ -88,6 +82,6 @@ public class HeadTeacherServiceImpl implements HeadTeacherService {
                 .status("ADMIN_ACCRUAL_STATUS")
                 .build();
 
-        return transactionService.createTransaction(creationDto);
+        return transactionService.createTransaction(institutionId, creationDto);
     }
 }

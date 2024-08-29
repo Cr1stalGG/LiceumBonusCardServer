@@ -35,7 +35,6 @@ public class AdminDtoMapper {
         return AdminFullDto.builder()
                 .uuid(source.getId())
                 .login(source.getLogin())
-                .password(source.getPassword())
                 .firstName(source.getFirstName())
                 .lastName(source.getLastName())
                 .fatherName(source.getFatherName())

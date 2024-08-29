@@ -4,6 +4,7 @@ import by.grsu.liceum.dto.card.CardDto;
 import by.grsu.liceum.dto.mapper.CardDtoMapper;
 import by.grsu.liceum.entity.Card;
 import by.grsu.liceum.exception.CardWithIdNotFoundException;
+import by.grsu.liceum.exception.InvalidPermissionsException;
 import by.grsu.liceum.repository.CardRepository;
 import by.grsu.liceum.service.CardService;
 import by.grsu.liceum.utils.Generator;
@@ -20,16 +21,19 @@ public class CardServiceImpl implements CardService {
     private final CardRepository cardRepository;
 
     @Override
-    public CardDto findById(long id) {
+    public CardDto findById(long institutionId, long id) {
         Card card = Optional.ofNullable(cardRepository.findById(id))
                 .orElseThrow(() -> new CardWithIdNotFoundException(id));
+
+        if (card.getAccount().getInstitution().getId() != institutionId)
+            throw new InvalidPermissionsException();
 
         return CardDtoMapper.convertEntityToDto(card);
     }
 
     @Override
-    public List<CardDto> findAll() {
-        return cardRepository.findAll().stream()
+    public List<CardDto> findAll(long institutionId) {
+        return cardRepository.findAllByAccount_Institution_Id(institutionId).stream()
                 .map(CardDtoMapper::convertEntityToDto)
                 .toList();
     }
@@ -47,8 +51,12 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public void deleteById(long id) {
-        findById(id);
+    public void deleteById(long institutionId, long id) {
+        Card card = Optional.ofNullable(cardRepository.findById(id))
+                .orElseThrow(() -> new CardWithIdNotFoundException(id));
+
+        if(card.getAccount().getInstitution().getId() != institutionId)
+            throw new InvalidPermissionsException();
 
         cardRepository.deleteById(id);
     }
