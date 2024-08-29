@@ -58,6 +58,9 @@ services:
       - '3000:3000'
     env_file:
       - ./env/grafana.env
+    volumes:
+      - local_grafana_data:/var/lib/grafana/data
 
 volumes:
   local_pgdata:
+  local_grafana_data:
