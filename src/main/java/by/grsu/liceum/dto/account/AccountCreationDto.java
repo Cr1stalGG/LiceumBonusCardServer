@@ -1,6 +1,5 @@
 package by.grsu.liceum.dto.account;
 
-import by.grsu.liceum.entity.enums.RoleConstant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,5 +19,5 @@ public class AccountCreationDto {
     private String fatherName;
     private String phoneNumber;
     private int yearOfStartOfStudies;
-    private List<RoleConstant> roleNames; //todo optional change to number(1 - user, 2 - admin...)
+    private List<String> roleNames; //todo optional change to number(1 - user, 2 - admin...)
 }

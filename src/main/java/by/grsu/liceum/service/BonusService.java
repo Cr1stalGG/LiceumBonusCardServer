@@ -9,9 +9,9 @@ import by.grsu.liceum.dto.ticket.TicketFullDto;
 import java.util.List;
 
 public interface BonusService {
-    List<BonusShortcutDto> findAll();
-    BonusFullDto findById(long id);
-    BonusFullDto createBonus(BonusCreationDto creationDto);
-    TicketFullDto buyBonus(BonusBuyDto buyDto);
-    void deleteById(long id);
+    List<BonusShortcutDto> findAllByInstitutionId(long institutionId);
+    BonusFullDto findById(long institutionId, long id);
+    BonusFullDto createBonus(long institutionId, BonusCreationDto creationDto);
+    TicketFullDto buyBonus(long institutionId, BonusBuyDto buyDto);
+    void deleteById(long institutionId, long id);
 }

@@ -8,6 +8,7 @@ import by.grsu.liceum.entity.Activity;
 import by.grsu.liceum.entity.ActivityType;
 import by.grsu.liceum.exception.ActivityTypeWithIdNotFoundException;
 import by.grsu.liceum.exception.ActivityWithIdNotFoundException;
+import by.grsu.liceum.exception.InvalidPermissionsException;
 import by.grsu.liceum.repository.ActivityRepository;
 import by.grsu.liceum.repository.ActivityTypeRepository;
 import by.grsu.liceum.service.ActivityService;
@@ -25,23 +26,26 @@ public class ActivityServiceImpl implements ActivityService {
     private final ActivityTypeRepository activityTypeRepository;
 
     @Override
-    public List<ActivityShortcutDto> findAll() {
-        return activityRepository.findAll().stream()
+    public List<ActivityShortcutDto> findAll(long institutionId) {
+        return activityRepository.findAllByActivityType_Institution_Id(institutionId).stream()
                 .map(ActivityDtoMapper::convertEntityToShortcutDto)
                 .toList();
     }
 
     @Override
-    public ActivityFullDto findById(long id) {
+    public ActivityFullDto findById(long institutionId, long id) {
         Activity activity = Optional.ofNullable(activityRepository.findById(id))
                 .orElseThrow(() -> new ActivityWithIdNotFoundException(id));
+
+        if(activity.getActivityType().getInstitution().getId() != institutionId)
+            throw new InvalidPermissionsException();
 
         return ActivityDtoMapper.convertEntityToFullDto(activity);
     }
 
     @Override
     @Transactional
-    public ActivityFullDto createActivity(ActivityCreationDto creationDto) {
+    public ActivityFullDto createActivity(long institutionId, ActivityCreationDto creationDto) {
         Activity activity = ActivityDtoMapper.convertDtoToEntity(creationDto);
 
         ActivityType activityType = Optional.ofNullable(activityTypeRepository.findById(creationDto.getActivityTypeId()))
@@ -56,8 +60,12 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public void deleteById(long id) {
-        findById(id);
+    public void deleteById(long institutionId, long id) {
+        Activity activity = Optional.ofNullable(activityRepository.findById(id))
+                .orElseThrow(() -> new ActivityWithIdNotFoundException(id));
+
+        if (activity.getActivityType().getInstitution().getId() != institutionId)
+            throw new InvalidPermissionsException();
 
         activityRepository.deleteById(id);
     }

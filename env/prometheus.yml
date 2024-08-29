@@ -12,16 +12,12 @@ scrape_configs:
         labels:
           alias: 'prometheus'
 
-  - job_name: 'liceumServer'
+  - job_name: 'spring_micrometer'
 
+    metrics_path: '/actuator/prometheus'
     scrape_interval: 5s
-
-    metrics_path: /actuator/prometheus
-
     static_configs:
-      - targets: ['localhost:8080']
-        labels:
-          alias: 'liceumServer'
+      - targets: [ '172.17.0.1:8080' ]
 
   - job_name: 'postgres'
 

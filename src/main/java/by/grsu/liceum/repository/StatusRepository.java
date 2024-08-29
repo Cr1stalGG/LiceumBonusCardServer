@@ -1,13 +1,12 @@
 package by.grsu.liceum.repository;
 
-import by.grsu.liceum.entity.Status;
-import by.grsu.liceum.entity.enums.StatusConstant;
+import by.grsu.liceum.entity.TransactionStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface StatusRepository extends JpaRepository<Status, Long> {
-    Status findById(long id);
-    Status findByName(StatusConstant name);
-    List<Status> findAll();
+public interface StatusRepository extends JpaRepository<TransactionStatus, Long> {
+    TransactionStatus findById(long id);
+    TransactionStatus findByName(String name);
+    List<TransactionStatus> findAll();
 }

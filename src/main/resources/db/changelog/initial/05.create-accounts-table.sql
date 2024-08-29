@@ -6,5 +6,6 @@ create table accounts(
     last_name varchar(30) not null,
     father_name varchar(30) not null,
     phone_number varchar(20) not null,
-    card_id bigint unique references cards(id)
+    card_id bigint unique references cards(id),
+    institution_id bigint references institutions(id)
 );

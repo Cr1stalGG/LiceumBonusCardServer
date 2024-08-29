@@ -2,8 +2,31 @@ package by.grsu.liceum.utils;
 
 import lombok.experimental.UtilityClass;
 
+import java.util.Set;
+
 @UtilityClass
 public class Transliterator {
+    private static final Set<Character> vowels = Set.of('а', 'у', 'о', 'э', 'и', 'ы', 'я', 'ю', 'ё', 'е');
+
+    public static String transliterateWordToAbbreviation(String name){
+        StringBuilder abbreviation = new StringBuilder();
+
+        for(String word : name.trim().split("[ .№]")) {
+            for (int i = 0; i < word.length(); ++i) {
+                if(i == 0 && vowels.contains(word.toLowerCase().charAt(i))){
+                    abbreviation.append(word.toLowerCase().charAt(i));
+                    break;
+                }
+                else if(i == 0 || !vowels.contains(word.toLowerCase().charAt(i)))
+                    abbreviation.append(word.toLowerCase().charAt(i));
+                else
+                    break;
+            }
+        }
+
+        return Transliterator.transliterateWord(abbreviation.toString());
+    }
+
     public static String transliterateWord(String word){
         StringBuilder transliteratedWord = new StringBuilder();
 

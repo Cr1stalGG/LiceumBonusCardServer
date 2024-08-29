@@ -4,9 +4,10 @@ import by.grsu.liceum.dto.mapper.TransactionDtoMapper;
 import by.grsu.liceum.dto.transaction.TransactionCreationDto;
 import by.grsu.liceum.dto.transaction.TransactionDto;
 import by.grsu.liceum.entity.Card;
-import by.grsu.liceum.entity.Status;
+import by.grsu.liceum.entity.TransactionStatus;
 import by.grsu.liceum.entity.Transaction;
 import by.grsu.liceum.exception.CardWithIdNotFoundException;
+import by.grsu.liceum.exception.InvalidPermissionsException;
 import by.grsu.liceum.exception.InvalidTransactionStatusException;
 import by.grsu.liceum.exception.TransactionWithIdNotFoundException;
 import by.grsu.liceum.repository.CardRepository;
@@ -29,16 +30,19 @@ public class TransactionServiceImpl implements TransactionService {
     private final StatusRepository statusRepository;
 
     @Override
-    public List<TransactionDto> findAll() {
-        return transactionRepository.findAll().stream()
+    public List<TransactionDto> findAll(long institutionId) {
+        return transactionRepository.findAllByCard_Account_Institution_Id(institutionId).stream()
                 .map(TransactionDtoMapper::convertEntityToDto)
                 .toList();
     }
 
     @Override
-    public List<TransactionDto> findAllByCardId(long cardId) {
+    public List<TransactionDto> findAllByCardId(long institutionId, long cardId) {
         Card card = Optional.ofNullable(cardRepository.findById(cardId))
                 .orElseThrow(() -> new CardWithIdNotFoundException(cardId));
+
+        if(card.getAccount().getInstitution().getId() != institutionId)
+            throw new InvalidPermissionsException();
 
         return card.getTransactions().stream()
                 .map(TransactionDtoMapper::convertEntityToDto)
@@ -46,26 +50,32 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public TransactionDto findById(long id) {
+    public TransactionDto findById(long institutionId, long id) {
         Transaction transaction = Optional.ofNullable(transactionRepository.findById(id))
                 .orElseThrow(() -> new TransactionWithIdNotFoundException(id));
+
+        if(transaction.getCard().getAccount().getInstitution().getId() != institutionId)
+            throw new InvalidPermissionsException();
 
         return TransactionDtoMapper.convertEntityToDto(transaction);
     }
 
     @Override
     @Transactional
-    public TransactionDto createTransaction(TransactionCreationDto creationDto) {
+    public TransactionDto createTransaction(long institutionId, TransactionCreationDto creationDto) {
         Card card = Optional.ofNullable(cardRepository.findById(creationDto.getCardId()))
                 .orElseThrow(() -> new CardWithIdNotFoundException(creationDto.getCardId()));
 
-        Status status = Optional.ofNullable(statusRepository.findByName(creationDto.getStatus()))
-                .orElseThrow(() -> new InvalidTransactionStatusException(creationDto.getStatus().name()));
+        if(card.getAccount().getInstitution().getId() != institutionId)
+            throw new InvalidPermissionsException();
+
+        TransactionStatus status = Optional.ofNullable(statusRepository.findByName(creationDto.getStatus()))
+                .orElseThrow(() -> new InvalidTransactionStatusException(creationDto.getStatus()));
 
         Transaction transaction = Transaction.builder()
                 .balance(creationDto.getBalance())
                 .card(card)
-                .status(status)
+                .transactionStatus(status)
                 .timeOfTransaction(new Date(System.currentTimeMillis()))
                 .build();
 
@@ -78,8 +88,12 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public void deleteById(long id) {
-        findById(id);
+    public void deleteById(long institutionId, long id) {
+        Transaction transaction = Optional.ofNullable(transactionRepository.findById(id))
+                .orElseThrow(() -> new TransactionWithIdNotFoundException(id));
+
+        if(transaction.getCard().getAccount().getInstitution().getId() != institutionId)
+            throw new InvalidPermissionsException();
 
         transactionRepository.deleteById(id);
     }

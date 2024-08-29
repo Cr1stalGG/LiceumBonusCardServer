@@ -1,10 +1,12 @@
-package by.grsu.liceum.security;
+package by.grsu.liceum.security.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +17,10 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
+@PropertySource("${classpath:application.properties}")
 public class JwtService {
-    private final static String SECRET_KEY = "46294A404E635266556A586E327235753778214125442A472D4B615064536756"; //todo change
+    @Value("${spring.jwt.secret}")
+    private String SECRET_KEY; //todo change
 
     public String generateToken(Map<String, Object> claims, UserDetails userDetails) {
         return Jwts
@@ -34,7 +38,7 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractEmail(token);
+        final String username = extractLogin(token);
 
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
@@ -47,7 +51,7 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    public String extractEmail(String token) {
+    public String extractLogin(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 

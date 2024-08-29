@@ -8,10 +8,10 @@ import by.grsu.liceum.dto.ticket.TicketShortcutDto;
 import java.util.List;
 
 public interface TicketService {
-    List<TicketShortcutDto> findAll();
-    TicketFullDto findById(long id);
-    TicketFullDto setTicketToTheAccount(SetTicketDto ticketDto);
-    void rollTicketBack(long id);
-    void readCode(TicketReadCodeDto readCodeDto);
-    void deleteById(long id);
+    List<TicketShortcutDto> findAll(long institutionId);
+    TicketFullDto findById(long institutionId, long id);
+    TicketFullDto setTicketToTheAccount(long institutionId, SetTicketDto ticketDto);
+    void rollTicketBack(long institutionId, long id);
+    void readCode(long institutionId, TicketReadCodeDto readCodeDto);
+    void deleteById(long institutionId, long id);
 }

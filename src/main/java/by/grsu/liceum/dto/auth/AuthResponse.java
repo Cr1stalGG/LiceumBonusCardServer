@@ -1,6 +1,5 @@
 package by.grsu.liceum.dto.auth;
 
-import by.grsu.liceum.entity.enums.RoleConstant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,6 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthResponse {
+    private long uuid;
+    private long institutionId;
     private String token;
-    private List<RoleConstant> roles; //todo optional change to number
+    private List<String> roles; //todo optional change to number
 }

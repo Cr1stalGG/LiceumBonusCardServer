@@ -6,7 +6,7 @@ import by.grsu.liceum.dto.auth.AuthResponse;
 import by.grsu.liceum.entity.Account;
 import by.grsu.liceum.entity.Role;
 import by.grsu.liceum.repository.AccountRepository;
-import by.grsu.liceum.security.JwtService;
+import by.grsu.liceum.security.jwt.JwtService;
 import by.grsu.liceum.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,6 +32,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String jwtToken = jwtService.generateToken(new AccountUserDetailsConfiguration(account));
 
         return AuthResponse.builder()
+                .uuid(account.getId())
+                .institutionId(account.getInstitution().getId())
                 .token(jwtToken)
                 .roles(account.getRoles().stream()
                         .map(Role::getName)

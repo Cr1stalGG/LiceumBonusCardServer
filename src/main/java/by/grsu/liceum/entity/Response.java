@@ -1,13 +1,13 @@
 package by.grsu.liceum.entity;
 
-import by.grsu.liceum.entity.enums.StatusConstant;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,28 +15,30 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.Date;
 
 @Entity
-@Table(name = "statuses")
+@Table(name = "responses")
 @Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Status {
+public class Response {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "name")
-    private StatusConstant name;
-    @Column(name = "description")
-    private String description;
+    @Column(name = "message")
+    private String message;
 
-    @OneToMany(
-            fetch = FetchType.LAZY,
-            mappedBy = "status",
-            orphanRemoval = true
-    )
-    private List<Transaction> transactions;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "response_status_id")
+    private ResponseStatus responseStatus;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id")
+    private Account account;
+
+    @Column(name = "time_of_response")
+    private Date timeOfResponse;
 }

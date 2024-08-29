@@ -4,8 +4,12 @@ import by.grsu.liceum.dto.activity_type.ActivityTypeCreationDto;
 import by.grsu.liceum.dto.activity_type.ActivityTypeDto;
 import by.grsu.liceum.dto.mapper.ActivityTypeDtoMapper;
 import by.grsu.liceum.entity.ActivityType;
+import by.grsu.liceum.entity.Institution;
 import by.grsu.liceum.exception.ActivityTypeWithIdNotFoundException;
+import by.grsu.liceum.exception.InstitutionWithIdNotFoundException;
+import by.grsu.liceum.exception.InvalidPermissionsException;
 import by.grsu.liceum.repository.ActivityTypeRepository;
+import by.grsu.liceum.repository.InstitutionRepository;
 import by.grsu.liceum.service.ActivityTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,34 +21,48 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ActivityTypeServiceImpl implements ActivityTypeService {
     private final ActivityTypeRepository activityTypeRepository;
+    private final InstitutionRepository institutionRepository;
 
     @Override
-    public ActivityTypeDto findById(long id) {
+    public ActivityTypeDto findById(long institutionId, long id) {
         ActivityType activityType = Optional.ofNullable(activityTypeRepository.findById(id))
                 .orElseThrow(() -> new ActivityTypeWithIdNotFoundException(id));
+
+        if(activityType.getInstitution().getId() != institutionId)
+            throw new InvalidPermissionsException();
 
         return ActivityTypeDtoMapper.convertEntityToDto(activityType);
     }
 
     @Override
-    public List<ActivityTypeDto> findAll() {
-        return activityTypeRepository.findAll().stream()
+    public List<ActivityTypeDto> findAll(long institutionId) {
+        return activityTypeRepository.findAllByInstitution_Id(institutionId).stream()
                 .map(ActivityTypeDtoMapper::convertEntityToDto)
                 .toList();
     }
 
     @Override
-    public ActivityTypeDto save(ActivityTypeCreationDto creationDto) {
+    public ActivityTypeDto save(long institutionId, ActivityTypeCreationDto creationDto) {
+        Institution institution = Optional.ofNullable(institutionRepository.findById(institutionId))
+                .orElseThrow(() -> new InstitutionWithIdNotFoundException(institutionId));
+
         ActivityType activityType = ActivityTypeDtoMapper.convertDtoToEntity(creationDto);
+        activityType.setInstitution(institution);
 
         activityTypeRepository.save(activityType);
+
+        institution.getActivityTypes().add(activityType);
 
         return ActivityTypeDtoMapper.convertEntityToDto(activityType);
     }
 
     @Override
-    public void deleteById(long id) {
-        findById(id);
+    public void deleteById(long institutionId, long id) {
+        ActivityType activityType = Optional.ofNullable(activityTypeRepository.findById(id))
+                .orElseThrow(() -> new ActivityTypeWithIdNotFoundException(id));
+
+        if(activityType.getInstitution().getId() != institutionId)
+            throw new InvalidPermissionsException();
 
         activityTypeRepository.deleteById(id);
     }

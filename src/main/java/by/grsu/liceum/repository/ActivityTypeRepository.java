@@ -10,4 +10,5 @@ import java.util.List;
 public interface ActivityTypeRepository extends JpaRepository<ActivityType, Long> {
     ActivityType findById(long id);
     List<ActivityType> findAll();
+    List<ActivityType> findAllByInstitution_Id(long institutionId);
 }
