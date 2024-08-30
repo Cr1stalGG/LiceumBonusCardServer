@@ -69,8 +69,8 @@
         <sqlFile encoding="utf8" path="./initial/15.create-accounts_groups-table.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
-    <changeSet id="initial-accounts_activities" author="Alexander Savickij">
-        <sqlFile encoding="utf8" path="./initial/16.create-accounts_activities-table.sql" relativeToChangelogFile="true"/>
+    <changeSet id="initial-solved_activities" author="Alexander Savickij">
+        <sqlFile encoding="utf8" path="./initial/16.create-solved_activities-table.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
 </databaseChangeLog>

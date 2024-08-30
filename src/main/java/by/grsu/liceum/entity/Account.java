@@ -99,11 +99,10 @@ public class Account {
     )
     private List<Role> roles;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "accounts_activities",
-            joinColumns = @JoinColumn(name = "account_id"),
-            inverseJoinColumns = @JoinColumn(name = "activity_id")
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "account",
+            orphanRemoval = true
     )
-    private List<Activity> solvedActivities;
+    private List<SolvedActivity> solvedActivities;
 }

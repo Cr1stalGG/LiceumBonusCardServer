@@ -5,10 +5,12 @@ import by.grsu.liceum.dto.account.AccountCreationResponse;
 import by.grsu.liceum.dto.account.AccountFullDto;
 import by.grsu.liceum.dto.account.AccountShortcutDto;
 import by.grsu.liceum.dto.group.GroupShortcutDto;
+import by.grsu.liceum.dto.solved_activity.SolvedActivityShortcutDto;
 import by.grsu.liceum.dto.ticket.TicketShortcutDto;
 import by.grsu.liceum.dto.utils.GeneratorLoginDto;
 import by.grsu.liceum.entity.Account;
 import by.grsu.liceum.entity.Group;
+import by.grsu.liceum.entity.SolvedActivity;
 import by.grsu.liceum.entity.Ticket;
 import by.grsu.liceum.exception.NullableAccountCreationDtoException;
 import lombok.experimental.UtilityClass;
@@ -46,7 +48,7 @@ public class AccountDtoMapper {
     public static GeneratorLoginDto convertCreationDtoToGeneratorDto(AccountCreationDto source){
         return Optional.ofNullable(source)
                 .map(AccountDtoMapper::buildGeneratorDto)
-                .orElse(null);//todo mb exception with 401 status
+                .orElse(null);
     }
 
     private static GeneratorLoginDto buildGeneratorDto(AccountCreationDto source) {
@@ -93,7 +95,17 @@ public class AccountDtoMapper {
                 .tickets(buildTickets(source.getTickets()))
                 .ownedGroups(buildGroups(source.getOwnedGroups()))
                 .otherGroups(buildGroups(source.getOtherGroups()))
+                .solvedActivities(buildSolvedActivities(source.getSolvedActivities()))
                 .build();
+    }
+
+    private static List<SolvedActivityShortcutDto> buildSolvedActivities(List<SolvedActivity> source) {
+        if(source == null)
+            return new ArrayList<>();
+        else
+            return source.stream()
+                    .map(SolvedActivityDtoMapper::convertEntityToShortcutDto)
+                    .toList();
     }
 
     private AccountShortcutDto buildShortcutDto(Account source){

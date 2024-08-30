@@ -4,6 +4,7 @@ import by.grsu.liceum.dto.activity.ActivityCreationDto;
 import by.grsu.liceum.dto.activity.ActivityFullDto;
 import by.grsu.liceum.dto.activity.ActivityShortcutDto;
 import by.grsu.liceum.entity.Activity;
+import by.grsu.liceum.utils.Generator;
 import lombok.experimental.UtilityClass;
 
 import java.util.Optional;

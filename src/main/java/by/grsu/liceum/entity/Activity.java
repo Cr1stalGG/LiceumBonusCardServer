@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,16 +38,17 @@ public class Activity {
     private String description;
     @Column(name = "count_of_members")
     private int countOfMembers;
+    @Column(name = "code")
+    private String code;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "activity_type_id")
     private ActivityType activityType;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "accounts_activities",
-            joinColumns = @JoinColumn(name = "activity_id"),
-            inverseJoinColumns = @JoinColumn(name = "account_id")
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "activity",
+            orphanRemoval = true
     )
-    private List<Account> members;
+    private List<SolvedActivity> solvedActivities;
 }

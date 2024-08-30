@@ -114,3 +114,10 @@ create table accounts_activities(
     account_id bigint references accounts(id),
     activity_id bigint references activities(id)
 );
+
+create table solved_activities(
+    id bigserial primary key,
+    account_id bigint references accounts(id),
+    activity_id bigint references activities(id),
+    code varchar(16) unique not null
+);
