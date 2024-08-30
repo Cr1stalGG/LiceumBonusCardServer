@@ -5,9 +5,11 @@ import by.grsu.liceum.dto.group.AddMembersDto;
 import by.grsu.liceum.dto.group.GroupCreationDto;
 import by.grsu.liceum.dto.group.GroupFullDto;
 
+import java.util.UUID;
+
 public interface GroupService {
-    GroupFullDto findGroupById(long institutionId, long id);
-    GroupFullDto createNewGroup(long institutionId, GroupCreationDto creationDto);
-    void addMembersToTheGroup(long institutionId, AddMembersDto addMembersDto);
-    void deleteGroupById(long institutionId, long id);
+    GroupFullDto findGroupById(UUID institutionId, UUID id);
+    GroupFullDto createNewGroup(UUID institutionId, GroupCreationDto creationDto);
+    void addMembersToTheGroup(UUID institutionId, AddMembersDto addMembersDto);
+    void deleteGroupById(UUID institutionId, UUID id);
 }

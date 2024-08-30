@@ -1,5 +1,5 @@
 create table roles(
-    id bigserial primary key,
+    id uuid primary key,
     name varchar(30) unique not null,
     description text
 );

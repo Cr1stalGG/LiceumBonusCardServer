@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.UUID;
 
 @Builder
 @Getter
@@ -14,8 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthResponse {
-    private long uuid;
-    private long institutionId;
+    private UUID uuid;
+    private UUID institutionId;
     private String token;
     private List<String> roles; //todo optional change to number
 }

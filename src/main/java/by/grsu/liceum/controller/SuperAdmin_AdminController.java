@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/root/admins")
@@ -35,25 +36,25 @@ public class SuperAdmin_AdminController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
-    public AdminFullDto findAdminById(@PathVariable("id") long id){
+    public AdminFullDto findAdminById(@PathVariable("id") UUID id){
         return adminService.findAdminById(id);
     }
 
     @PostMapping("/{institutionId}")
     @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
-    public AdminFullDto createAdmin(@PathVariable("institutionId") long institutionId){
+    public AdminFullDto createAdmin(@PathVariable("institutionId") UUID institutionId){
         return adminService.createAdmin(institutionId);
     }
 
     @PutMapping("/{institutionId}/regenerate/password/{adminId}")
     @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
-    public AdminFullDto regeneratePassword(@PathVariable("institutionId") long institutionId, @PathVariable("adminId") long adminId){
+    public AdminFullDto regeneratePassword(@PathVariable("institutionId") UUID institutionId, @PathVariable("adminId") UUID adminId){
         return adminService.regeneratePassword(institutionId, adminId);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
-    public void deleteById(@PathVariable("id") long id){
+    public void deleteById(@PathVariable("id") UUID id){
         adminService.deleteAdminById(id);
     }
 }

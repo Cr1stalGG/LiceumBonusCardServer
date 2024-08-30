@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +22,7 @@ public class CardServiceImpl implements CardService {
     private final CardRepository cardRepository;
 
     @Override
-    public CardDto findById(long institutionId, long id) {
+    public CardDto findById(UUID institutionId, UUID id) {
         Card card = Optional.ofNullable(cardRepository.findById(id))
                 .orElseThrow(() -> new CardWithIdNotFoundException(id));
 
@@ -32,7 +33,7 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public List<CardDto> findAll(long institutionId) {
+    public List<CardDto> findAll(UUID institutionId) {
         return cardRepository.findAllByAccount_Institution_Id(institutionId).stream()
                 .map(CardDtoMapper::convertEntityToDto)
                 .toList();
@@ -51,7 +52,7 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public void deleteById(long institutionId, long id) {
+    public void deleteById(UUID institutionId, UUID id) {
         Card card = Optional.ofNullable(cardRepository.findById(id))
                 .orElseThrow(() -> new CardWithIdNotFoundException(id));
 

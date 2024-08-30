@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -26,14 +27,14 @@ public class ActivityServiceImpl implements ActivityService {
     private final ActivityTypeRepository activityTypeRepository;
 
     @Override
-    public List<ActivityShortcutDto> findAll(long institutionId) {
+    public List<ActivityShortcutDto> findAll(UUID institutionId) {
         return activityRepository.findAllByActivityType_Institution_Id(institutionId).stream()
                 .map(ActivityDtoMapper::convertEntityToShortcutDto)
                 .toList();
     }
 
     @Override
-    public ActivityFullDto findById(long institutionId, long id) {
+    public ActivityFullDto findById(UUID institutionId, UUID id) {
         Activity activity = Optional.ofNullable(activityRepository.findById(id))
                 .orElseThrow(() -> new ActivityWithIdNotFoundException(id));
 
@@ -45,7 +46,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     @Transactional
-    public ActivityFullDto createActivity(long institutionId, ActivityCreationDto creationDto) {
+    public ActivityFullDto createActivity(UUID institutionId, ActivityCreationDto creationDto) {
         Activity activity = ActivityDtoMapper.convertDtoToEntity(creationDto);
 
         ActivityType activityType = Optional.ofNullable(activityTypeRepository.findById(creationDto.getActivityTypeId()))
@@ -60,7 +61,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public void deleteById(long institutionId, long id) {
+    public void deleteById(UUID institutionId, UUID id) {
         Activity activity = Optional.ofNullable(activityRepository.findById(id))
                 .orElseThrow(() -> new ActivityWithIdNotFoundException(id));
 

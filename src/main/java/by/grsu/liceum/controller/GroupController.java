@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/v1/institutions/{institutionId}/groups")
 @RequiredArgsConstructor
@@ -22,25 +24,25 @@ public class GroupController {
 
     @GetMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
-    public GroupFullDto findGroupById(@PathVariable("institutionId") long institutionId, @PathVariable("id") long id){
+    public GroupFullDto findGroupById(@PathVariable("institutionId") UUID institutionId, @PathVariable("id") UUID id){
         return groupService.findGroupById(institutionId, id);
     }
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_HEAD_TEACHER', 'ROLE_TEACHER')")
-    public GroupFullDto createNewGroup(@PathVariable("institutionId")long institutionId, @RequestBody GroupCreationDto creationDto){
+    public GroupFullDto createNewGroup(@PathVariable("institutionId")UUID institutionId, @RequestBody GroupCreationDto creationDto){
         return groupService.createNewGroup(institutionId, creationDto);
     }
 
     @PostMapping("/add")
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_HEAD_TEACHER', 'ROLE_TEACHER')")
-    void addMembersToTheGroup(@PathVariable("institutionId")long institutionId, @RequestBody AddMembersDto addMembersDto){
+    void addMembersToTheGroup(@PathVariable("institutionId")UUID institutionId, @RequestBody AddMembersDto addMembersDto){
         groupService.addMembersToTheGroup(institutionId, addMembersDto);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_HEAD_TEACHER', 'ROLE_TEACHER')")
-    void deleteGroupById(@PathVariable("institutionId")long institutionId, @PathVariable("id") long id){
+    void deleteGroupById(@PathVariable("institutionId")UUID institutionId, @PathVariable("id") UUID id){
         groupService.deleteGroupById(institutionId, id);
     }
 }

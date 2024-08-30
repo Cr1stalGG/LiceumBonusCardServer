@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/institutions/{institutionId}/tickets")
@@ -25,37 +26,37 @@ public class TicketController {
 
     @GetMapping
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SALE_UNIT', 'ROLE_SUPER_ADMIN', 'ROLE_HEAD_TEACHER')")
-    public List<TicketShortcutDto> findAllByInstitution(@PathVariable("institutionId") long institutionId){
+    public List<TicketShortcutDto> findAllByInstitution(@PathVariable("institutionId") UUID institutionId){
         return ticketService.findAll(institutionId);
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
-    public TicketFullDto findById(@PathVariable("institutionId") long institutionId, @PathVariable("id") long id){
+    public TicketFullDto findById(@PathVariable("institutionId") UUID institutionId, @PathVariable("id") UUID id){
         return ticketService.findById(institutionId, id);
     }
 
     @PostMapping("/set")
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_HEAD_TEACHER', 'ROLE_TEACHER')")
-    public TicketFullDto setTicketToTheAccount(@PathVariable("institutionId") long institutionId, @RequestBody SetTicketDto ticketDto){
+    public TicketFullDto setTicketToTheAccount(@PathVariable("institutionId") UUID institutionId, @RequestBody SetTicketDto ticketDto){
         return ticketService.setTicketToTheAccount(institutionId, ticketDto);
     }
 
     @PostMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
-    public void rollTicketBack(@PathVariable("institutionId") long institutionId, @PathVariable("id") long id){
+    public void rollTicketBack(@PathVariable("institutionId") UUID institutionId, @PathVariable("id") UUID id){
         ticketService.rollTicketBack(institutionId, id);
     }
 
     @PostMapping("/code")
     @PreAuthorize("hasAuthority('ROLE_SALE_UNIT')")
-    public void readCode(@PathVariable("institutionId") long institutionId, @RequestBody TicketReadCodeDto readCodeDto){
+    public void readCode(@PathVariable("institutionId") UUID institutionId, @RequestBody TicketReadCodeDto readCodeDto){
         ticketService.readCode(institutionId, readCodeDto);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_HEAD_TEACHER')")
-    public void deleteById(@PathVariable("institutionId") long institutionId, @PathVariable("id") long id){
+    public void deleteById(@PathVariable("institutionId") UUID institutionId, @PathVariable("id") UUID id){
         ticketService.deleteById(institutionId, id);
     }
 }

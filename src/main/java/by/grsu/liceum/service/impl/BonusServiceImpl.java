@@ -34,6 +34,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -46,7 +47,7 @@ public class BonusServiceImpl implements BonusService {
     private final InstitutionRepository institutionRepository;
 
     @Override
-    public List<BonusShortcutDto> findAllByInstitutionId(long institutionId) {
+    public List<BonusShortcutDto> findAllByInstitutionId(UUID institutionId) {
         return bonusRepository.findAllByInstitution_Id(institutionId).stream()
                 .filter(x -> x.getCount() > 0)
                 .map(BonusDtoMapper::convertEntityToShortcutDto)
@@ -54,7 +55,7 @@ public class BonusServiceImpl implements BonusService {
     }
 
     @Override
-    public BonusFullDto findById(long institutionId, long id) {
+    public BonusFullDto findById(UUID institutionId, UUID id) {
         Bonus bonus = Optional.ofNullable(bonusRepository.findById(id))
                 .orElseThrow(() -> new BonusWithIdNotFoundException(id));
 
@@ -66,7 +67,7 @@ public class BonusServiceImpl implements BonusService {
 
     @Override
     @Transactional
-    public BonusFullDto createBonus(long institutionId, BonusCreationDto creationDto) {
+    public BonusFullDto createBonus(UUID institutionId, BonusCreationDto creationDto) {
         Institution institution = Optional.ofNullable(institutionRepository.findById(institutionId))
                 .orElseThrow(() -> new InstitutionWithIdNotFoundException(institutionId));
 
@@ -82,7 +83,7 @@ public class BonusServiceImpl implements BonusService {
 
     @Override
     @Transactional
-    public TicketFullDto buyBonus(long institutionId, BonusBuyDto buyDto) {
+    public TicketFullDto buyBonus(UUID institutionId, BonusBuyDto buyDto) {
         Account account = Optional.ofNullable(accountRepository.findById(buyDto.getAccountId()))
                 .orElseThrow(() -> new AccountWithIdNotFoundException(buyDto.getAccountId()));
 
@@ -120,7 +121,7 @@ public class BonusServiceImpl implements BonusService {
     @Scheduled(fixedDelay = 60_000L) // test every minute
     public void checkIfBonuseTimeEnded(){
         log.info("=======DELETE ALL USELESS BONUSES(time out off)=======");
-        List<Bonus> bonuses = Optional.ofNullable(bonusRepository.findAll())
+        List<Bonus> bonuses = Optional.of(bonusRepository.findAll())
                 .orElse(new ArrayList<>());
 
         for(Bonus bonus : bonuses){
@@ -141,7 +142,7 @@ public class BonusServiceImpl implements BonusService {
 
 
     @Override
-    public void deleteById(long institutionId, long id) {
+    public void deleteById(UUID institutionId, UUID id) {
         Bonus bonus = Optional.ofNullable(bonusRepository.findById(id))
                 .orElseThrow(() -> new BonusWithIdNotFoundException(id));
 

@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +38,7 @@ public class AccountServiceImpl implements AccountService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public AccountFullDto findById(long institutionId, long id) {
+    public AccountFullDto findById(UUID institutionId, UUID id) {
         Account account = Optional.ofNullable(accountRepository.findById(id))
                 .orElseThrow(() -> new AccountWithIdNotFoundException(id));
 
@@ -48,7 +49,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<AccountShortcutDto> findAll(long institutionId) {
+    public List<AccountShortcutDto> findAll(UUID institutionId) {
         return accountRepository.findAllByInstitution_Id(institutionId).stream()
                 .map(AccountDtoMapper::convertEntityToShortcutDto)
                 .toList();
@@ -56,7 +57,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional
-    public AccountCreationResponse createUserWithRole(long institutionId, AccountCreationDto creationDto) {
+    public AccountCreationResponse createUserWithRole(UUID institutionId, AccountCreationDto creationDto) {
         Institution institution = Optional.ofNullable(institutionRepository.findById(institutionId))
                 .orElseThrow(() -> new InstitutionWithIdNotFoundException(institutionId));
 
@@ -92,7 +93,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional
-    public AccountCreationResponse regeneratePassword(long institutionId, long accountId) {
+    public AccountCreationResponse regeneratePassword(UUID institutionId, UUID accountId) {
         Account account = Optional.ofNullable(accountRepository.findById(accountId))
                 .orElseThrow(() -> new AccountWithIdNotFoundException(accountId));
 
@@ -110,7 +111,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void deleteById(long institutionId, long id) {
+    public void deleteById(UUID institutionId, UUID id) {
         Account account = Optional.ofNullable(accountRepository.findById(id))
                 .orElseThrow(() -> new AccountWithIdNotFoundException(id));
 

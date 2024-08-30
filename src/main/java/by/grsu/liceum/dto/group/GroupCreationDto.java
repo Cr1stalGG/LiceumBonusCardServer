@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.UUID;
 
 @Builder
 @Getter
@@ -15,6 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 public class GroupCreationDto {
     private String name;
-    private long adminId;
-    private List<Long> membersId;//todo optional
+    private UUID adminId;
+    private List<UUID> membersId;//todo optional
 }

@@ -31,7 +31,6 @@ public class SolvedActivityDtoMapper {
                 .uuid(source.getId())
                 .account(buildAccount(source.getAccount()))
                 .activity(buildActivity(source.getActivity()))
-                .code(source.getCode())
                 .timeOfSolving(source.getTimeOfSolving())
                 .build();
     }

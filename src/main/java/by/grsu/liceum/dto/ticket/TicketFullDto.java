@@ -8,13 +8,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Builder
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class TicketFullDto {
-    private long uuid;
+    private UUID uuid;
     private String code;
     private AccountShortcutDto owner;
     private BonusShortcutDto bonus;

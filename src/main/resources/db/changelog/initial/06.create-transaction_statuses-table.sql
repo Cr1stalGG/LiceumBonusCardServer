@@ -1,5 +1,5 @@
 create table transaction_statuses(
-    id bigserial primary key,
+    id uuid primary key,
     name varchar(30) unique not null,
     description text not null
 );

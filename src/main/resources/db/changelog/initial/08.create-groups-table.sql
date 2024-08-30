@@ -1,7 +1,7 @@
 create table groups(
-    id bigserial primary key,
-    admin_id bigint references accounts(id),
+    id uuid primary key,
+    admin_id uuid references accounts(id),
     name varchar(60) unique not null,
     description text,
-    institution_id bigint references institutions(id)
+    institution_id uuid references institutions(id)
 );

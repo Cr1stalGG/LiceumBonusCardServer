@@ -1,6 +1,6 @@
 package by.grsu.liceum.service.impl;
 
-import by.grsu.liceum.dto.admin.RatingDto;
+import by.grsu.liceum.dto.account.admin.RatingDto;
 import by.grsu.liceum.dto.group.GroupShortcutDto;
 import by.grsu.liceum.dto.mapper.GroupDtoMapper;
 import by.grsu.liceum.dto.transaction.TransactionCreationDto;
@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @PropertySource("${classpath:business_settings.properties}")
@@ -36,7 +37,7 @@ public class HeadTeacherServiceImpl implements HeadTeacherService {
     private int maxRatingValue;
 
     @Override
-    public List<GroupShortcutDto> findAll(long institutionId) {
+    public List<GroupShortcutDto> findAll(UUID institutionId) {
         return groupRepository.findAllByMembers_Institution_Id(institutionId).stream()
                 .map(GroupDtoMapper::convertEntityToShortcutDto)
                 .toList();
@@ -44,7 +45,7 @@ public class HeadTeacherServiceImpl implements HeadTeacherService {
 
     @Override
     @Transactional
-    public TransactionDto addRating(long institutionId, RatingDto ratingDto) {
+    public TransactionDto addRating(UUID institutionId, RatingDto ratingDto) {
         if(ratingDto.getValue() < this.minRatingValue || ratingDto.getValue() > this.maxRatingValue)
             throw new InvalidRatingAmountException(this.minRatingValue, this.maxRatingValue, ratingDto.getValue());
 
@@ -64,7 +65,7 @@ public class HeadTeacherServiceImpl implements HeadTeacherService {
 
     @Override
     @Transactional
-    public TransactionDto getRating(long institutionId, RatingDto ratingDto) {
+    public TransactionDto getRating(UUID institutionId, RatingDto ratingDto) {
         if(ratingDto.getValue() < this.minRatingValue || ratingDto.getValue() > this.maxRatingValue)
             throw new InvalidRatingAmountException(this.minRatingValue, this.maxRatingValue, ratingDto.getValue());
 

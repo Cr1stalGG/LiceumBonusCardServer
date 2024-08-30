@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Builder
 @Getter
 @Setter
@@ -15,5 +17,5 @@ public class ActivityCreationDto {
     private String name;
     private String description;
     private int countOfMembers;
-    private int activityTypeId;
+    private UUID activityTypeId;
 }

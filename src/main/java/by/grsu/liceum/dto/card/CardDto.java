@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.UUID;
 
 @Builder
 @Getter
@@ -15,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CardDto {
-    private long uuid;
+    private UUID uuid;
     private String number;
     private int balance;
     private List<TransactionDto> transactions;

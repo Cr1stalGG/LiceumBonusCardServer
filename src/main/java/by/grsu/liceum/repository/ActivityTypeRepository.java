@@ -5,10 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public interface ActivityTypeRepository extends JpaRepository<ActivityType, Long> {
-    ActivityType findById(long id);
+    ActivityType findById(UUID id);
     List<ActivityType> findAll();
-    List<ActivityType> findAllByInstitution_Id(long institutionId);
+    List<ActivityType> findAllByInstitution_Id(UUID institutionId);
+    void deleteById(UUID id);
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/root/institutions")
@@ -44,7 +45,7 @@ public class SuperAdmin_InstitutionController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
-    public InstitutionFullDto findInstitutionById(@PathVariable("id") long id){
+    public InstitutionFullDto findInstitutionById(@PathVariable("id") UUID id){
         return institutionService.findInstitutionById(id);
     }
 
@@ -56,13 +57,13 @@ public class SuperAdmin_InstitutionController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
-    public InstitutionFullDto updateInstitution(@PathVariable("id") long id, @RequestBody InstitutionUpdateDto updateDto){
+    public InstitutionFullDto updateInstitution(@PathVariable("id") UUID id, @RequestBody InstitutionUpdateDto updateDto){
         return institutionService.updateInstitution(id, updateDto);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
-    public void deleteInstitutionById(@PathVariable("id") long id){
+    public void deleteInstitutionById(@PathVariable("id") UUID id){
         institutionService.deleteInstitutionById(id);
     }
 }

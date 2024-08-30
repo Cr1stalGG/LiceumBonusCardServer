@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.util.UUID;
 
 @Builder
 @Getter
@@ -14,7 +15,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SolvedActivityShortcutDto {
-    private long uuid;
+    private UUID uuid;
     private String activityName;
     private int rating;
     private Date timeOfSolving;

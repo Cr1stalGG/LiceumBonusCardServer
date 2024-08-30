@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/institutions/{institutionId}/bonuses")
@@ -26,31 +27,31 @@ public class BonusController {
 
     @GetMapping
     @PreAuthorize("isAuthenticated()")
-    public List<BonusShortcutDto> findAll(@PathVariable("institutionId") long institutionId){
+    public List<BonusShortcutDto> findAll(@PathVariable("institutionId") UUID institutionId){
         return bonusService.findAllByInstitutionId(institutionId);
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
-    public BonusFullDto findById(@PathVariable("institutionId") long institutionId, @PathVariable("id") long id){
+    public BonusFullDto findById(@PathVariable("institutionId") UUID institutionId, @PathVariable("id") UUID id){
         return bonusService.findById(institutionId, id);
     }
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_HEAD_TEACHER')")
-    public BonusFullDto createBonus(@PathVariable("institutionId") long institutionId, @RequestBody BonusCreationDto creationDto){
+    public BonusFullDto createBonus(@PathVariable("institutionId") UUID institutionId, @RequestBody BonusCreationDto creationDto){
         return bonusService.createBonus(institutionId, creationDto);
     }
 
     @PostMapping("/buy")
     @PreAuthorize("isAuthenticated()")
-    public TicketFullDto buyBonus(@PathVariable("institutionId") long institutionId, @RequestBody BonusBuyDto buyDto){
+    public TicketFullDto buyBonus(@PathVariable("institutionId") UUID institutionId, @RequestBody BonusBuyDto buyDto){
         return bonusService.buyBonus(institutionId, buyDto);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_HEAD_TEACHER')")
-    public void deleteById(@PathVariable("institutionId") long institutionId, @PathVariable("id") long id){
+    public void deleteById(@PathVariable("institutionId") UUID institutionId, @PathVariable("id") UUID id){
         bonusService.deleteById(institutionId, id);
     }
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/institutions/{institutionId}/accounts")
@@ -26,31 +27,31 @@ public class AccountController {
 
     @GetMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
-    public AccountFullDto findById(@PathVariable("institutionId") long institutionId, @PathVariable("id") long id){
+    public AccountFullDto findById(@PathVariable("institutionId") UUID institutionId, @PathVariable("id") UUID id){
         return accountService.findById(institutionId, id);
     }
 
     @GetMapping
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_HEAD_TEACHER', 'ROLE_SALE_UNIT', 'ROLE_TEACHER')")
-    public List<AccountShortcutDto> findAll(@PathVariable("institutionId") long institutionId){
+    public List<AccountShortcutDto> findAll(@PathVariable("institutionId") UUID institutionId){
         return accountService.findAll(institutionId);
     }
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'")
-    public AccountCreationResponse createAccountWithRole(@PathVariable("institutionId") long institutionId, @RequestBody AccountCreationDto creationDto){
+    public AccountCreationResponse createAccountWithRole(@PathVariable("institutionId") UUID institutionId, @RequestBody AccountCreationDto creationDto){
         return accountService.createUserWithRole(institutionId, creationDto);
     }
 
     @PutMapping("/regenerate/password/{accountId}")
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
-    public AccountCreationResponse regeneratePassword(@PathVariable("institutionId") long institutionId, @PathVariable("accountId") long accountId){
+    public AccountCreationResponse regeneratePassword(@PathVariable("institutionId") UUID institutionId, @PathVariable("accountId") UUID accountId){
         return accountService.regeneratePassword(institutionId, accountId);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
-    public void deleteAccountById(@PathVariable("institutionId") long institutionId, @PathVariable("id") long id){
+    public void deleteAccountById(@PathVariable("institutionId") UUID institutionId, @PathVariable("id") UUID id){
         accountService.deleteById(institutionId, id);
     }
 }

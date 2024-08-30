@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +45,7 @@ public class InstitutionServiceImpl implements InstitutionService {
     }
 
     @Override
-    public InstitutionFullDto findInstitutionById(long id) {
+    public InstitutionFullDto findInstitutionById(UUID id) {
         Institution institution = Optional.ofNullable(institutionRepository.findById(id))
                 .orElseThrow(() -> new InstitutionWithIdNotFoundException(id));
 
@@ -66,12 +67,12 @@ public class InstitutionServiceImpl implements InstitutionService {
     }
 
     @Override
-    public InstitutionFullDto updateInstitution(long id, InstitutionUpdateDto updateDto) {
+    public InstitutionFullDto updateInstitution(UUID id, InstitutionUpdateDto updateDto) {
         return null; //todo
     }
 
     @Override
-    public void deleteInstitutionById(long id) {
+    public void deleteInstitutionById(UUID id) {
         findInstitutionById(id);
 
         institutionRepository.deleteById(id);

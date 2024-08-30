@@ -2,7 +2,7 @@ package by.grsu.liceum.service.impl;
 
 import by.grsu.liceum.dto.account.admin.AdminFullDto;
 import by.grsu.liceum.dto.account.admin.AdminShortcutDto;
-import by.grsu.liceum.dto.admin.RatingDto;
+import by.grsu.liceum.dto.account.admin.RatingDto;
 import by.grsu.liceum.dto.mapper.AdminDtoMapper;
 import by.grsu.liceum.dto.transaction.TransactionCreationDto;
 import by.grsu.liceum.dto.transaction.TransactionDto;
@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @PropertySource("${classpath:business_settings.properties}")
@@ -49,7 +50,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
-    public TransactionDto addRating(long institutionId, RatingDto ratingDto) {
+    public TransactionDto addRating(UUID institutionId, RatingDto ratingDto) {
         if(ratingDto.getValue() < this.minRatingValue || ratingDto.getValue() > this.maxRatingValue)
             throw new InvalidRatingAmountException(this.minRatingValue, this.maxRatingValue, ratingDto.getValue());
 
@@ -72,7 +73,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
-    public TransactionDto getRating(long institutionId, RatingDto ratingDto) {
+    public TransactionDto getRating(UUID institutionId, RatingDto ratingDto) {
         if(ratingDto.getValue() < this.minRatingValue || ratingDto.getValue() > this.maxRatingValue)
             throw new InvalidRatingAmountException(this.minRatingValue, this.maxRatingValue, ratingDto.getValue());
 
@@ -111,7 +112,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public AdminFullDto findAdminById(long id) {
+    public AdminFullDto findAdminById(UUID id) {
         Account account = Optional.ofNullable(accountRepository.findById(id))
                 .orElseThrow(() -> new AccountWithIdNotFoundException(id)); //todo mb check of role
 
@@ -120,7 +121,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
-    public AdminFullDto createAdmin(long institutionId) {
+    public AdminFullDto createAdmin(UUID institutionId) {
         Institution institution = Optional.ofNullable(institutionRepository.findById(institutionId))
                 .orElseThrow(() -> new InstitutionWithIdNotFoundException(institutionId));
 
@@ -153,9 +154,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
-    public AdminFullDto regeneratePassword(long institutionId, long adminId) {
+    public AdminFullDto regeneratePassword(UUID institutionId, UUID adminId) {
         Account account = Optional.ofNullable(accountRepository.findById(adminId))
-                .orElseThrow(() -> new AccountWithIdNotFoundException(institutionId));
+                .orElseThrow(() -> new AccountWithIdNotFoundException(adminId));
 
         if(account.getRoles().stream().noneMatch(x -> x.getName().equals("ROLE_ADMIN")))
             throw new InvalidPermissionsException();
@@ -174,7 +175,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void deleteAdminById(long id) {
+    public void deleteAdminById(UUID id) {
         findAdminById(id);
 
         accountRepository.deleteById(id); //todo check of role mb

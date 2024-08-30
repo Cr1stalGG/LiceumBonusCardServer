@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.UUID;
 
 @Builder
 @Getter
@@ -17,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InstitutionFullDto {
-    private long uuid;
+    private UUID uuid;
     private String name;
     private String city;
     private List<AccountShortcutDto> accounts;

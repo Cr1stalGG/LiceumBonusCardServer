@@ -1,6 +1,6 @@
 package by.grsu.liceum.controller;
 
-import by.grsu.liceum.dto.admin.RatingDto;
+import by.grsu.liceum.dto.account.admin.RatingDto;
 import by.grsu.liceum.dto.group.GroupShortcutDto;
 import by.grsu.liceum.dto.transaction.TransactionDto;
 import by.grsu.liceum.service.HeadTeacherService;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/institutions/{institutionId}/head")
@@ -23,19 +24,19 @@ public class HeadTeacherController {
 
     @GetMapping
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_HEAD_TEACHER')")
-    public List<GroupShortcutDto> findGroupsOfInstitution(@PathVariable("institutionId") long institutionId){
+    public List<GroupShortcutDto> findGroupsOfInstitution(@PathVariable("institutionId") UUID institutionId){
         return headTeacherService.findAll(institutionId);
     }
 
     @PostMapping("/push")
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_HEAD_TEACHER')")
-    public TransactionDto addRating(@PathVariable("institutionId") long institutionId, @RequestBody RatingDto ratingDto){
+    public TransactionDto addRating(@PathVariable("institutionId") UUID institutionId, @RequestBody RatingDto ratingDto){
         return headTeacherService.addRating(institutionId, ratingDto);
     }
 
     @PostMapping("/take")
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_HEAD_TEACHER')")
-    public TransactionDto getRating(@PathVariable("institutionId") long institutionId, @RequestBody RatingDto ratingDto){
+    public TransactionDto getRating(@PathVariable("institutionId") UUID institutionId, @RequestBody RatingDto ratingDto){
         return headTeacherService.getRating(institutionId, ratingDto);
     }
 }

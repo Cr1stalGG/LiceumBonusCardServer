@@ -6,13 +6,14 @@ import by.grsu.liceum.dto.institution.InstitutionShortcutDto;
 import by.grsu.liceum.dto.institution.InstitutionUpdateDto;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface InstitutionService {
     List<InstitutionShortcutDto> findAllInstitutions();
     List<InstitutionShortcutDto> findAllInstitutionsByCity(String city);
     List<InstitutionShortcutDto> findAllInstitutionsByNameLike(String name);
-    InstitutionFullDto findInstitutionById(long id);
+    InstitutionFullDto findInstitutionById(UUID id);
     InstitutionFullDto createInstitution(InstitutionCreationDto creationDto);
-    InstitutionFullDto updateInstitution(long id, InstitutionUpdateDto updateDto);
-    void deleteInstitutionById(long id);
+    InstitutionFullDto updateInstitution(UUID id, InstitutionUpdateDto updateDto);
+    void deleteInstitutionById(UUID id);
 }

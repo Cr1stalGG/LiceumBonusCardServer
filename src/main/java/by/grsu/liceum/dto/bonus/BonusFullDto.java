@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Builder
 @Getter
@@ -14,7 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BonusFullDto {
-    private long uuid;
+    private UUID uuid;
     private String name;
     private String description;
     private int price;

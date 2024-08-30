@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -34,14 +35,14 @@ public class TicketServiceImpl implements TicketService {
     private final BonusRepository bonusRepository;
 
     @Override
-    public List<TicketShortcutDto> findAll(long institutionId) {
+    public List<TicketShortcutDto> findAll(UUID institutionId) {
         return ticketRepository.findAllByBonus_Institution_Id(institutionId).stream()
                 .map(TicketDtoMapper::convertEntityToShortcutDto)
                 .toList();
     }
 
     @Override
-    public TicketFullDto findById(long institutionId, long id) {
+    public TicketFullDto findById(UUID institutionId, UUID id) {
         Ticket ticket = Optional.ofNullable(ticketRepository.findById(id))
                 .orElseThrow(() -> new TicketWithIdNotFoundException(id));
 
@@ -53,7 +54,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     @Transactional
-    public TicketFullDto setTicketToTheAccount(long institutionId, SetTicketDto ticketDto) {
+    public TicketFullDto setTicketToTheAccount(UUID institutionId, SetTicketDto ticketDto) {
         Account account = Optional.ofNullable(accountRepository.findById(ticketDto.getAccountId()))
                 .orElseThrow(() -> new AccountWithIdNotFoundException(ticketDto.getAccountId()));
 
@@ -86,7 +87,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     @Transactional
-    public void rollTicketBack(long institutionId, long id) {
+    public void rollTicketBack(UUID institutionId, UUID id) {
         Ticket ticket = Optional.ofNullable(ticketRepository.findById(id))
                 .orElseThrow(() -> new TicketWithIdNotFoundException(id));
 
@@ -107,7 +108,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     @Transactional
-    public void readCode(long institutionId, TicketReadCodeDto readCodeDto){
+    public void readCode(UUID institutionId, TicketReadCodeDto readCodeDto){
         Ticket ticket = Optional.ofNullable(ticketRepository.findById(readCodeDto.getUuid()))
                 .orElseThrow(() -> new TicketWithIdNotFoundException(readCodeDto.getUuid()));
 
@@ -124,7 +125,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public void deleteById(long institutionId, long id) {
+    public void deleteById(UUID institutionId, UUID id) {
         Ticket ticket = Optional.ofNullable(ticketRepository.findById(id))
                 .orElseThrow(() -> new TicketWithIdNotFoundException(id));
 

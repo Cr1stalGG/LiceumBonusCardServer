@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/institutions/{institutionId}/activities/solved")
@@ -24,37 +25,37 @@ public class SolvedActivityController {
 
     @GetMapping
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_HEAD_TEACHER', 'ROLE_SALE_UNIT')")
-    public List<SolvedActivityShortcutDto> findAllByInstitutionId(@PathVariable("institutionId") long institutionId) {
+    public List<SolvedActivityShortcutDto> findAllByInstitutionId(@PathVariable("institutionId") UUID institutionId) {
         return solvedActivityService.findAllByInstitutionId(institutionId);
     }
 
     @GetMapping("/accounts/{accountId}")
     @PreAuthorize("isAuthenticated()")
-    public List<SolvedActivityShortcutDto> findAllByAccountId(@PathVariable("institutionId") long institutionId, @PathVariable("accountId") long accountId) {
+    public List<SolvedActivityShortcutDto> findAllByAccountId(@PathVariable("institutionId") UUID institutionId, @PathVariable("accountId") UUID accountId) {
         return solvedActivityService.findAllByAccountId(institutionId, accountId);
     }
 
     @GetMapping("/activities/{activityId}")
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_HEAD_TEACHER', 'ROLE_SALE_UNIT')")
-    public List<SolvedActivityShortcutDto> findAllByActivityId(@PathVariable("institutionId") long institutionId, @PathVariable("activityId") long activityId) {
+    public List<SolvedActivityShortcutDto> findAllByActivityId(@PathVariable("institutionId") UUID institutionId, @PathVariable("activityId") UUID activityId) {
         return solvedActivityService.findAllByActivityId(institutionId, activityId);
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
-    public SolvedActivityFullDto findById(@PathVariable("institutionId") long institutionId, @PathVariable("id") long id){
+    public SolvedActivityFullDto findById(@PathVariable("institutionId") UUID institutionId, @PathVariable("id") UUID id){
         return solvedActivityService.findById(institutionId, id);
     }
 
     @PostMapping
     @PreAuthorize("isAuthenticated()")
-    public SolvedActivityFullDto solveActivity(@PathVariable("institutionId") long institutionId, @RequestBody SolveActivityRequest request){
+    public SolvedActivityFullDto solveActivity(@PathVariable("institutionId") UUID institutionId, @RequestBody SolveActivityRequest request){
         return solvedActivityService.solveActivity(institutionId, request);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_HEAD_TEACHER')")
-    public void deleteById(@PathVariable("institutionId") long institutionId, @PathVariable("id") long id){
+    public void deleteById(@PathVariable("institutionId") UUID institutionId, @PathVariable("id") UUID id){
         solvedActivityService.deleteById(institutionId, id);
     }
 }

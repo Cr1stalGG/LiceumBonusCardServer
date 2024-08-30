@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Builder
 @Getter
@@ -15,7 +16,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TransactionDto {
-    private long uuid;
+    private UUID uuid;
     private int balance;
     private String cardNumber;
     private StatusDto status;

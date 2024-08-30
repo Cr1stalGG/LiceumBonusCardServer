@@ -6,12 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class BonusBuyDto {
-    private long accountId;
-    private long bonusId;
+    private UUID accountId;
+    private UUID bonusId;
 }

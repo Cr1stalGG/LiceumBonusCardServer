@@ -1,7 +1,6 @@
 package by.grsu.liceum.service.impl;
 
 import by.grsu.liceum.dto.mapper.SolvedActivityDtoMapper;
-import by.grsu.liceum.dto.solved_activity.CheckSolvingActivityDto;
 import by.grsu.liceum.dto.solved_activity.SolveActivityRequest;
 import by.grsu.liceum.dto.solved_activity.SolvedActivityFullDto;
 import by.grsu.liceum.dto.solved_activity.SolvedActivityShortcutDto;
@@ -26,8 +25,8 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +37,7 @@ public class SolvedActivityServiceImpl implements SolvedActivityService {
     private final InstitutionRepository institutionRepository;
 
     @Override
-    public List<SolvedActivityShortcutDto> findAllByInstitutionId(long institutionId) {
+    public List<SolvedActivityShortcutDto> findAllByInstitutionId(UUID institutionId) {
         Optional.ofNullable(institutionRepository.findById(institutionId))
                 .orElseThrow(() -> new InstitutionWithIdNotFoundException(institutionId));
 
@@ -48,7 +47,7 @@ public class SolvedActivityServiceImpl implements SolvedActivityService {
     }
 
     @Override
-    public List<SolvedActivityShortcutDto> findAllByAccountId(long institutionId, long accountId) {
+    public List<SolvedActivityShortcutDto> findAllByAccountId(UUID institutionId, UUID accountId) {
         Account account = Optional.ofNullable(accountRepository.findById(accountId))
                 .orElseThrow(() -> new AccountWithIdNotFoundException(accountId));
 
@@ -61,7 +60,7 @@ public class SolvedActivityServiceImpl implements SolvedActivityService {
     }
 
     @Override
-    public List<SolvedActivityShortcutDto> findAllByActivityId(long institutionId, long activityId) {
+    public List<SolvedActivityShortcutDto> findAllByActivityId(UUID institutionId, UUID activityId) {
         Activity activity = Optional.ofNullable(activityRepository.findById(activityId))
                 .orElseThrow(() -> new ActivityWithIdNotFoundException(activityId));
 
@@ -74,7 +73,7 @@ public class SolvedActivityServiceImpl implements SolvedActivityService {
     }
 
     @Override
-    public SolvedActivityFullDto findById(long institutionId, long id) {
+    public SolvedActivityFullDto findById(UUID institutionId, UUID id) {
         SolvedActivity solvedActivity = Optional.ofNullable(solvedActivityRepository.findById(id))
                 .orElseThrow(() -> new SolvedActivityWithIdNotFoundException(id));
 
@@ -86,7 +85,7 @@ public class SolvedActivityServiceImpl implements SolvedActivityService {
 
     @Override
     @Transactional
-    public SolvedActivityFullDto solveActivity(long institutionId, SolveActivityRequest request) {
+    public SolvedActivityFullDto solveActivity(UUID institutionId, SolveActivityRequest request) {
         Activity activity = Optional.ofNullable(activityRepository.findById(request.getActivityId()))
                 .orElseThrow(() -> new ActivityWithIdNotFoundException(request.getActivityId()));
 
@@ -122,7 +121,7 @@ public class SolvedActivityServiceImpl implements SolvedActivityService {
 
     @Override
     @Transactional
-    public void deleteById(long institutionId, long id) {
+    public void deleteById(UUID institutionId, UUID id) {
         SolvedActivity solvedActivity = Optional.ofNullable(solvedActivityRepository.findById(id))
                 .orElseThrow(() -> new SolvedActivityWithIdNotFoundException(id));
 

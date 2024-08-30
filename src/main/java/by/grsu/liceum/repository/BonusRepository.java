@@ -5,9 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public interface BonusRepository extends JpaRepository<Bonus, Long> {
-    Bonus findById(long id);
-    List<Bonus> findAllByInstitution_Id(long institutionId);
+    Bonus findById(UUID id);
+    List<Bonus> findAllByInstitution_Id(UUID institutionId);
+    void deleteById(UUID id);
 }

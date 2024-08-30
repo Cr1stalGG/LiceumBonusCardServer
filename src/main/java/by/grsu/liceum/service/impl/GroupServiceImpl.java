@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +29,7 @@ public class GroupServiceImpl implements GroupService {
     private final GroupRepository groupRepository;
 
     @Override
-    public GroupFullDto findGroupById(long institutionId, long id) {
+    public GroupFullDto findGroupById(UUID institutionId, UUID id) {
         Group group = Optional.ofNullable(groupRepository.findById(id))
                 .orElseThrow(() -> new GroupWithIdNotFoundException(id));
 
@@ -40,7 +41,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     @Transactional
-    public GroupFullDto createNewGroup(long institutionId, GroupCreationDto creationDto) {
+    public GroupFullDto createNewGroup(UUID institutionId, GroupCreationDto creationDto) {
         if(creationDto == null)
             throw new NullableGroupCreationDtoException();
 
@@ -63,8 +64,8 @@ public class GroupServiceImpl implements GroupService {
 
         admin.getOtherGroups().add(group);
 
-        for(Long memberId : creationDto.getMembersId()){
-            Account member = accountRepository.findById(memberId)
+        for(UUID memberId : creationDto.getMembersId()){
+            Account member = Optional.ofNullable(accountRepository.findById(memberId))
                     .orElseThrow(() -> new AccountWithIdNotFoundException(memberId));
 
             group.getMembers().add(member);
@@ -78,7 +79,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     @Transactional
-    public void addMembersToTheGroup(long institutionId, AddMembersDto addMembersDto) {
+    public void addMembersToTheGroup(UUID institutionId, AddMembersDto addMembersDto) {
         Group group = groupRepository.findById(addMembersDto.getGroupId());
 
         if(group.getInstitution().getId() != institutionId)
@@ -87,8 +88,8 @@ public class GroupServiceImpl implements GroupService {
         if(group.getAdmin().getId() != addMembersDto.getAdminId())
             throw new InvalidPermissionsException();
 
-        for(Long memberId : addMembersDto.getMembersId()){
-            Account member = accountRepository.findById(memberId)
+        for(UUID memberId : addMembersDto.getMembersId()){
+            Account member = Optional.ofNullable(accountRepository.findById(memberId))
                     .orElseThrow(() -> new AccountWithIdNotFoundException(memberId));
 
             group.getMembers().add(member);
@@ -97,7 +98,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void deleteGroupById(long institutionId, long id) {
+    public void deleteGroupById(UUID institutionId, UUID id) {
         Group group = Optional.ofNullable(groupRepository.findById(id))
             .orElseThrow(() -> new GroupWithIdNotFoundException(id));
 

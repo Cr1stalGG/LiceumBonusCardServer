@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -30,14 +31,14 @@ public class TransactionServiceImpl implements TransactionService {
     private final StatusRepository statusRepository;
 
     @Override
-    public List<TransactionDto> findAll(long institutionId) {
+    public List<TransactionDto> findAll(UUID institutionId) {
         return transactionRepository.findAllByCard_Account_Institution_Id(institutionId).stream()
                 .map(TransactionDtoMapper::convertEntityToDto)
                 .toList();
     }
 
     @Override
-    public List<TransactionDto> findAllByCardId(long institutionId, long cardId) {
+    public List<TransactionDto> findAllByCardId(UUID institutionId, UUID cardId) {
         Card card = Optional.ofNullable(cardRepository.findById(cardId))
                 .orElseThrow(() -> new CardWithIdNotFoundException(cardId));
 
@@ -50,7 +51,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public TransactionDto findById(long institutionId, long id) {
+    public TransactionDto findById(UUID institutionId, UUID id) {
         Transaction transaction = Optional.ofNullable(transactionRepository.findById(id))
                 .orElseThrow(() -> new TransactionWithIdNotFoundException(id));
 
@@ -62,7 +63,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional
-    public TransactionDto createTransaction(long institutionId, TransactionCreationDto creationDto) {
+    public TransactionDto createTransaction(UUID institutionId, TransactionCreationDto creationDto) {
         Card card = Optional.ofNullable(cardRepository.findById(creationDto.getCardId()))
                 .orElseThrow(() -> new CardWithIdNotFoundException(creationDto.getCardId()));
 
@@ -88,7 +89,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public void deleteById(long institutionId, long id) {
+    public void deleteById(UUID institutionId, UUID id) {
         Transaction transaction = Optional.ofNullable(transactionRepository.findById(id))
                 .orElseThrow(() -> new TransactionWithIdNotFoundException(id));
 

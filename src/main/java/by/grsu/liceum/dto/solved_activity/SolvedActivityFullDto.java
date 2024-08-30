@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Builder
 @Getter
@@ -16,9 +17,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SolvedActivityFullDto {
-    private long uuid;
+    private UUID uuid;
     private AccountShortcutDto account;
     private ActivityShortcutDto activity;
-    private String code;
     private Date timeOfSolving;
 }

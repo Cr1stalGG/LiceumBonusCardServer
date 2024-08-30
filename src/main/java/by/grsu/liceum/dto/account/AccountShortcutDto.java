@@ -6,13 +6,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountShortcutDto {
-    private long uuid;
+    private UUID uuid;
     private String firstName;
     private String lastName;
     private String fatherName;

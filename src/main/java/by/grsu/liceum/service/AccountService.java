@@ -6,11 +6,12 @@ import by.grsu.liceum.dto.account.AccountFullDto;
 import by.grsu.liceum.dto.account.AccountShortcutDto;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface AccountService {
-    AccountFullDto findById(long institutionId, long id);
-    List<AccountShortcutDto> findAll(long institutionId);
-    AccountCreationResponse createUserWithRole(long institutionId, AccountCreationDto creationDto);
-    AccountCreationResponse regeneratePassword(long institutionId, long accountId);
-    void deleteById(long institutionId, long id);
+    AccountFullDto findById(UUID institutionId, UUID id);
+    List<AccountShortcutDto> findAll(UUID institutionId);
+    AccountCreationResponse createUserWithRole(UUID institutionId, AccountCreationDto creationDto);
+    AccountCreationResponse regeneratePassword(UUID institutionId, UUID accountId);
+    void deleteById(UUID institutionId, UUID id);
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/institutions/{institutionId}/activities")
@@ -24,25 +25,25 @@ public class ActivityController {
 
     @GetMapping
     @PreAuthorize("isAuthenticated()")
-    public List<ActivityShortcutDto> findAll(@PathVariable("institutionId") long institutionId){
+    public List<ActivityShortcutDto> findAll(@PathVariable("institutionId") UUID institutionId){
         return activityService.findAll(institutionId);
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
-    public ActivityFullDto findById(@PathVariable("institutionId") long institutionId, @PathVariable("id") long id){
+    public ActivityFullDto findById(@PathVariable("institutionId") UUID institutionId, @PathVariable("id") UUID id){
         return activityService.findById(institutionId, id);
     }
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_HEAD_TEACHER')")
-    public ActivityFullDto createActivity(@PathVariable("institutionId") long institutionId, @RequestBody ActivityCreationDto creationDto){
+    public ActivityFullDto createActivity(@PathVariable("institutionId") UUID institutionId, @RequestBody ActivityCreationDto creationDto){
         return activityService.createActivity(institutionId, creationDto);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
-    public void deleteById(@PathVariable("institutionId") long institutionId, @PathVariable("/{id}") long id){
+    public void deleteById(@PathVariable("institutionId") UUID institutionId, @PathVariable("/{id}") UUID id){
         activityService.deleteById(institutionId, id);
     }
 }

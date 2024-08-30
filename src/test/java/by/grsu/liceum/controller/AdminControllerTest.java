@@ -1,6 +1,6 @@
 package by.grsu.liceum.controller;
 
-import by.grsu.liceum.dto.admin.RatingDto;
+import by.grsu.liceum.dto.account.admin.RatingDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
