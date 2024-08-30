@@ -77,4 +77,5 @@ public class InstitutionServiceImpl implements InstitutionService {
 
         institutionRepository.deleteById(id);
     }
+
 }

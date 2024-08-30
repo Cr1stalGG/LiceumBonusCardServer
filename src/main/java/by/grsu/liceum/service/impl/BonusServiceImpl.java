@@ -117,8 +117,8 @@ public class BonusServiceImpl implements BonusService {
         return TicketDtoMapper.convertEntitToFullDto(ticket);
     }
 
-    //@Scheduled(cron = "${scheduler.cron.interval}") - real
-    @Scheduled(fixedDelay = 60_000L) // test every minute
+    //@Scheduled(cron = "${scheduler.cron.interval.bonuses}") - real
+    @Scheduled(fixedDelay = 120_000L) // test every minute
     public void checkIfBonuseTimeEnded(){
         log.info("=======DELETE ALL USELESS BONUSES(time out off)=======");
         List<Bonus> bonuses = Optional.of(bonusRepository.findAll())

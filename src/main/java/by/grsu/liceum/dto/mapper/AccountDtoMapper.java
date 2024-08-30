@@ -16,6 +16,7 @@ import by.grsu.liceum.exception.NullableAccountCreationDtoException;
 import lombok.experimental.UtilityClass;
 
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,11 +74,21 @@ public class AccountDtoMapper {
     }
 
     private static Account buildEntity(AccountCreationDto source) {
+        //Date date = new Date(new Timestamp(source.getYearOfStartOfStudies(), 9, 1, 0, 0, 0, 0).getTime());
+
+        java.util.Date date = new java.util.Date();
+        date.setYear(source.getYearOfStartOfStudies());
+        date.setMonth(9);
+        date.setDate(1);
+
+        Date sqlDate = new Date(date.getTime());
+
         return Account.builder()
                 .firstName(source.getFirstName())
                 .lastName(source.getLastName())
                 .fatherName(source.getFatherName())
                 .phoneNumber(source.getPhoneNumber())
+                .yearOfStartOfStudying(sqlDate)
                 .ownedGroups(new ArrayList<>())
                 .otherGroups(new ArrayList<>())
                 .tickets(new ArrayList<>())

@@ -21,14 +21,21 @@ import by.grsu.liceum.service.CardService;
 import by.grsu.liceum.utils.Generator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
+@PropertySource("classpath:business_settings.properties")
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
@@ -108,6 +115,25 @@ public class AccountServiceImpl implements AccountService {
         response.setPassword(password);
 
         return response;
+    }
+
+    //@Scheduled(cron = "${scheduler.cron.interval.accounts}") todo real
+    @Scheduled(fixedDelay = 120_000L) //todo test
+    public void deleteAccountsWith11Years(){
+        log.info("=======DELETE ALL ACCOUNTS TIME OFF=======");
+
+        List<Account> accounts = Optional.of(accountRepository.findAll())
+                .orElse(new ArrayList<>());
+
+            for(Account account: accounts){
+                Date tmpDate = account.getYearOfStartOfStudying();
+                tmpDate.setYear(account.getYearOfStartOfStudying().getYear()+11);
+
+//                if (account.getRoles().stream().noneMatch(x -> x.getName().equals()))
+                if(tmpDate.after(new java.util.Date(System.currentTimeMillis())))
+                    accountRepository.deleteById(account.getId());
+            }
+        log.info("==========================================");
     }
 
     @Override

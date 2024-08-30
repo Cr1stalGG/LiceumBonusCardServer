@@ -6,6 +6,7 @@ create table accounts(
     last_name varchar(30) not null,
     father_name varchar(30) not null,
     phone_number varchar(20) not null,
+    year_of_start_of_studying date not null,
     card_id uuid unique references cards(id),
     institution_id uuid references institutions(id)
 );
