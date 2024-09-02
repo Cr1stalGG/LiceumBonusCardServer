@@ -137,6 +137,7 @@ public class AdminServiceImpl implements AdminService {
                 .login(Generator.generateAdminLogin(institution.getName()))
                 .password(bCryptPasswordEncoder.encode(password))
                 .card(cardService.generateCard())
+                .grade(52)
                 .institution(institution)
                 .roles(List.of(role))
                 .build();

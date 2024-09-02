@@ -18,6 +18,6 @@ public class AccountCreationDto {
     private String lastName;
     private String fatherName;
     private String phoneNumber;
-    private int yearOfStartOfStudies;
+    private int grade;
     private List<String> roleNames; //todo optional change to number(1 - user, 2 - admin...)
 }

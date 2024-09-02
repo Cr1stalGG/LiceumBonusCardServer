@@ -4,6 +4,7 @@ import by.grsu.liceum.dto.utils.GeneratorLoginDto;
 import by.grsu.liceum.exception.InvalidRoleNameException;
 import lombok.experimental.UtilityClass;
 
+import java.sql.Date;
 import java.util.Random;
 
 @UtilityClass
@@ -24,7 +25,7 @@ public class Generator {
         login.append(Transliterator.transliterateWord(String.valueOf(loginDto.getFirstName().charAt(0))))
                 .append(Transliterator.transliterateWord(String.valueOf(loginDto.getLastName().charAt(0))))
                 .append("_");
-        login.append(String.format("%02d", loginDto.getYearOfStartOfStudies() % 100));
+        login.append(String.format("%02d", new Date(System.currentTimeMillis()).toLocalDate().getYear() % 100));
 
         return login.toString().toLowerCase();
     }

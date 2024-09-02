@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Builder
@@ -22,5 +23,6 @@ public class AccountCreationResponse {
     private String lastName;
     private String fatherName;
     private String phoneNumber;
+    private LocalDate endSchoolTime;
     private CardDto card;
 }

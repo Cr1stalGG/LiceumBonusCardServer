@@ -18,5 +18,6 @@ public class AccountShortcutDto {
     private String firstName;
     private String lastName;
     private String fatherName;
+    private int grade;
     private String phoneNumber;//todo optional<?
 }

@@ -21,6 +21,7 @@ import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,8 +54,8 @@ public class Account {
     private String fatherName;
     @Column(name = "phone_number")
     private String phoneNumber;
-    @Column(name = "year_of_start_of_studying")
-    private Date yearOfStartOfStudying;
+    @Column(name = "grade")
+    private int grade;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "card_id")

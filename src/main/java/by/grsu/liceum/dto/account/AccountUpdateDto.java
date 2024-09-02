@@ -16,4 +16,5 @@ public class AccountUpdateDto {
     private String lastName;
     private String fatherName;
     private String phoneNumber;
+    private int grade;
 }

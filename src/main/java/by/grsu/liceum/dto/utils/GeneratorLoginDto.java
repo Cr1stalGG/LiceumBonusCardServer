@@ -15,5 +15,4 @@ public class GeneratorLoginDto {
     private String firstName;
     private String lastName;
     private String fatherName;
-    private int yearOfStartOfStudies;
 }

@@ -24,6 +24,7 @@ public class AccountFullDto {
     private String lastName;
     private String fatherName;
     private String phoneNumber;
+    private int grade;
     private CardDto card;
     private List<TicketShortcutDto> tickets;
     private List<GroupShortcutDto> ownedGroups;
