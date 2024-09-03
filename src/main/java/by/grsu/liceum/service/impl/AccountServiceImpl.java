@@ -4,9 +4,12 @@ import by.grsu.liceum.dto.account.AccountCreationDto;
 import by.grsu.liceum.dto.account.AccountCreationResponse;
 import by.grsu.liceum.dto.account.AccountFullDto;
 import by.grsu.liceum.dto.account.AccountShortcutDto;
+import by.grsu.liceum.dto.image.ImageCreationDto;
 import by.grsu.liceum.dto.mapper.AccountDtoMapper;
+import by.grsu.liceum.dto.mapper.ImageDtoMapper;
 import by.grsu.liceum.entity.Account;
 import by.grsu.liceum.entity.Card;
+import by.grsu.liceum.entity.Image;
 import by.grsu.liceum.entity.Institution;
 import by.grsu.liceum.entity.Role;
 import by.grsu.liceum.exception.AccountWithIdNotFoundException;
@@ -14,6 +17,7 @@ import by.grsu.liceum.exception.InstitutionWithIdNotFoundException;
 import by.grsu.liceum.exception.InvalidPermissionsException;
 import by.grsu.liceum.exception.InvalidRoleNameException;
 import by.grsu.liceum.repository.AccountRepository;
+import by.grsu.liceum.repository.ImageRepository;
 import by.grsu.liceum.repository.InstitutionRepository;
 import by.grsu.liceum.repository.RoleRepository;
 import by.grsu.liceum.service.AccountService;
@@ -42,6 +46,7 @@ public class AccountServiceImpl implements AccountService {
     private final CardService cardService;
     private final InstitutionRepository institutionRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final ImageRepository imageRepository;
 
     @Override
     public AccountFullDto findById(UUID institutionId, UUID id) {
@@ -114,6 +119,23 @@ public class AccountServiceImpl implements AccountService {
         response.setPassword(password);
 
         return response;
+    }
+
+    @Override
+    @Transactional
+    public AccountFullDto setImage(UUID institutionId, UUID accountId, ImageCreationDto creationDto) {
+        Account account = Optional.ofNullable(accountRepository.findById(accountId))
+                .orElseThrow(() -> new AccountWithIdNotFoundException(accountId));
+
+        if(account.getInstitution().getId() != institutionId)
+            throw new InvalidPermissionsException();
+
+        Image image = ImageDtoMapper.convertDtoToEntity(creationDto);
+        imageRepository.save(image);
+
+        account.setImage(image);
+
+        return AccountDtoMapper.convertEntityToFullDto(account);
     }
 
     //@Scheduled(cron = "${scheduler.cron.interval.accounts}") todo real
