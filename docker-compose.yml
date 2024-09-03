@@ -13,6 +13,17 @@ services:
     volumes:
       - local_pgdata:/var/lib/postgresql/data
 
+  minio:
+    image: 'minio/minio'
+    ports:
+      - '9000:9001'
+    volumes:
+      - minio_storage:/data
+    environment:
+      MINIO_ROOT_USER: superadmin
+      MINIO_ROOT_PASSWORD: pass1234
+    command: server --console-address ":9001" /data
+
   app:
     build: .
     deploy:
@@ -23,6 +34,7 @@ services:
       - '9000-9003:90'
     depends_on:
       - db
+      - minio
     restart: always
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
@@ -31,6 +43,9 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=none
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
       - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+      - SPRING_MINIO_HOST=http://minio:9001/
+      - SPRING_MINIO_USERNAME=superadmin
+      - SPRING_MINIO_PASSWORD=pass123
 
   nginx:
     image: liceum_server/nginx:vtest7
@@ -64,3 +79,4 @@ services:
 volumes:
   local_pgdata:
   local_grafana_data:
+  minio_storage: {}

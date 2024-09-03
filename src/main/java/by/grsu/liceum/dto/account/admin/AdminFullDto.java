@@ -1,5 +1,6 @@
 package by.grsu.liceum.dto.account.admin;
 
+import by.grsu.liceum.dto.image.ImageDto;
 import by.grsu.liceum.dto.institution.InstitutionShortcutDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,5 +23,6 @@ public class AdminFullDto {
     private String lastName;
     private String fatherName;
     private String phoneNumber;
-    private InstitutionShortcutDto institution;//todo check another info
+    private InstitutionShortcutDto institution;
+    private ImageDto image;//todo check another info
 }

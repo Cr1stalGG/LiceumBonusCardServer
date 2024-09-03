@@ -8,5 +8,6 @@ create table accounts(
     phone_number varchar(20) not null,
     grade int not null,
     card_id uuid unique references cards(id),
-    institution_id uuid references institutions(id)
+    institution_id uuid references institutions(id),
+    image_id uuid references images(id)
 );

@@ -3,11 +3,13 @@ package by.grsu.liceum.dto.mapper;
 import by.grsu.liceum.dto.account.AccountShortcutDto;
 import by.grsu.liceum.dto.activity_type.ActivityTypeShortcutDto;
 import by.grsu.liceum.dto.bonus.BonusShortcutDto;
+import by.grsu.liceum.dto.image.ImageDto;
 import by.grsu.liceum.dto.institution.InstitutionFullDto;
 import by.grsu.liceum.dto.institution.InstitutionShortcutDto;
 import by.grsu.liceum.entity.Account;
 import by.grsu.liceum.entity.ActivityType;
 import by.grsu.liceum.entity.Bonus;
+import by.grsu.liceum.entity.Image;
 import by.grsu.liceum.entity.Institution;
 import lombok.experimental.UtilityClass;
 
@@ -38,7 +40,14 @@ public class InstitutionDtoMapper {
                 .accounts(buildAccounts(source.getAccounts()))
                 .activityTypes(buildActivityTypes(source.getActivityTypes()))
                 .bonuses(buildBonuses(source.getBonuses()))
+                .image(buildImage(source.getImage()))
                 .build();
+    }
+
+    private static ImageDto buildImage(Image source) {
+        return Optional.ofNullable(source)
+                .map(ImageDtoMapper::convertEntityToDto)
+                .orElse(null);
     }
 
     private static List<BonusShortcutDto> buildBonuses(List<Bonus> source) {
@@ -73,6 +82,7 @@ public class InstitutionDtoMapper {
                 .uuid(source.getId())
                 .name(source.getName())
                 .city(source.getCity())
+                .imageDto(buildImage(source.getImage()))
                 .build();
     }
 }

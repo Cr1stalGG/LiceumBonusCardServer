@@ -25,6 +25,7 @@
 		<spring-doc.version>2.3.0</spring-doc.version>
 		<jwt.api.version>0.11.5</jwt.api.version>
 		<micrometer.prometheus.version>0.2.0</micrometer.prometheus.version>
+		<minio.version>8.5.2</minio.version>
 	</properties>
 
 	<dependencies>
@@ -64,6 +65,12 @@
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>io.minio</groupId>
+			<artifactId>minio</artifactId>
+			<version>${minio.version}</version>
 		</dependency>
 
 

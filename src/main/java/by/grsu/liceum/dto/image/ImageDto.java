@@ -1,6 +1,5 @@
-package by.grsu.liceum.dto.institution;
+package by.grsu.liceum.dto.image;
 
-import by.grsu.liceum.dto.image.ImageDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,9 +13,9 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class InstitutionShortcutDto {
-    private UUID uuid;
-    private String name;
-    private String city;
-    private ImageDto imageDto;
+public class ImageDto {
+    private UUID id;
+    private String objectName;
+    private String bucketName;
+    private UUID institutionId;
 }

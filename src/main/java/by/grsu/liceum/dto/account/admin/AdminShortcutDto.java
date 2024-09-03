@@ -1,5 +1,6 @@
 package by.grsu.liceum.dto.account.admin;
 
+import by.grsu.liceum.dto.image.ImageDto;
 import by.grsu.liceum.dto.institution.InstitutionShortcutDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,4 +19,5 @@ public class AdminShortcutDto {
     private UUID uuid;
     private String login;
     private InstitutionShortcutDto institution;
+    private ImageDto image;
 }

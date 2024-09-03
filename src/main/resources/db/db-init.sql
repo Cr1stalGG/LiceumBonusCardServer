@@ -121,3 +121,10 @@ create table solved_activities(
     activity_id bigint references activities(id),
     code varchar(16) unique not null
 );
+
+create table images(
+    id uuid primary key,
+    object_name varchar not null,
+    bucket_name varchar not null,
+    institution_id uuid references institutions(id);
+);

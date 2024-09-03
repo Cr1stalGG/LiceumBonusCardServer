@@ -2,6 +2,7 @@ package by.grsu.liceum.dto.account;
 
 import by.grsu.liceum.dto.card.CardDto;
 import by.grsu.liceum.dto.group.GroupShortcutDto;
+import by.grsu.liceum.dto.image.ImageDto;
 import by.grsu.liceum.dto.solved_activity.SolvedActivityShortcutDto;
 import by.grsu.liceum.dto.ticket.TicketShortcutDto;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,7 @@ public class AccountFullDto {
     private String phoneNumber;
     private int grade;
     private CardDto card;
+    private ImageDto imageDto;
     private List<TicketShortcutDto> tickets;
     private List<GroupShortcutDto> ownedGroups;
     private List<GroupShortcutDto> otherGroups;

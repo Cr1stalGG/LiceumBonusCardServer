@@ -2,8 +2,10 @@ package by.grsu.liceum.dto.mapper;
 
 import by.grsu.liceum.dto.account.admin.AdminFullDto;
 import by.grsu.liceum.dto.account.admin.AdminShortcutDto;
+import by.grsu.liceum.dto.image.ImageDto;
 import by.grsu.liceum.dto.institution.InstitutionShortcutDto;
 import by.grsu.liceum.entity.Account;
+import by.grsu.liceum.entity.Image;
 import by.grsu.liceum.entity.Institution;
 import lombok.experimental.UtilityClass;
 
@@ -28,6 +30,7 @@ public class AdminDtoMapper {
                 .uuid(source.getId())
                 .login(source.getLogin())
                 .institution(buildInstitution(source.getInstitution()))
+                .image(buildImage(source.getImage()))
                 .build();
     }
 
@@ -40,12 +43,19 @@ public class AdminDtoMapper {
                 .fatherName(source.getFatherName())
                 .phoneNumber(source.getPhoneNumber())
                 .institution(buildInstitution(source.getInstitution()))
+                .image(buildImage(source.getImage()))
                 .build();
     }
 
     private static InstitutionShortcutDto buildInstitution(Institution source) {
         return Optional.ofNullable(source)
                 .map(InstitutionDtoMapper::convertEntityToShortcutDto)
+                .orElse(null);
+    }
+
+    private static ImageDto buildImage(Image source) {
+        return Optional.ofNullable(source)
+                .map(ImageDtoMapper::convertEntityToDto)
                 .orElse(null);
     }
 }

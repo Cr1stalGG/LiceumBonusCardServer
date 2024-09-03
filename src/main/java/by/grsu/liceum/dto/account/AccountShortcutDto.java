@@ -1,5 +1,6 @@
 package by.grsu.liceum.dto.account;
 
+import by.grsu.liceum.dto.image.ImageDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,4 +21,5 @@ public class AccountShortcutDto {
     private String fatherName;
     private int grade;
     private String phoneNumber;//todo optional<?
+    private ImageDto image;
 }

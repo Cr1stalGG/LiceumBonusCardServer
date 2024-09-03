@@ -63,6 +63,10 @@ public class Account {
     @JoinColumn(name = "institution_id")
     private Institution institution;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "image_id")
+    private Image image;
+
     @OneToMany(
             fetch = FetchType.LAZY,
             mappedBy = "account",

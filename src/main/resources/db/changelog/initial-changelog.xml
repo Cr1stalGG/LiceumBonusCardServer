@@ -9,6 +9,10 @@
       http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd"
         logicalFilePath="changelog">
 
+    <changeSet id="initial-images" author="Alexander Savickij">
+        <sqlFile encoding="utf8" path="./initial/17.create-images-table.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
     <changeSet id="initial-roles" author="Alexander Savickij">
         <sqlFile encoding="utf8" path="./initial/01.create-roles-table.sql" relativeToChangelogFile="true"/>
     </changeSet>
