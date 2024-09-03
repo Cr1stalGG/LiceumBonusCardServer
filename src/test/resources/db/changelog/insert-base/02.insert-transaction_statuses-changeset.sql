@@ -1,0 +1,4 @@
+insert into transaction_statuses(id, name, description) values('780ed93a-6b43-4a37-937d-911264ca66a6', 'ADMIN_ACCRUAL_STATUS', 'admin puts rating to the card');
+insert into transaction_statuses(id, name, description) values('7000c6dd-c038-4d92-9479-563f28a79985', 'ACTIVITY_ACCRUAL_STATUS', 'puts activities rating to the card');
+insert into transaction_statuses(id, name, description) values('b434474c-1f51-4d93-a362-566fbdb447b0', 'WRITE_OFF_STATUS', 'take rating from the card');
+insert into transaction_statuses(id, name, description) values('375c13ae-93db-4dfb-a328-68cbb72330fd', 'BUY_BONUS_STATUS', 'buy bonus - take rating')
