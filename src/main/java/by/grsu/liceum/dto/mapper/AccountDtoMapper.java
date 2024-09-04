@@ -68,6 +68,7 @@ public class AccountDtoMapper {
                 .lastName(source.getLastName())
                 .fatherName(source.getFatherName())
                 .phoneNumber(source.getPhoneNumber())
+                .grade(source.getGrade())
                 .build();
     }
 
@@ -100,7 +101,7 @@ public class AccountDtoMapper {
     }
 
     private static List<SolvedActivityShortcutDto> buildSolvedActivities(List<SolvedActivity> source) {
-        if(source == null)
+        if(source.isEmpty())
             return new ArrayList<>();
         else
             return source.stream()
@@ -119,7 +120,7 @@ public class AccountDtoMapper {
     }
 
     private static List<TicketShortcutDto> buildTickets(List<Ticket> source){
-        if(source == null)
+        if(source.isEmpty())
             return new ArrayList<>();
 
         return source.stream()
@@ -128,7 +129,7 @@ public class AccountDtoMapper {
     }
 
     private static List<GroupShortcutDto> buildGroups(List<Group> source){
-        if(source == null)
+        if(source.isEmpty())
             return new ArrayList<>();
 
         return source.stream()

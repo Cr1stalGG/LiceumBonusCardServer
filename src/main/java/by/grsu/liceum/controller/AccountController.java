@@ -4,6 +4,7 @@ import by.grsu.liceum.dto.account.AccountCreationDto;
 import by.grsu.liceum.dto.account.AccountCreationResponse;
 import by.grsu.liceum.dto.account.AccountFullDto;
 import by.grsu.liceum.dto.account.AccountShortcutDto;
+import by.grsu.liceum.dto.image.ImageCreationDto;
 import by.grsu.liceum.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -38,15 +39,21 @@ public class AccountController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public AccountCreationResponse createAccountWithRole(@PathVariable("institutionId") UUID institutionId, @RequestBody AccountCreationDto creationDto){
         return accountService.createUserWithRole(institutionId, creationDto);
     }
 
-    @PutMapping("/regenerate/password/{accountId}")
+    @PutMapping("/{accountId}/regenerate/password")
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     public AccountCreationResponse regeneratePassword(@PathVariable("institutionId") UUID institutionId, @PathVariable("accountId") UUID accountId){
         return accountService.regeneratePassword(institutionId, accountId);
+    }
+
+    @PutMapping("/{accountId}/images")
+    @PreAuthorize("isAuthenticated()")
+    public AccountFullDto updateImage(@PathVariable("institutionId") UUID institutionId, @PathVariable("accountId") UUID accountId, @RequestBody ImageCreationDto imageCreationDto){
+        return accountService.setImage(institutionId, accountId, imageCreationDto); //todo null
     }
 
     @DeleteMapping("/{id}")

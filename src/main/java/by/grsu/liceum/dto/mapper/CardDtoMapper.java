@@ -28,16 +28,7 @@ public class CardDtoMapper {
     }
 
     private static List<TransactionDto> buildTransactionDtos(List<Transaction> source) {
-        if(source == null)
-            return new ArrayList<>();
-
-        return source.stream()
-                .map(TransactionDtoMapper::convertEntityToDto)
-                .toList();
-    }
-
-    private static List<TransactionDto> buildSentTransactions(List<Transaction> source) {
-        if(source == null)
+        if(source.isEmpty())
             return new ArrayList<>();
 
         return source.stream()

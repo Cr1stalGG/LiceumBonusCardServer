@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@PropertySource("${classpath:business_settings.properties}")
+@PropertySource("classpath:business_settings.properties")
 @RequiredArgsConstructor
 public class HeadTeacherServiceImpl implements HeadTeacherService {
     private final AccountRepository accountRepository;

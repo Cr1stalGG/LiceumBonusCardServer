@@ -39,6 +39,6 @@ public class Transaction {
     @JoinColumn(name = "transaction_status_id")
     private TransactionStatus transactionStatus;
 
-    @Column(name = "time_of_transaction")
+    @Column(name = "transaction_time")
     private Date timeOfTransaction;
 }

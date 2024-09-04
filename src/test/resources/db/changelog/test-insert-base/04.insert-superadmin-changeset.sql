@@ -36,8 +36,8 @@ insert into accounts(
     'master',
     '+12312312312',
     52,
-    'master_rootSuperadmin211337',
-    '$2a$12$JJ6KGAbBax5m5VdUpBAT3OJ/I3IWoAu0W2EbAu.coLf.sSmGYUPYy', --YDVx6rcS4pJw
+    'login',
+    'password',
     'fdd76f7f-af76-41af-ad60-00d5bbceb2e6',
     'f287d9ff-728e-4a8f-ad79-8985fe55b50b'
     );

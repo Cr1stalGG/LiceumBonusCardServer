@@ -26,7 +26,8 @@ import java.util.UUID;
 @NamedEntityGraph(
     name = "account-with-roles",
     attributeNodes = {
-            @NamedAttributeNode("roles")
+            @NamedAttributeNode("roles"),
+            @NamedAttributeNode("institution")
     }
 )
 @Entity

@@ -9,11 +9,13 @@ import io.minio.UploadObjectArgs;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Repository;
 
 @Slf4j
 @Repository
 @RequiredArgsConstructor
+@ConditionalOnProperty(value = "spring.is-bean-enabled", matchIfMissing = false)
 public class MinioRepositoryImpl implements MinioRepository { //todo replace @SneakyThrows with try/catch
     private final MinioClient minioClient;
 

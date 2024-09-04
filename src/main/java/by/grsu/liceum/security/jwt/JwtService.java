@@ -17,10 +17,10 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
-@PropertySource("${classpath:application.properties}")
+@PropertySource("classpath:application.properties")
 public class JwtService {
     @Value("${spring.jwt.secret}")
-    private String SECRET_KEY; //todo change
+    private String SECRET_KEY;
 
     public String generateToken(Map<String, Object> claims, UserDetails userDetails) {
         return Jwts

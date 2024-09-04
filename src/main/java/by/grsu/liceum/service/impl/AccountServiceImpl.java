@@ -53,7 +53,7 @@ public class AccountServiceImpl implements AccountService {
         Account account = Optional.ofNullable(accountRepository.findById(id))
                 .orElseThrow(() -> new AccountWithIdNotFoundException(id));
 
-        if(account.getInstitution().getId() != institutionId)
+        if(!account.getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         return AccountDtoMapper.convertEntityToFullDto(account);
@@ -79,6 +79,7 @@ public class AccountServiceImpl implements AccountService {
         account.setLogin(Generator.generateLogin(AccountDtoMapper.convertCreationDtoToGeneratorDto(creationDto)));
         account.setPassword(bCryptPasswordEncoder.encode(password));
         account.setInstitution(institution);
+        account.setRoles(new ArrayList<>());
 
         accountRepository.save(account);
 
@@ -108,7 +109,7 @@ public class AccountServiceImpl implements AccountService {
         Account account = Optional.ofNullable(accountRepository.findById(accountId))
                 .orElseThrow(() -> new AccountWithIdNotFoundException(accountId));
 
-        if(account.getInstitution().getId() != institutionId)
+        if(!account.getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         String password = Generator.generatePassword("ROLE_USER");
@@ -127,7 +128,7 @@ public class AccountServiceImpl implements AccountService {
         Account account = Optional.ofNullable(accountRepository.findById(accountId))
                 .orElseThrow(() -> new AccountWithIdNotFoundException(accountId));
 
-        if(account.getInstitution().getId() != institutionId)
+        if(!account.getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         Image image = ImageDtoMapper.convertDtoToEntity(creationDto);
@@ -166,7 +167,7 @@ public class AccountServiceImpl implements AccountService {
         Account account = Optional.ofNullable(accountRepository.findById(id))
                 .orElseThrow(() -> new AccountWithIdNotFoundException(id));
 
-        if(account.getInstitution().getId() != institutionId)
+        if(!account.getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         accountRepository.deleteById(id);

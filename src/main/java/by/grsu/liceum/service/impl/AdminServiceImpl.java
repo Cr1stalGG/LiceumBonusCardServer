@@ -33,7 +33,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@PropertySource("${classpath:business_settings.properties}")
+@PropertySource("classpath:business_settings.properties")
 @RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService {
     private final AccountRepository accountRepository;
