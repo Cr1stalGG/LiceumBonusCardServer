@@ -1,5 +1,7 @@
 package by.grsu.liceum.controller;
 
+import by.grsu.liceum.dto.account.admin.RatingDto;
+import by.grsu.liceum.dto.image.ImageCreationDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
@@ -10,7 +12,10 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.UUID;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -28,9 +33,15 @@ public class AdminControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void testAddRating() throws Exception {
-        System.out.println(mockMvc.perform(post(BAZE_PATH + "/push/58f82d24-ac0a-4508-a56d-f1fc0eee09fc/10")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk()) //todo repos -> account by id not found
+        RatingDto dto = RatingDto.builder()
+                .value(15)
+                .accountId(UUID.fromString("58f82d24-ac0a-4508-a56d-f1fc0eee09fc"))
+                .build();
+
+        System.out.println(mockMvc.perform(post(BAZE_PATH + "/push")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isOk()) //todo repos -> accpimt
                 .andReturn()
                 .getResponse()
                 .getContentAsString());
@@ -39,8 +50,31 @@ public class AdminControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void testGetRating() throws Exception{
-        System.out.println(mockMvc.perform(post(BAZE_PATH + "/take/58f82d24-ac0a-4508-a56d-f1fc0eee09fc/10")
-                        .contentType(MediaType.APPLICATION_JSON))
+        RatingDto dto = RatingDto.builder()
+                .value(15)
+                .accountId(UUID.fromString("58f82d24-ac0a-4508-a56d-f1fc0eee09fc"))
+                .build();
+
+        System.out.println(mockMvc.perform(post(BAZE_PATH + "/take")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void testSetImage() throws Exception {
+        ImageCreationDto creationDto = ImageCreationDto.builder()
+                .objectName("image.png")
+                .bucketName("bucketName")
+                .build();
+
+        System.out.println(mockMvc.perform(put(BAZE_PATH + "/6df0875f-05a8-44a2-b742-17d718058fb4/images")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(creationDto)))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()

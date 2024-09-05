@@ -41,4 +41,16 @@
         <sqlFile encoding="utf8" path="./test-insert-base/08.insert-accounts_roles-changeset.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <changeSet id="insert-activity_types" author="Alexander Savickij">
+        <sqlFile encoding="utf8" path="./test-insert-base/09.insert-activity_types-changeset.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="insert-activities" author="Alexander Savickij">
+        <sqlFile encoding="utf8" path="./test-insert-base/10.insert-activities-changeset.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="insert-bonuses" author="Alexander Savickij">
+        <sqlFile encoding="utf8" path="./test-insert-base/11.insert-bonuses-changeset.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
 </databaseChangeLog>

@@ -38,7 +38,7 @@ public class ActivityServiceImpl implements ActivityService {
         Activity activity = Optional.ofNullable(activityRepository.findById(id))
                 .orElseThrow(() -> new ActivityWithIdNotFoundException(id));
 
-        if(activity.getActivityType().getInstitution().getId() != institutionId)
+        if(!activity.getActivityType().getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         return ActivityDtoMapper.convertEntityToFullDto(activity);
@@ -65,7 +65,7 @@ public class ActivityServiceImpl implements ActivityService {
         Activity activity = Optional.ofNullable(activityRepository.findById(id))
                 .orElseThrow(() -> new ActivityWithIdNotFoundException(id));
 
-        if (activity.getActivityType().getInstitution().getId() != institutionId)
+        if(!activity.getActivityType().getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         activityRepository.deleteById(id);

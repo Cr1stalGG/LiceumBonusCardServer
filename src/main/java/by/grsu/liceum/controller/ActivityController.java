@@ -43,7 +43,7 @@ public class ActivityController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
-    public void deleteById(@PathVariable("institutionId") UUID institutionId, @PathVariable("/{id}") UUID id){
+    public void deleteById(@PathVariable("institutionId") UUID institutionId, @PathVariable("id") UUID id){
         activityService.deleteById(institutionId, id);
     }
 }

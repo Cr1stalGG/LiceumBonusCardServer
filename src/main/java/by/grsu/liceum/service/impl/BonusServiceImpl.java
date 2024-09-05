@@ -59,7 +59,7 @@ public class BonusServiceImpl implements BonusService {
         Bonus bonus = Optional.ofNullable(bonusRepository.findById(id))
                 .orElseThrow(() -> new BonusWithIdNotFoundException(id));
 
-        if(bonus.getInstitution().getId() != institutionId)
+        if(!bonus.getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         return BonusDtoMapper.convertEntityToFullDto(bonus);
@@ -90,7 +90,7 @@ public class BonusServiceImpl implements BonusService {
         Bonus bonus = Optional.ofNullable(bonusRepository.findById(buyDto.getBonusId()))
                 .orElseThrow(() -> new BonusWithIdNotFoundException(buyDto.getBonusId()));
 
-        if(account.getInstitution().getId() != institutionId || bonus.getInstitution().getId() != institutionId)
+        if(!account.getInstitution().getId().equals(institutionId) || !bonus.getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         if(account.getCard().getBalance() < bonus.getPrice())
@@ -146,7 +146,7 @@ public class BonusServiceImpl implements BonusService {
         Bonus bonus = Optional.ofNullable(bonusRepository.findById(id))
                 .orElseThrow(() -> new BonusWithIdNotFoundException(id));
 
-        if (bonus.getInstitution().getId() != institutionId)
+        if(!bonus.getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         bonusRepository.deleteById(id);

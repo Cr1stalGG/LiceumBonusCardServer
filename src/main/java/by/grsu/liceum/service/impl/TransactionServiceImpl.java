@@ -42,7 +42,7 @@ public class TransactionServiceImpl implements TransactionService {
         Card card = Optional.ofNullable(cardRepository.findById(cardId))
                 .orElseThrow(() -> new CardWithIdNotFoundException(cardId));
 
-        if(card.getAccount().getInstitution().getId() != institutionId)
+        if(!card.getAccount().getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         return card.getTransactions().stream()
@@ -55,7 +55,7 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction transaction = Optional.ofNullable(transactionRepository.findById(id))
                 .orElseThrow(() -> new TransactionWithIdNotFoundException(id));
 
-        if(transaction.getCard().getAccount().getInstitution().getId() != institutionId)
+        if(!transaction.getCard().getAccount().getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         return TransactionDtoMapper.convertEntityToDto(transaction);
@@ -67,7 +67,7 @@ public class TransactionServiceImpl implements TransactionService {
         Card card = Optional.ofNullable(cardRepository.findById(creationDto.getCardId()))
                 .orElseThrow(() -> new CardWithIdNotFoundException(creationDto.getCardId()));
 
-        if(card.getAccount().getInstitution().getId() != institutionId)
+        if(!card.getAccount().getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         TransactionStatus status = Optional.ofNullable(statusRepository.findByName(creationDto.getStatus()))
@@ -93,7 +93,7 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction transaction = Optional.ofNullable(transactionRepository.findById(id))
                 .orElseThrow(() -> new TransactionWithIdNotFoundException(id));
 
-        if(transaction.getCard().getAccount().getInstitution().getId() != institutionId)
+        if(!transaction.getCard().getAccount().getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         transactionRepository.deleteById(id);

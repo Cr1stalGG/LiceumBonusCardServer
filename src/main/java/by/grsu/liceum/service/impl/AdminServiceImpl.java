@@ -3,10 +3,13 @@ package by.grsu.liceum.service.impl;
 import by.grsu.liceum.dto.account.admin.AdminFullDto;
 import by.grsu.liceum.dto.account.admin.AdminShortcutDto;
 import by.grsu.liceum.dto.account.admin.RatingDto;
+import by.grsu.liceum.dto.image.ImageCreationDto;
 import by.grsu.liceum.dto.mapper.AdminDtoMapper;
+import by.grsu.liceum.dto.mapper.ImageDtoMapper;
 import by.grsu.liceum.dto.transaction.TransactionCreationDto;
 import by.grsu.liceum.dto.transaction.TransactionDto;
 import by.grsu.liceum.entity.Account;
+import by.grsu.liceum.entity.Image;
 import by.grsu.liceum.entity.Institution;
 import by.grsu.liceum.entity.Role;
 import by.grsu.liceum.exception.AccountWithIdNotFoundException;
@@ -15,6 +18,7 @@ import by.grsu.liceum.exception.InvalidPermissionsException;
 import by.grsu.liceum.exception.InvalidRatingAmountException;
 import by.grsu.liceum.exception.NotEnoughBalanceError;
 import by.grsu.liceum.repository.AccountRepository;
+import by.grsu.liceum.repository.ImageRepository;
 import by.grsu.liceum.repository.InstitutionRepository;
 import by.grsu.liceum.repository.RoleRepository;
 import by.grsu.liceum.service.AdminService;
@@ -42,6 +46,7 @@ public class AdminServiceImpl implements AdminService {
     private final RoleRepository roleRepository;
     private final CardService cardService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final ImageRepository imageRepository;
 
     @Value("${property.admin.rating.min_value}")
     private int minRatingValue;
@@ -50,21 +55,21 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
-    public TransactionDto addRating(UUID institutionId, UUID accountId, int value) {
-        if(value < this.minRatingValue || value > this.maxRatingValue)
-            throw new InvalidRatingAmountException(this.minRatingValue, this.maxRatingValue, value);
+    public TransactionDto addRating(UUID institutionId, RatingDto ratingDto) {
+        if(ratingDto.getValue() < this.minRatingValue || ratingDto.getValue() > this.maxRatingValue)
+            throw new InvalidRatingAmountException(this.minRatingValue, this.maxRatingValue, ratingDto.getValue());
 
-        Account account = Optional.ofNullable(accountRepository.findById(accountId))
-                .orElseThrow(() -> new AccountWithIdNotFoundException(accountId));
+        Account account = Optional.ofNullable(accountRepository.findById(ratingDto.getAccountId()))
+                .orElseThrow(() -> new AccountWithIdNotFoundException(ratingDto.getAccountId()));
 
-        if (!account.getInstitution().getId().equals(institutionId))
+        if(!account.getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
-        account.getCard().setBalance(account.getCard().getBalance() + value);
+        account.getCard().setBalance(account.getCard().getBalance() + ratingDto.getValue());
 
         TransactionCreationDto creationDto = TransactionCreationDto.builder()
                 .cardId(account.getCard().getId())
-                .balance(value)
+                .balance(ratingDto.getValue())
                 .status("ADMIN_ACCRUAL_STATUS")
                 .build();
 
@@ -73,24 +78,24 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
-    public TransactionDto getRating(UUID institutionId, UUID accountId, int value) {
-        if(value < this.minRatingValue || value > this.maxRatingValue)
-            throw new InvalidRatingAmountException(this.minRatingValue, this.maxRatingValue, value);
+    public TransactionDto getRating(UUID institutionId, RatingDto ratingDto) {
+        if(ratingDto.getValue() < this.minRatingValue || ratingDto.getValue() > this.maxRatingValue)
+            throw new InvalidRatingAmountException(this.minRatingValue, this.maxRatingValue, ratingDto.getValue());
 
-        Account account = Optional.ofNullable(accountRepository.findById(accountId))
-                .orElseThrow(() -> new AccountWithIdNotFoundException(accountId));
+        Account account = Optional.ofNullable(accountRepository.findById(ratingDto.getAccountId()))
+                .orElseThrow(() -> new AccountWithIdNotFoundException(ratingDto.getAccountId()));
 
-        if (!account.getInstitution().getId().equals(institutionId))
+        if(!account.getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
-        if(account.getCard().getBalance() - value <= 0)
-            throw new NotEnoughBalanceError(accountId, account.getCard().getBalance());
+        if(account.getCard().getBalance() - ratingDto.getValue() <= 0)
+            throw new NotEnoughBalanceError(ratingDto.getAccountId(), account.getCard().getBalance());
 
-        account.getCard().setBalance(account.getCard().getBalance() - value);
+        account.getCard().setBalance(account.getCard().getBalance() - ratingDto.getValue());
 
         TransactionCreationDto creationDto = TransactionCreationDto.builder()
                 .cardId(account.getCard().getId())
-                .balance(value)
+                .balance(ratingDto.getValue())
                 .status("ADMIN_ACCRUAL_STATUS")
                 .build();
 
@@ -180,5 +185,22 @@ public class AdminServiceImpl implements AdminService {
         findAdminById(id);
 
         accountRepository.deleteById(id); //todo check of role mb
+    }
+
+    @Override
+    @Transactional
+    public AdminFullDto setImage(UUID institutionId, UUID accountId, ImageCreationDto creationDto) {
+        Account account = Optional.ofNullable(accountRepository.findById(accountId))
+                .orElseThrow(() -> new AccountWithIdNotFoundException(accountId));
+
+        if(!account.getInstitution().getId().equals(institutionId))
+            throw new InvalidPermissionsException();
+
+        Image image = ImageDtoMapper.convertDtoToEntity(creationDto);
+        imageRepository.save(image);
+
+        account.setImage(image);
+
+        return AdminDtoMapper.convertEntityToFullDto(account);
     }
 }
