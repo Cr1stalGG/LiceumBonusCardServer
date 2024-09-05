@@ -1,5 +1,6 @@
 package by.grsu.liceum.controller;
 
+import by.grsu.liceum.dto.image.ImageCreationDto;
 import by.grsu.liceum.dto.institution.InstitutionCreationDto;
 import by.grsu.liceum.dto.institution.InstitutionFullDto;
 import by.grsu.liceum.dto.institution.InstitutionShortcutDto;
@@ -59,6 +60,12 @@ public class SuperAdmin_InstitutionController {
     @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
     public InstitutionFullDto updateInstitution(@PathVariable("id") UUID id, @RequestBody InstitutionUpdateDto updateDto){
         return institutionService.updateInstitution(id, updateDto);
+    }
+
+    @PutMapping("/{id}/images")
+    @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
+    public InstitutionFullDto setImage(@PathVariable("id") UUID id, @RequestBody ImageCreationDto creationDto){
+        return institutionService.setImage(id, creationDto);
     }
 
     @DeleteMapping("/{id}")

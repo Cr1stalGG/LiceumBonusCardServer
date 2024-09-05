@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface AdminService {
-    TransactionDto addRating(UUID institutionId, RatingDto ratingDto);
-    TransactionDto getRating(UUID institutionId, RatingDto ratingDto);
+    TransactionDto addRating(UUID institutionId, UUID accountId, int value);
+    TransactionDto getRating(UUID institutionId, UUID accountId, int value);
     List<AdminShortcutDto> findAllAdmins();
     List<AdminShortcutDto> findAllAdminsByCity(String city);
     AdminFullDto findAdminById(UUID id);

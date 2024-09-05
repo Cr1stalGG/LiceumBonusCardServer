@@ -21,11 +21,24 @@
         <sqlFile encoding="utf8" path="./test-insert-base/03.insert-response_statuses-changeset.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
-    <changeSet id="insert-superadmin" author="Alexander Savickij">
-        <sqlFile encoding="utf8" path="./test-insert-base/04.insert-superadmin-changeset.sql" relativeToChangelogFile="true"/>
+    <changeSet id="insert-institutions" author="Alexander Savickij">
+        <sqlFile encoding="utf8" path="./test-insert-base/04.insert-institutions-changeset.sql" relativeToChangelogFile="true"/>
     </changeSet>
+
+    <changeSet id="insert-cards" author="Alexander Savickij">
+        <sqlFile encoding="utf8" path="./test-insert-base/05.insert-cards-changeset.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="insert-superadmin" author="Alexander Savickij">
+        <sqlFile encoding="utf8" path="./test-insert-base/06.insert-superadmin-changeset.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
     <changeSet id="insert-accounts" author="Alexander Savickij">
-        <sqlFile encoding="utf8" path="./test-insert-base/05.insert-accounts-changeset.sql" relativeToChangelogFile="true"/>
+        <sqlFile encoding="utf8" path="./test-insert-base/07.insert-accounts-changeset.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="insert-accounts_roles" author="Alexander Savickij">
+        <sqlFile encoding="utf8" path="./test-insert-base/08.insert-accounts_roles-changeset.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
 </databaseChangeLog>

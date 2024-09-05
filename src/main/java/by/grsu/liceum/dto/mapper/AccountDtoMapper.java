@@ -5,11 +5,13 @@ import by.grsu.liceum.dto.account.AccountCreationResponse;
 import by.grsu.liceum.dto.account.AccountFullDto;
 import by.grsu.liceum.dto.account.AccountShortcutDto;
 import by.grsu.liceum.dto.group.GroupShortcutDto;
+import by.grsu.liceum.dto.image.ImageDto;
 import by.grsu.liceum.dto.solved_activity.SolvedActivityShortcutDto;
 import by.grsu.liceum.dto.ticket.TicketShortcutDto;
 import by.grsu.liceum.dto.utils.GeneratorLoginDto;
 import by.grsu.liceum.entity.Account;
 import by.grsu.liceum.entity.Group;
+import by.grsu.liceum.entity.Image;
 import by.grsu.liceum.entity.SolvedActivity;
 import by.grsu.liceum.entity.Ticket;
 import by.grsu.liceum.exception.NullableAccountCreationDtoException;
@@ -97,7 +99,14 @@ public class AccountDtoMapper {
                 .ownedGroups(buildGroups(source.getOwnedGroups()))
                 .otherGroups(buildGroups(source.getOtherGroups()))
                 .solvedActivities(buildSolvedActivities(source.getSolvedActivities()))
+                .imageDto(buildImage(source.getImage()))
                 .build();
+    }
+
+    private static ImageDto buildImage(Image source){
+        return Optional.ofNullable(source)
+                .map(ImageDtoMapper::convertEntityToDto)
+                .orElse(null);
     }
 
     private static List<SolvedActivityShortcutDto> buildSolvedActivities(List<SolvedActivity> source) {
@@ -116,6 +125,7 @@ public class AccountDtoMapper {
                 .lastName(source.getLastName())
                 .fatherName(source.getFatherName())
                 .phoneNumber(source.getPhoneNumber())
+                .image(buildImage(source.getImage()))
                 .build();
     }
 

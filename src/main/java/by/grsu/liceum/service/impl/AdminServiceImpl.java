@@ -50,21 +50,21 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
-    public TransactionDto addRating(UUID institutionId, RatingDto ratingDto) {
-        if(ratingDto.getValue() < this.minRatingValue || ratingDto.getValue() > this.maxRatingValue)
-            throw new InvalidRatingAmountException(this.minRatingValue, this.maxRatingValue, ratingDto.getValue());
+    public TransactionDto addRating(UUID institutionId, UUID accountId, int value) {
+        if(value < this.minRatingValue || value > this.maxRatingValue)
+            throw new InvalidRatingAmountException(this.minRatingValue, this.maxRatingValue, value);
 
-        Account account = Optional.ofNullable(accountRepository.findById(ratingDto.getAccountId()))
-                .orElseThrow(() -> new AccountWithIdNotFoundException(ratingDto.getAccountId()));
+        Account account = Optional.ofNullable(accountRepository.findById(accountId))
+                .orElseThrow(() -> new AccountWithIdNotFoundException(accountId));
 
-        if(account.getInstitution().getId() != institutionId)
+        if (!account.getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
-        account.getCard().setBalance(account.getCard().getBalance() + ratingDto.getValue());
+        account.getCard().setBalance(account.getCard().getBalance() + value);
 
         TransactionCreationDto creationDto = TransactionCreationDto.builder()
                 .cardId(account.getCard().getId())
-                .balance(ratingDto.getValue())
+                .balance(value)
                 .status("ADMIN_ACCRUAL_STATUS")
                 .build();
 
@@ -73,24 +73,24 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
-    public TransactionDto getRating(UUID institutionId, RatingDto ratingDto) {
-        if(ratingDto.getValue() < this.minRatingValue || ratingDto.getValue() > this.maxRatingValue)
-            throw new InvalidRatingAmountException(this.minRatingValue, this.maxRatingValue, ratingDto.getValue());
+    public TransactionDto getRating(UUID institutionId, UUID accountId, int value) {
+        if(value < this.minRatingValue || value > this.maxRatingValue)
+            throw new InvalidRatingAmountException(this.minRatingValue, this.maxRatingValue, value);
 
-        Account account = Optional.ofNullable(accountRepository.findById(ratingDto.getAccountId()))
-                .orElseThrow(() -> new AccountWithIdNotFoundException(ratingDto.getAccountId()));
+        Account account = Optional.ofNullable(accountRepository.findById(accountId))
+                .orElseThrow(() -> new AccountWithIdNotFoundException(accountId));
 
-        if (account.getInstitution().getId() != institutionId)
+        if (!account.getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
-        if(account.getCard().getBalance() - ratingDto.getValue() <= 0)
-            throw new NotEnoughBalanceError(ratingDto.getAccountId(), account.getCard().getBalance());
+        if(account.getCard().getBalance() - value <= 0)
+            throw new NotEnoughBalanceError(accountId, account.getCard().getBalance());
 
-        account.getCard().setBalance(account.getCard().getBalance() - ratingDto.getValue());
+        account.getCard().setBalance(account.getCard().getBalance() - value);
 
         TransactionCreationDto creationDto = TransactionCreationDto.builder()
                 .cardId(account.getCard().getId())
-                .balance(ratingDto.getValue())
+                .balance(value)
                 .status("ADMIN_ACCRUAL_STATUS")
                 .build();
 
@@ -162,7 +162,7 @@ public class AdminServiceImpl implements AdminService {
         if(account.getRoles().stream().noneMatch(x -> x.getName().equals("ROLE_ADMIN")))
             throw new InvalidPermissionsException();
 
-        if(account.getInstitution().getId() != institutionId)
+        if(!account.getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         String password = Generator.generatePassword("ROLE_ADMIN");
