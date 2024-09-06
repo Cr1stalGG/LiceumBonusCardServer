@@ -57,4 +57,12 @@
         <sqlFile encoding="utf8" path="./test-insert-base/12.insert-solved_activities-changeset.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <changeSet id="insert-groups" author="Alexander Savickij">
+        <sqlFile encoding="utf8" path="./test-insert-base/13.insert-groups-changeset.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="insert-accounts_groups" author="Alexander Savickij">
+        <sqlFile encoding="utf8" path="./test-insert-base/14.insert-accounts_groups-changeset.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
 </databaseChangeLog>
