@@ -4,6 +4,7 @@ import by.grsu.liceum.dto.account.admin.RatingDto;
 import by.grsu.liceum.dto.group.GroupShortcutDto;
 import by.grsu.liceum.dto.transaction.TransactionDto;
 import by.grsu.liceum.service.HeadTeacherService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,13 +31,13 @@ public class HeadTeacherController {
 
     @PostMapping("/push")
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_HEAD_TEACHER')")
-    public TransactionDto addRating(@PathVariable("institutionId") UUID institutionId, @RequestBody RatingDto ratingDto){
+    public TransactionDto addRating(@PathVariable("institutionId") UUID institutionId, @RequestBody @Valid RatingDto ratingDto){
         return headTeacherService.addRating(institutionId, ratingDto);
     }
 
     @PostMapping("/take")
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_HEAD_TEACHER')")
-    public TransactionDto getRating(@PathVariable("institutionId") UUID institutionId, @RequestBody RatingDto ratingDto){
+    public TransactionDto getRating(@PathVariable("institutionId") UUID institutionId, @RequestBody @Valid RatingDto ratingDto){
         return headTeacherService.getRating(institutionId, ratingDto);
     }
 }

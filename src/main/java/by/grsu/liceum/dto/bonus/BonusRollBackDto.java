@@ -1,5 +1,6 @@
 package by.grsu.liceum.dto.bonus;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,6 +15,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BonusRollBackDto {
+    @NotNull
     private UUID accountId;
+    @NotNull
     private UUID bonusId;
 }

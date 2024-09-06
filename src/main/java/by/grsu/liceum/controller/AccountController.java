@@ -6,6 +6,7 @@ import by.grsu.liceum.dto.account.AccountFullDto;
 import by.grsu.liceum.dto.account.AccountShortcutDto;
 import by.grsu.liceum.dto.image.ImageCreationDto;
 import by.grsu.liceum.service.AccountService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,7 +41,7 @@ public class AccountController {
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
-    public AccountCreationResponse createAccountWithRole(@PathVariable("institutionId") UUID institutionId, @RequestBody AccountCreationDto creationDto){
+    public AccountCreationResponse createAccountWithRole(@PathVariable("institutionId") UUID institutionId, @RequestBody @Valid AccountCreationDto creationDto){
         return accountService.createUserWithRole(institutionId, creationDto);
     }
 
@@ -52,7 +53,7 @@ public class AccountController {
 
     @PutMapping("/{accountId}/images")
     @PreAuthorize("isAuthenticated()")
-    public AccountFullDto updateImage(@PathVariable("institutionId") UUID institutionId, @PathVariable("accountId") UUID accountId, @RequestBody ImageCreationDto imageCreationDto){
+    public AccountFullDto updateImage(@PathVariable("institutionId") UUID institutionId, @PathVariable("accountId") UUID accountId, @RequestBody @Valid ImageCreationDto imageCreationDto){
         return accountService.setImage(institutionId, accountId, imageCreationDto); //todo null
     }
 

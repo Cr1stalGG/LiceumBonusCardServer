@@ -70,6 +70,26 @@ public class AccountControllerTest {
 
     @Test
     @WithMockUser(username = "login", password = "password", roles = "SUPER_ADMIN")
+    void testCreateAccountWithRoleValidation() throws  Exception {
+        AccountCreationDto accountCreationDto = AccountCreationDto.builder()
+                .lastName("Smth")
+                .fatherName("Smth")
+                .grade(11)
+                .phoneNumber("+375291919191")
+                .roleNames(List.of("ROLE_USER"))
+                .build();
+
+        System.out.println(mockMvc.perform(post(BAZE_PATH)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(accountCreationDto)))
+                .andExpect(status().isBadRequest())
+                .andReturn()
+                .getResponse()
+                .getContentAsString());
+    }
+
+    @Test
+    @WithMockUser(username = "login", password = "password", roles = "SUPER_ADMIN")
     void testRegeneratePassword() throws Exception{
         System.out.println(mockMvc.perform(put(BAZE_PATH + "/3234088c-210a-4f13-9a7e-e6900a1e2036/regenerate/password")
                 .contentType(MediaType.APPLICATION_JSON))

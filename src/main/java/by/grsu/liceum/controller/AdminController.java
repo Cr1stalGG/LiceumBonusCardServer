@@ -6,6 +6,7 @@ import by.grsu.liceum.dto.image.ImageCreationDto;
 import by.grsu.liceum.dto.transaction.TransactionDto;
 import by.grsu.liceum.service.AccountService;
 import by.grsu.liceum.service.AdminService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.simpleframework.xml.Path;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,19 +27,19 @@ public class AdminController {
 
     @PostMapping("/push")
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
-    public TransactionDto addRating(@PathVariable("institutionId") UUID institutionId, @RequestBody RatingDto ratingDto){
+    public TransactionDto addRating(@PathVariable("institutionId") UUID institutionId, @RequestBody @Valid RatingDto ratingDto){
         return adminService.addRating(institutionId, ratingDto);
     }
 
     @PostMapping("/take")
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
-    public TransactionDto getRating(@PathVariable("institutionId") UUID institutionId, @RequestBody RatingDto ratingDto){
+    public TransactionDto getRating(@PathVariable("institutionId") UUID institutionId, @RequestBody @Valid RatingDto ratingDto){
         return adminService.getRating(institutionId, ratingDto);
     }
 
     @PutMapping("/{adminId}/images")
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
-    public AdminFullDto setImage(@PathVariable("institutionId") UUID institutionId, @PathVariable("adminId") UUID adminId, @RequestBody ImageCreationDto creationDto){
+    public AdminFullDto setImage(@PathVariable("institutionId") UUID institutionId, @PathVariable("adminId") UUID adminId, @RequestBody @Valid ImageCreationDto creationDto){
         return adminService.setImage(institutionId, adminId, creationDto);
     }
 }

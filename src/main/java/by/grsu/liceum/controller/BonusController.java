@@ -6,6 +6,7 @@ import by.grsu.liceum.dto.bonus.BonusFullDto;
 import by.grsu.liceum.dto.bonus.BonusShortcutDto;
 import by.grsu.liceum.dto.ticket.TicketFullDto;
 import by.grsu.liceum.service.BonusService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,13 +40,13 @@ public class BonusController {
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_HEAD_TEACHER')")
-    public BonusFullDto createBonus(@PathVariable("institutionId") UUID institutionId, @RequestBody BonusCreationDto creationDto){
+    public BonusFullDto createBonus(@PathVariable("institutionId") UUID institutionId, @RequestBody @Valid BonusCreationDto creationDto){
         return bonusService.createBonus(institutionId, creationDto);
     }
 
     @PostMapping("/buy")
     @PreAuthorize("isAuthenticated()")
-    public TicketFullDto buyBonus(@PathVariable("institutionId") UUID institutionId, @RequestBody BonusBuyDto buyDto){
+    public TicketFullDto buyBonus(@PathVariable("institutionId") UUID institutionId, @RequestBody @Valid BonusBuyDto buyDto){
         return bonusService.buyBonus(institutionId, buyDto);
     }
 

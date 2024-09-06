@@ -6,6 +6,7 @@ import by.grsu.liceum.dto.institution.InstitutionFullDto;
 import by.grsu.liceum.dto.institution.InstitutionShortcutDto;
 import by.grsu.liceum.dto.institution.InstitutionUpdateDto;
 import by.grsu.liceum.service.InstitutionService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -52,13 +53,13 @@ public class SuperAdmin_InstitutionController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
-    public InstitutionFullDto createInstitution(@RequestBody InstitutionCreationDto creationDto){
+    public InstitutionFullDto createInstitution(@RequestBody @Valid InstitutionCreationDto creationDto){
         return institutionService.createInstitution(creationDto);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
-    public InstitutionFullDto updateInstitution(@PathVariable("id") UUID id, @RequestBody InstitutionUpdateDto updateDto){
+    public InstitutionFullDto updateInstitution(@PathVariable("id") UUID id, @RequestBody @Valid InstitutionUpdateDto updateDto){
         return institutionService.updateInstitution(id, updateDto);
     }
 

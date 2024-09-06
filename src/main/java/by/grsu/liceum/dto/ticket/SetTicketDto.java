@@ -1,5 +1,6 @@
 package by.grsu.liceum.dto.ticket;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,6 +15,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SetTicketDto {
+    @NotNull
     private UUID accountId;
+    @NotNull
     private UUID bonusId;
 }

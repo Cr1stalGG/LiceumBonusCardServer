@@ -21,7 +21,10 @@ import by.grsu.liceum.exception.NullableAccountCreationDtoException;
 import by.grsu.liceum.exception.NullableGroupCreationDtoException;
 import by.grsu.liceum.exception.SolvedActivityWithIdNotFoundException;
 import by.grsu.liceum.exception.TicketWithIdNotFoundException;
+import jakarta.validation.ConstraintDeclarationException;
+import jakarta.validation.ConstraintDefinitionException;
 import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -68,7 +71,12 @@ public class RestExceptionHandler {
         return new ResponseEntity<>("Cannot do operation error: " + e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = ConstraintViolationException.class)
+    @ExceptionHandler(value = {
+            ConstraintViolationException.class,
+            ConstraintDefinitionException.class,
+            ConstraintDeclarationException.class,
+            ValidationException.class
+    })
     public ResponseEntity<String> handleValidationException(Exception e){
         return new ResponseEntity<>("Invalid request body error: " + e.getMessage(), HttpStatus.BAD_REQUEST);
     }

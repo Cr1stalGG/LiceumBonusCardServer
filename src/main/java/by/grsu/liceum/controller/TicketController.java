@@ -5,6 +5,7 @@ import by.grsu.liceum.dto.ticket.TicketFullDto;
 import by.grsu.liceum.dto.ticket.TicketReadCodeDto;
 import by.grsu.liceum.dto.ticket.TicketShortcutDto;
 import by.grsu.liceum.service.TicketService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,7 +39,7 @@ public class TicketController {
 
     @PostMapping("/set")
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_HEAD_TEACHER', 'ROLE_TEACHER')")
-    public TicketFullDto setTicketToTheAccount(@PathVariable("institutionId") UUID institutionId, @RequestBody SetTicketDto ticketDto){
+    public TicketFullDto setTicketToTheAccount(@PathVariable("institutionId") UUID institutionId, @RequestBody @Valid SetTicketDto ticketDto){
         return ticketService.setTicketToTheAccount(institutionId, ticketDto);
     }
 
@@ -50,7 +51,7 @@ public class TicketController {
 
     @PostMapping("/code")
     @PreAuthorize("hasAuthority('ROLE_SALE_UNIT')")
-    public void readCode(@PathVariable("institutionId") UUID institutionId, @RequestBody TicketReadCodeDto readCodeDto){
+    public void readCode(@PathVariable("institutionId") UUID institutionId, @RequestBody @Valid TicketReadCodeDto readCodeDto){
         ticketService.readCode(institutionId, readCodeDto);
     }
 

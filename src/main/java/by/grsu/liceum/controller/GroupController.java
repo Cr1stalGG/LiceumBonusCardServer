@@ -4,6 +4,7 @@ import by.grsu.liceum.dto.group.AddMembersDto;
 import by.grsu.liceum.dto.group.GroupCreationDto;
 import by.grsu.liceum.dto.group.GroupFullDto;
 import by.grsu.liceum.service.GroupService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,13 +31,13 @@ public class GroupController {
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_HEAD_TEACHER', 'ROLE_TEACHER')")
-    public GroupFullDto createNewGroup(@PathVariable("institutionId")UUID institutionId, @RequestBody GroupCreationDto creationDto){
+    public GroupFullDto createNewGroup(@PathVariable("institutionId")UUID institutionId, @RequestBody @Valid GroupCreationDto creationDto){
         return groupService.createNewGroup(institutionId, creationDto);
     }
 
     @PostMapping("/add")
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_HEAD_TEACHER', 'ROLE_TEACHER')")
-    GroupFullDto addMembersToTheGroup(@PathVariable("institutionId")UUID institutionId, @RequestBody AddMembersDto addMembersDto){
+    GroupFullDto addMembersToTheGroup(@PathVariable("institutionId")UUID institutionId, @RequestBody @Valid AddMembersDto addMembersDto){
         return groupService.addMembersToTheGroup(institutionId, addMembersDto);
     }
 

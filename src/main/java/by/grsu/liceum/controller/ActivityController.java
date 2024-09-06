@@ -4,6 +4,7 @@ import by.grsu.liceum.dto.activity.ActivityCreationDto;
 import by.grsu.liceum.dto.activity.ActivityFullDto;
 import by.grsu.liceum.dto.activity.ActivityShortcutDto;
 import by.grsu.liceum.service.ActivityService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,7 +38,7 @@ public class ActivityController {
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_HEAD_TEACHER')")
-    public ActivityFullDto createActivity(@PathVariable("institutionId") UUID institutionId, @RequestBody ActivityCreationDto creationDto){
+    public ActivityFullDto createActivity(@PathVariable("institutionId") UUID institutionId, @RequestBody @Valid ActivityCreationDto creationDto){
         return activityService.createActivity(institutionId, creationDto);
     }
 

@@ -4,6 +4,7 @@ import by.grsu.liceum.dto.solved_activity.SolveActivityRequest;
 import by.grsu.liceum.dto.solved_activity.SolvedActivityFullDto;
 import by.grsu.liceum.dto.solved_activity.SolvedActivityShortcutDto;
 import by.grsu.liceum.service.SolvedActivityService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -49,7 +50,7 @@ public class SolvedActivityController {
 
     @PostMapping
     @PreAuthorize("isAuthenticated()")
-    public SolvedActivityFullDto solveActivity(@PathVariable("institutionId") UUID institutionId, @RequestBody SolveActivityRequest request){
+    public SolvedActivityFullDto solveActivity(@PathVariable("institutionId") UUID institutionId, @RequestBody @Valid SolveActivityRequest request){
         return solvedActivityService.solveActivity(institutionId, request);
     }
 

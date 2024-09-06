@@ -1,5 +1,7 @@
 package by.grsu.liceum.dto.group;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +17,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GroupCreationDto {
+    @NotBlank
     private String name;
+    @NotNull
     private UUID adminId;
     private List<UUID> membersId;//todo optional
 }
