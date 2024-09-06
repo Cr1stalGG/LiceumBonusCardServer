@@ -46,7 +46,7 @@ public class TicketServiceImpl implements TicketService {
         Ticket ticket = Optional.ofNullable(ticketRepository.findById(id))
                 .orElseThrow(() -> new TicketWithIdNotFoundException(id));
 
-        if(ticket.getBonus().getInstitution().getId() != institutionId || ticket.getAccount().getInstitution().getId() != institutionId)
+        if(!ticket.getBonus().getInstitution().getId().equals(institutionId) || !ticket.getAccount().getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         return TicketDtoMapper.convertEntitToFullDto(ticket);
@@ -61,7 +61,7 @@ public class TicketServiceImpl implements TicketService {
         Bonus bonus = Optional.ofNullable(bonusRepository.findById(ticketDto.getBonusId()))
                 .orElseThrow(() -> new BonusWithIdNotFoundException(ticketDto.getBonusId()));
 
-        if(bonus.getInstitution().getId() != institutionId || account.getInstitution().getId() != institutionId)
+        if(!bonus.getInstitution().getId().equals(institutionId) || !account.getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         if(bonus.getCount() > 0)
@@ -91,7 +91,7 @@ public class TicketServiceImpl implements TicketService {
         Ticket ticket = Optional.ofNullable(ticketRepository.findById(id))
                 .orElseThrow(() -> new TicketWithIdNotFoundException(id));
 
-        if(ticket.getBonus().getInstitution().getId() != institutionId || ticket.getAccount().getInstitution().getId() != institutionId)
+        if(!ticket.getBonus().getInstitution().getId().equals(institutionId) || !ticket.getAccount().getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         Bonus bonus = Optional.of(ticket.getBonus())
@@ -112,7 +112,7 @@ public class TicketServiceImpl implements TicketService {
         Ticket ticket = Optional.ofNullable(ticketRepository.findById(readCodeDto.getUuid()))
                 .orElseThrow(() -> new TicketWithIdNotFoundException(readCodeDto.getUuid()));
 
-        if(ticket.getBonus().getInstitution().getId() != institutionId || ticket.getAccount().getInstitution().getId() != institutionId)
+        if(!ticket.getBonus().getInstitution().getId().equals(institutionId) || !ticket.getAccount().getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         if(ticket.getCode().equals(readCodeDto.getCode())) { //todo check user
@@ -129,7 +129,7 @@ public class TicketServiceImpl implements TicketService {
         Ticket ticket = Optional.ofNullable(ticketRepository.findById(id))
                 .orElseThrow(() -> new TicketWithIdNotFoundException(id));
 
-        if(ticket.getBonus().getInstitution().getId() != institutionId || ticket.getAccount().getInstitution().getId() != institutionId)
+        if(!ticket.getBonus().getInstitution().getId().equals(institutionId) || !ticket.getAccount().getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         ticketRepository.deleteById(id);

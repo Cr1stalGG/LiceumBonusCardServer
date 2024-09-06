@@ -65,4 +65,8 @@
         <sqlFile encoding="utf8" path="./test-insert-base/14.insert-accounts_groups-changeset.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <changeSet id="insert-tickets" author="Alexander Savickij">
+        <sqlFile encoding="utf8" path="./test-insert-base/15.insert-tickets-changeset.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
 </databaseChangeLog>
