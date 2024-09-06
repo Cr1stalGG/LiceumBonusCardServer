@@ -19,8 +19,11 @@ import by.grsu.liceum.repository.ActivityRepository;
 import by.grsu.liceum.repository.InstitutionRepository;
 import by.grsu.liceum.repository.SolvedActivityRepository;
 import by.grsu.liceum.service.SolvedActivityService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -28,9 +31,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SolvedActivityServiceImpl implements SolvedActivityService {
+    private final ObjectMapper objectMapper;
     private final SolvedActivityRepository solvedActivityRepository;
     private final AccountRepository accountRepository;
     private final ActivityRepository activityRepository;
@@ -51,7 +56,7 @@ public class SolvedActivityServiceImpl implements SolvedActivityService {
         Account account = Optional.ofNullable(accountRepository.findById(accountId))
                 .orElseThrow(() -> new AccountWithIdNotFoundException(accountId));
 
-        if(account.getInstitution().getId() != institutionId)
+        if(!account.getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         return solvedActivityRepository.findAllByAccount_Id(accountId).stream()
@@ -64,7 +69,7 @@ public class SolvedActivityServiceImpl implements SolvedActivityService {
         Activity activity = Optional.ofNullable(activityRepository.findById(activityId))
                 .orElseThrow(() -> new ActivityWithIdNotFoundException(activityId));
 
-        if(activity.getActivityType().getInstitution().getId() != institutionId)
+        if(!activity.getActivityType().getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         return solvedActivityRepository.findAllByActivity_Id(activityId).stream()
@@ -73,11 +78,12 @@ public class SolvedActivityServiceImpl implements SolvedActivityService {
     }
 
     @Override
+    @SneakyThrows
     public SolvedActivityFullDto findById(UUID institutionId, UUID id) {
         SolvedActivity solvedActivity = Optional.ofNullable(solvedActivityRepository.findById(id))
                 .orElseThrow(() -> new SolvedActivityWithIdNotFoundException(id));
 
-        if(solvedActivity.getAccount().getInstitution().getId() != institutionId)
+        if(!solvedActivity.getAccount().getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         return SolvedActivityDtoMapper.convertEntityToFullDto(solvedActivity);
@@ -92,7 +98,7 @@ public class SolvedActivityServiceImpl implements SolvedActivityService {
         Account account = Optional.ofNullable(accountRepository.findById(request.getAccountId()))
                 .orElseThrow(() -> new AccountWithIdNotFoundException(request.getAccountId()));
 
-        if(activity.getActivityType().getInstitution().getId() != institutionId || account.getInstitution().getId() != institutionId)
+        if(!activity.getActivityType().getInstitution().getId().equals(institutionId) || !account.getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         if(!activity.getCode().equals(request.getCode()))
@@ -125,7 +131,7 @@ public class SolvedActivityServiceImpl implements SolvedActivityService {
         SolvedActivity solvedActivity = Optional.ofNullable(solvedActivityRepository.findById(id))
                 .orElseThrow(() -> new SolvedActivityWithIdNotFoundException(id));
 
-        if(solvedActivity.getAccount().getInstitution().getId() != institutionId)
+        if(!solvedActivity.getAccount().getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         solvedActivityRepository.deleteById(id);

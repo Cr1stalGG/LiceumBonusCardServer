@@ -53,4 +53,8 @@
         <sqlFile encoding="utf8" path="./test-insert-base/11.insert-bonuses-changeset.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <changeSet id="insert-solved_activities" author="Alexander Savickij">
+        <sqlFile encoding="utf8" path="./test-insert-base/12.insert-solved_activities-changeset.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
 </databaseChangeLog>

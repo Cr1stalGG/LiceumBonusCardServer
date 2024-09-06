@@ -16,6 +16,3 @@ public interface SolvedActivityRepository extends JpaRepository<SolvedActivity, 
     SolvedActivity findById(UUID id);
     void deleteById(UUID id);
 }
-//todo institution -> image_id
-//todo account -> image_id
-//todo images !-> institution_id
