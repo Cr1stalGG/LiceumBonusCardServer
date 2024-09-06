@@ -26,7 +26,7 @@ public class CardServiceImpl implements CardService {
         Card card = Optional.ofNullable(cardRepository.findById(id))
                 .orElseThrow(() -> new CardWithIdNotFoundException(id));
 
-        if (card.getAccount().getInstitution().getId() != institutionId)
+        if (!card.getAccount().getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         return CardDtoMapper.convertEntityToDto(card);
@@ -47,7 +47,6 @@ public class CardServiceImpl implements CardService {
                 .transactions(new ArrayList<>())
                 .build();
 
-        //todo test
         return cardRepository.save(card);
     }
 
@@ -56,7 +55,7 @@ public class CardServiceImpl implements CardService {
         Card card = Optional.ofNullable(cardRepository.findById(id))
                 .orElseThrow(() -> new CardWithIdNotFoundException(id));
 
-        if(card.getAccount().getInstitution().getId() != institutionId)
+        if (!card.getAccount().getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         cardRepository.deleteById(id);
