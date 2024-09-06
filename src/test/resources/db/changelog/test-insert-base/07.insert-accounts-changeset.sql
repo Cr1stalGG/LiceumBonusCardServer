@@ -2,7 +2,7 @@ insert into accounts(id, login, password, first_name, last_name, father_name, ph
 values(
     '58f82d24-ac0a-4508-a56d-f1fc0eee09fc',
     'amogus228',
-    'pass123',
+    '$2a$12$be5PPf8axC0XM.kzqqYNQe6lSTjBZeaN.gmEbwTpXrNO5RbUBrP6u',--pass123
     'Даниил',
     'Савко',
     'Незнайкович',
@@ -16,7 +16,7 @@ insert into accounts(id, login, password, first_name, last_name, father_name, ph
 values(
     '6df0875f-05a8-44a2-b742-17d718058fb4',
     'masterckk',
-    'qwerqw',
+    '$2a$12$atACfZEoHNasJa9LX/zVxORY3lE.sMf6pF6.BWATHooAWI8nUgKJu',--qwerqw
     'Чуйко',
     'Юрий',
     'Андреевич',

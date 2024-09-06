@@ -40,7 +40,6 @@ public class ApiConfiguration {
                 new AntPathRequestMatcher("/h2-console/**"),
                 toH2Console())
             .permitAll());
-        //http.headers(AbstractHttpConfigurer::disable);
 
         http.authorizeHttpRequests(request -> request.requestMatchers(
                 new AntPathRequestMatcher("/api/v1/institutions/{institutionId}/admins/**"))

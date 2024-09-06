@@ -5,6 +5,7 @@ import by.grsu.liceum.dto.auth.AuthRequest;
 import by.grsu.liceum.dto.auth.AuthResponse;
 import by.grsu.liceum.entity.Account;
 import by.grsu.liceum.entity.Role;
+import by.grsu.liceum.exception.AccountWithLoginNotFoundException;
 import by.grsu.liceum.repository.AccountRepository;
 import by.grsu.liceum.security.jwt.JwtService;
 import by.grsu.liceum.service.AuthenticationService;
@@ -27,7 +28,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getLogin(), request.getPassword()));
 
         Account account = Optional.ofNullable(accountRepository.findByLogin(request.getLogin()))
-                .orElseThrow();
+                .orElseThrow(() -> new AccountWithLoginNotFoundException(request.getLogin()));
 
         String jwtToken = jwtService.generateToken(new AccountUserDetailsConfiguration(account));
 
