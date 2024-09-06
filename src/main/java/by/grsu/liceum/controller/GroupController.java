@@ -36,8 +36,8 @@ public class GroupController {
 
     @PostMapping("/add")
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_HEAD_TEACHER', 'ROLE_TEACHER')")
-    void addMembersToTheGroup(@PathVariable("institutionId")UUID institutionId, @RequestBody AddMembersDto addMembersDto){
-        groupService.addMembersToTheGroup(institutionId, addMembersDto);
+    GroupFullDto addMembersToTheGroup(@PathVariable("institutionId")UUID institutionId, @RequestBody AddMembersDto addMembersDto){
+        return groupService.addMembersToTheGroup(institutionId, addMembersDto);
     }
 
     @DeleteMapping("/{id}")

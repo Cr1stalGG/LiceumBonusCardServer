@@ -19,6 +19,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,7 +34,7 @@ public class GroupServiceImpl implements GroupService {
         Group group = Optional.ofNullable(groupRepository.findById(id))
                 .orElseThrow(() -> new GroupWithIdNotFoundException(id));
 
-        if (group.getInstitution().getId() != institutionId)
+        if(!group.getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         return GroupDtoMapper.convertEntityToFullDto(group);
@@ -51,7 +52,7 @@ public class GroupServiceImpl implements GroupService {
         Institution institution = Optional.of(admin.getInstitution())
                 .orElseThrow(() -> new InstitutionWithIdNotFoundException(institutionId));
 
-        if(admin.getInstitution().getId() != institutionId)
+        if(!admin.getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         Group group = Group.builder()
@@ -63,6 +64,9 @@ public class GroupServiceImpl implements GroupService {
         groupRepository.save(group);
 
         admin.getOtherGroups().add(group);
+
+        if(group.getMembers() == null)
+            group.setMembers(new ArrayList<>());
 
         for(UUID memberId : creationDto.getMembersId()){
             Account member = Optional.ofNullable(accountRepository.findById(memberId))
@@ -79,22 +83,27 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     @Transactional
-    public void addMembersToTheGroup(UUID institutionId, AddMembersDto addMembersDto) {
+    public GroupFullDto addMembersToTheGroup(UUID institutionId, AddMembersDto addMembersDto) {
         Group group = groupRepository.findById(addMembersDto.getGroupId());
 
-        if(group.getInstitution().getId() != institutionId)
+        if(!group.getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
-        if(group.getAdmin().getId() != addMembersDto.getAdminId())
+        if(!group.getAdmin().getId().equals(addMembersDto.getAdminId()))
             throw new InvalidPermissionsException();
 
         for(UUID memberId : addMembersDto.getMembersId()){
             Account member = Optional.ofNullable(accountRepository.findById(memberId))
                     .orElseThrow(() -> new AccountWithIdNotFoundException(memberId));
 
+            if(group.getMembers().stream().anyMatch(x -> x.getId().equals(memberId)))
+                continue;
+
             group.getMembers().add(member);
             member.getOtherGroups().add(group);
         }
+
+        return GroupDtoMapper.convertEntityToFullDto(group);
     }
 
     @Override
@@ -102,7 +111,7 @@ public class GroupServiceImpl implements GroupService {
         Group group = Optional.ofNullable(groupRepository.findById(id))
             .orElseThrow(() -> new GroupWithIdNotFoundException(id));
 
-        if(group.getInstitution().getId() != institutionId)
+        if(!group.getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
         groupRepository.deleteById(id);

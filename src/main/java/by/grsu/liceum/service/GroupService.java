@@ -10,6 +10,6 @@ import java.util.UUID;
 public interface GroupService {
     GroupFullDto findGroupById(UUID institutionId, UUID id);
     GroupFullDto createNewGroup(UUID institutionId, GroupCreationDto creationDto);
-    void addMembersToTheGroup(UUID institutionId, AddMembersDto addMembersDto);
+    GroupFullDto addMembersToTheGroup(UUID institutionId, AddMembersDto addMembersDto);
     void deleteGroupById(UUID institutionId, UUID id);
 }
