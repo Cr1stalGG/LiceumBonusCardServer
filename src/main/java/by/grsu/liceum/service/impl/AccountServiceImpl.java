@@ -153,7 +153,7 @@ public class AccountServiceImpl implements AccountService {
     @Scheduled(fixedDelay = 120_000L) //todo test
     @Transactional
     public void accountsGradeUpOrDelete(){
-        log.info("=======DELETE ALL ACCOUNTS TIME OFF=======");
+        log.info("=======DELETE ALL ACCOUNTS GRADE OFF=======");
 
         List<Account> accounts = Optional.of(accountRepository.findAll())
                 .orElse(new ArrayList<>());
