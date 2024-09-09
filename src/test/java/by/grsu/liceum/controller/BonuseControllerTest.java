@@ -93,4 +93,12 @@ public class BonuseControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    @WithMockUser(roles = "SUPER_ADMIN")
+    void testAutoDeletion() throws Exception {
+        mockMvc.perform(get(BAZE_PATH + "/0a47a62a-8b95-4257-958b-e633af79720e")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
 }
