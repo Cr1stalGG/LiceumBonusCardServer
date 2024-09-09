@@ -20,6 +20,7 @@ public class TransactionCreationDto {
     @NotNull
     private UUID cardId;
     @Min(1)
+    @NotNull
     private int balance;
     @NotBlank
     private String status;

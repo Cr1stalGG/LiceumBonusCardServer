@@ -2,6 +2,7 @@ package by.grsu.liceum.dto.group;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class GroupCreationDto {
     @NotBlank
+    @Size(max = 60)
     private String name;
     @NotNull
     private UUID adminId;
