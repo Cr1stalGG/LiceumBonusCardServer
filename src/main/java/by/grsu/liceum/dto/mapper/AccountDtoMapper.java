@@ -6,12 +6,14 @@ import by.grsu.liceum.dto.account.AccountFullDto;
 import by.grsu.liceum.dto.account.AccountShortcutDto;
 import by.grsu.liceum.dto.group.GroupShortcutDto;
 import by.grsu.liceum.dto.image.ImageDto;
+import by.grsu.liceum.dto.response.ResponseShortcutDto;
 import by.grsu.liceum.dto.solved_activity.SolvedActivityShortcutDto;
 import by.grsu.liceum.dto.ticket.TicketShortcutDto;
 import by.grsu.liceum.dto.utils.GeneratorLoginDto;
 import by.grsu.liceum.entity.Account;
 import by.grsu.liceum.entity.Group;
 import by.grsu.liceum.entity.Image;
+import by.grsu.liceum.entity.Response;
 import by.grsu.liceum.entity.SolvedActivity;
 import by.grsu.liceum.entity.Ticket;
 import by.grsu.liceum.exception.NullableAccountCreationDtoException;
@@ -100,7 +102,17 @@ public class AccountDtoMapper {
                 .otherGroups(buildGroups(source.getOtherGroups()))
                 .solvedActivities(buildSolvedActivities(source.getSolvedActivities()))
                 .imageDto(buildImage(source.getImage()))
+                .responses(buildResponses(source.getResponses()))
                 .build();
+    }
+
+    private static List<ResponseShortcutDto> buildResponses(List<Response> source) {
+        if(source == null)
+            return new ArrayList<>();
+        else
+            return source.stream()
+                    .map(ResponseDtoMapper::convertEntityToShortcutDto)
+                    .toList();
     }
 
     private static ImageDto buildImage(Image source){

@@ -3,6 +3,7 @@ package by.grsu.liceum.dto.account;
 import by.grsu.liceum.dto.card.CardDto;
 import by.grsu.liceum.dto.group.GroupShortcutDto;
 import by.grsu.liceum.dto.image.ImageDto;
+import by.grsu.liceum.dto.response.ResponseShortcutDto;
 import by.grsu.liceum.dto.solved_activity.SolvedActivityShortcutDto;
 import by.grsu.liceum.dto.ticket.TicketShortcutDto;
 import lombok.AllArgsConstructor;
@@ -32,4 +33,5 @@ public class AccountFullDto {
     private List<GroupShortcutDto> ownedGroups;
     private List<GroupShortcutDto> otherGroups;
     private List<SolvedActivityShortcutDto> solvedActivities;
+    private List<ResponseShortcutDto> responses;
 }

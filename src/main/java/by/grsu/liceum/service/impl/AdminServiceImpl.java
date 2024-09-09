@@ -24,6 +24,8 @@ import by.grsu.liceum.repository.RoleRepository;
 import by.grsu.liceum.service.AdminService;
 import by.grsu.liceum.service.CardService;
 import by.grsu.liceum.service.TransactionService;
+import by.grsu.liceum.service.enums.RoleConstant;
+import by.grsu.liceum.service.enums.TransactionStatusConstant;
 import by.grsu.liceum.utils.Generator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -70,7 +72,7 @@ public class AdminServiceImpl implements AdminService {
         TransactionCreationDto creationDto = TransactionCreationDto.builder()
                 .cardId(account.getCard().getId())
                 .balance(ratingDto.getValue())
-                .status("ADMIN_ACCRUAL_STATUS")
+                .status(TransactionStatusConstant.TRANSACTION_STATUS_ADMIN_ACCRUAL_STATUS.getValue()) //todo transaction_statuses enum
                 .build();
 
         return transactionService.createTransaction(institutionId, creationDto);
@@ -96,7 +98,7 @@ public class AdminServiceImpl implements AdminService {
         TransactionCreationDto creationDto = TransactionCreationDto.builder()
                 .cardId(account.getCard().getId())
                 .balance(ratingDto.getValue())
-                .status("ADMIN_ACCRUAL_STATUS")
+                .status(TransactionStatusConstant.TRANSACTION_STATUS_ADMIN_ACCRUAL_STATUS.getValue())
                 .build();
 
         return transactionService.createTransaction(institutionId, creationDto);
@@ -104,14 +106,14 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<AdminShortcutDto> findAllAdmins() {
-        return accountRepository.findAllByRoles_Name("ROLE_ADMIN").stream()
+        return accountRepository.findAllByRoles_Name(RoleConstant.ROLE_ADMIN.getValue()).stream()
                 .map(AdminDtoMapper::convertEntityToShortcutDto)
                 .toList();
     }
 
     @Override
     public List<AdminShortcutDto> findAllAdminsByCity(String cityName) {
-        return accountRepository.findAllByRoles_NameAndInstitution_City("ROLE_ADMIN", cityName).stream()
+        return accountRepository.findAllByRoles_NameAndInstitution_City(RoleConstant.ROLE_ADMIN.getValue(), cityName).stream()
                 .map(AdminDtoMapper::convertEntityToShortcutDto)
                 .toList();
     }
@@ -130,11 +132,11 @@ public class AdminServiceImpl implements AdminService {
         Institution institution = Optional.ofNullable(institutionRepository.findById(institutionId))
                 .orElseThrow(() -> new InstitutionWithIdNotFoundException(institutionId));
 
-        Role role = roleRepository.findByName("ROLE_ADMIN");//todo optional
+        Role role = roleRepository.findByName(RoleConstant.ROLE_ADMIN.getValue());//todo optional
 
-        String password = Generator.generatePassword("ROLE_ADMIN");
+        String password = Generator.generatePassword(RoleConstant.ROLE_ADMIN.getValue());
 
-        Account account = Account.builder()
+        Account account = Account.builder() //todo adminCreationDto
                 .firstName("admin")
                 .lastName(institution.getName())
                 .fatherName(institution.getCity())
@@ -164,13 +166,13 @@ public class AdminServiceImpl implements AdminService {
         Account account = Optional.ofNullable(accountRepository.findById(adminId))
                 .orElseThrow(() -> new AccountWithIdNotFoundException(adminId));
 
-        if(account.getRoles().stream().noneMatch(x -> x.getName().equals("ROLE_ADMIN")))
+        if(account.getRoles().stream().noneMatch(x -> x.getName().equals(RoleConstant.ROLE_ADMIN.getValue())))
             throw new InvalidPermissionsException();
 
         if(!account.getInstitution().getId().equals(institutionId))
             throw new InvalidPermissionsException();
 
-        String password = Generator.generatePassword("ROLE_ADMIN");
+        String password = Generator.generatePassword(RoleConstant.ROLE_ADMIN.getValue());
 
         account.setPassword(bCryptPasswordEncoder.encode(password));
 

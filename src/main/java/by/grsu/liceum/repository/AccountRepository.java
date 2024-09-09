@@ -23,6 +23,9 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     List<Account> findAllByRoles_Name(String name);
 
     @EntityGraph(value = "account-with-roles", type = EntityGraph.EntityGraphType.LOAD)
+    List<Account> findByRoles_NameAndInstitution_Id(String roleName, UUID institutionId);
+
+    @EntityGraph(value = "account-with-roles", type = EntityGraph.EntityGraphType.LOAD)
     List<Account> findAllByRoles_NameAndInstitution_City(String name, String city);
 
     @EntityGraph(value = "account-with-roles", type = EntityGraph.EntityGraphType.LOAD)

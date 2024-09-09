@@ -13,6 +13,7 @@ import by.grsu.liceum.repository.AccountRepository;
 import by.grsu.liceum.repository.GroupRepository;
 import by.grsu.liceum.service.HeadTeacherService;
 import by.grsu.liceum.service.TransactionService;
+import by.grsu.liceum.service.enums.TransactionStatusConstant;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,7 +58,7 @@ public class HeadTeacherServiceImpl implements HeadTeacherService {
         TransactionCreationDto creationDto = TransactionCreationDto.builder()
                 .cardId(account.getCard().getId())
                 .balance(ratingDto.getValue())
-                .status("ADMIN_ACCRUAL_STATUS")
+                .status(TransactionStatusConstant.TRANSACTION_STATUS_ADMIN_ACCRUAL_STATUS.getValue())
                 .build();
 
         return transactionService.createTransaction(institutionId, creationDto);
@@ -80,7 +81,7 @@ public class HeadTeacherServiceImpl implements HeadTeacherService {
         TransactionCreationDto creationDto = TransactionCreationDto.builder()
                 .cardId(account.getCard().getId())
                 .balance(ratingDto.getValue())
-                .status("ADMIN_ACCRUAL_STATUS")
+                .status(TransactionStatusConstant.TRANSACTION_STATUS_ADMIN_ACCRUAL_STATUS.getValue())
                 .build();
 
         return transactionService.createTransaction(institutionId, creationDto);

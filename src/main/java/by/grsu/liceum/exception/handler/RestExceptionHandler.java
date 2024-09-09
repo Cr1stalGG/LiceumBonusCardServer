@@ -19,6 +19,7 @@ import by.grsu.liceum.exception.InvalidTransactionStatusException;
 import by.grsu.liceum.exception.NotEnoughBalanceError;
 import by.grsu.liceum.exception.NullableAccountCreationDtoException;
 import by.grsu.liceum.exception.NullableGroupCreationDtoException;
+import by.grsu.liceum.exception.ResponseStatusWithNameNotFoundException;
 import by.grsu.liceum.exception.SolvedActivityWithIdNotFoundException;
 import by.grsu.liceum.exception.TicketWithIdNotFoundException;
 import jakarta.validation.ConstraintDeclarationException;
@@ -42,7 +43,8 @@ public class RestExceptionHandler {
             AccountWithLoginNotFoundException.class,
             InstitutionWithIdNotFoundException.class,
             GroupWithIdNotFoundException.class,
-            SolvedActivityWithIdNotFoundException.class
+            SolvedActivityWithIdNotFoundException.class,
+            ResponseStatusWithNameNotFoundException.class
     })
     public ResponseEntity<String> handleNotFoundException(Exception e){
         return new ResponseEntity<>("Not found error: " + e.getMessage(), HttpStatus.BAD_REQUEST);

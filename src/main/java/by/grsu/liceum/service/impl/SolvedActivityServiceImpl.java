@@ -35,7 +35,6 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class SolvedActivityServiceImpl implements SolvedActivityService {
-    private final ObjectMapper objectMapper;
     private final SolvedActivityRepository solvedActivityRepository;
     private final AccountRepository accountRepository;
     private final ActivityRepository activityRepository;
@@ -116,7 +115,7 @@ public class SolvedActivityServiceImpl implements SolvedActivityService {
                 .activity(activity)
                 .timeOfSolving(new Date(System.currentTimeMillis()))
                 .build();
-
+        //todo create transaction
         solvedActivityRepository.save(solvedActivity);
 
         account.getSolvedActivities().add(solvedActivity);

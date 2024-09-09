@@ -10,6 +10,8 @@ import by.grsu.liceum.dto.ticket.TicketFullDto;
 import by.grsu.liceum.entity.Account;
 import by.grsu.liceum.entity.Bonus;
 import by.grsu.liceum.entity.Institution;
+import by.grsu.liceum.entity.Response;
+import by.grsu.liceum.entity.ResponseStatus;
 import by.grsu.liceum.entity.Ticket;
 import by.grsu.liceum.exception.AccountWithIdNotFoundException;
 import by.grsu.liceum.exception.BonusWithIdNotFoundException;
@@ -17,11 +19,16 @@ import by.grsu.liceum.exception.InstitutionWithIdNotFoundException;
 import by.grsu.liceum.exception.InvalidBonusCountException;
 import by.grsu.liceum.exception.InvalidPermissionsException;
 import by.grsu.liceum.exception.NotEnoughBalanceError;
+import by.grsu.liceum.exception.ResponseStatusWithNameNotFoundException;
 import by.grsu.liceum.repository.AccountRepository;
 import by.grsu.liceum.repository.BonusRepository;
 import by.grsu.liceum.repository.InstitutionRepository;
+import by.grsu.liceum.repository.ResponseRepository;
+import by.grsu.liceum.repository.ResponseStatusRepository;
 import by.grsu.liceum.repository.TicketRepository;
 import by.grsu.liceum.service.BonusService;
+import by.grsu.liceum.service.enums.ResponseStatusConstant;
+import by.grsu.liceum.service.enums.RoleConstant;
 import by.grsu.liceum.utils.Generator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +52,8 @@ public class BonusServiceImpl implements BonusService {
     private final AccountRepository accountRepository;
     private final TicketRepository ticketRepository;
     private final InstitutionRepository institutionRepository;
+    private final ResponseStatusRepository responseStatusRepository;
+    private final ResponseRepository responseRepository;
 
     @Override
     public List<BonusShortcutDto> findAllByInstitutionId(UUID institutionId) {
@@ -119,6 +128,7 @@ public class BonusServiceImpl implements BonusService {
 
     //@Scheduled(cron = "${scheduler.cron.interval.bonuses}") - real
     @Scheduled(fixedDelay = 120_000L) // test every minute
+    @Transactional
     public void checkIfBonuseTimeEnded(){
         log.info("=======DELETE ALL USELESS BONUSES(time out off)=======");
         List<Bonus> bonuses = Optional.of(bonusRepository.findAll())
@@ -129,9 +139,42 @@ public class BonusServiceImpl implements BonusService {
 
                 for(Ticket ticket : bonus.getTickets()){
                     log.info("Ticket with id {} removed", ticket.getId());
-                    //todo add message(mb new entity) with status of deleted tickets(mb put some percent of rating back)
+
+                    ResponseStatus responseStatus = Optional.ofNullable(responseStatusRepository.findByName(ResponseStatusConstant.RESPONSE_STATUS_TICKET_LIFE_ENDED.getValue()))
+                            .orElseThrow(() -> new ResponseStatusWithNameNotFoundException(ResponseStatusConstant.RESPONSE_STATUS_TICKET_LIFE_ENDED.getValue()));
+
+                    Account account = ticket.getAccount();
+                    Response response = Response.builder()
+                            .message("Ticket time is ended")
+                            .responseStatus(responseStatus)
+                            .timeOfResponse(new Date(System.currentTimeMillis()))
+                            .account(account)
+                            .build();
+
+                    responseRepository.save(response);
+
+                    responseStatus.getResponses().add(response);
+                    account.getResponses().add(response);
+
                     ticketRepository.deleteById(ticket.getId());
                 }
+
+                Account admin = accountRepository.findByRoles_NameAndInstitution_Id(RoleConstant.ROLE_ADMIN.getValue(), bonus.getInstitution().getId()).iterator().next();
+
+                ResponseStatus responseStatus = Optional.ofNullable(responseStatusRepository.findByName(ResponseStatusConstant.RESPONSE_STATUS_BONUS_LIFE_ENDED.getValue()))
+                        .orElseThrow(() -> new ResponseStatusWithNameNotFoundException(ResponseStatusConstant.RESPONSE_STATUS_BONUS_LIFE_ENDED.getValue()));
+
+                Response response = Response.builder()
+                        .account(admin)
+                        .responseStatus(responseStatus)
+                        .message(String.format("Bonus '%s' deleted because of time ended", bonus.getName()))
+                        .timeOfResponse(new Date(System.currentTimeMillis()))
+                        .build();
+
+                responseRepository.save(response);
+
+                responseStatus.getResponses().add(response);
+                admin.getResponses().add(response);
 
                 log.info("Bonus with id {} removed", bonus.getId());
                 bonusRepository.deleteById(bonus.getId());
