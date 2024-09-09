@@ -25,3 +25,13 @@ insert into cards(
     '1231231231231231',
      553
 );
+
+insert into cards(
+    id,
+    number,
+    balance
+) values (
+    'dbd6f228-da8f-49f4-827b-2f6b0f8311da',
+    '1231551231231231',
+     553
+);

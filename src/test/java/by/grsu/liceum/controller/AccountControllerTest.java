@@ -35,7 +35,7 @@ public class AccountControllerTest {
     @Test
     @WithMockUser(username = "login", password = "password", roles = "SUPER_ADMIN")
     void testFindById() throws Exception {
-        mockMvc.perform(get(BAZE_PATH +"/3234088c-210a-4f13-9a7e-e6900a1e2036")
+        mockMvc.perform(get(BAZE_PATH + "/3234088c-210a-4f13-9a7e-e6900a1e2036")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -121,5 +121,13 @@ public class AccountControllerTest {
     void testDeleteAccountById() throws Exception{
         mockMvc.perform(delete(BAZE_PATH + "/3234088c-210a-4f13-9a7e-e6900a1e2036"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(roles = "SUPER_ADMIN")
+    void testAutoDeleteAccounts() throws Exception {
+        mockMvc.perform(get(BAZE_PATH + "/5cbb7d35-813f-4f6b-a6e3-b13d16affed8")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
     }
 }

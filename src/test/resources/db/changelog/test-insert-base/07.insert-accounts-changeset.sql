@@ -21,7 +21,21 @@ values(
     'Юрий',
     'Андреевич',
     '+375291990000',
-    11,
+    1,
     '6df0875f-05a8-44a2-b742-17d718058fb4',
+    'f287d9ff-728e-4a8f-ad79-8985fe55b50b'
+);
+
+insert into accounts(id, login, password, first_name, last_name, father_name, phone_number, grade, card_id, institution_id)
+values(
+    '5cbb7d35-813f-4f6b-a6e3-b13d16affed8',
+    'someDeleteTest',
+    '$2a$12$atACfZEoHNasJa9LX/zVxORY3lE.sMf6pF6.BWATHooAWI8nUgKJu',--qwerqw
+    'asdfa',
+    'asdf',
+    'asdf',
+    '+375291990000',
+    12,
+    'dbd6f228-da8f-49f4-827b-2f6b0f8311da',
     'f287d9ff-728e-4a8f-ad79-8985fe55b50b'
 );
