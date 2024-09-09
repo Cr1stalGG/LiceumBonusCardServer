@@ -56,6 +56,7 @@ public class BonuseControllerTest {
                 .name("Bonuss")
                 .description("descr")
                 .price(123)
+                .count(22)
                 .timeOfEnd(new Date(System.currentTimeMillis() + 15000))
                 .build();
 
