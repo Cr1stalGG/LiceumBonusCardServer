@@ -26,6 +26,6 @@ public class AdminFullDto {
     private String fatherName;
     private String phoneNumber;
     private InstitutionShortcutDto institution;
-    private ImageDto image;//todo check another info
+    private ImageDto image;
     private List<ResponseShortcutDto> responses;
 }

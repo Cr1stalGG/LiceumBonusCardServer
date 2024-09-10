@@ -204,7 +204,7 @@ public class AccountServiceImpl implements AccountService {
                    accountRepository.deleteById(account.getId());
                }
            }
-        //todo add responses to dto
+
         log.info("==========================================");
     }
 

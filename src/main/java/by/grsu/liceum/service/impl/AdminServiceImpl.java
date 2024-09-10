@@ -13,10 +13,12 @@ import by.grsu.liceum.entity.Image;
 import by.grsu.liceum.entity.Institution;
 import by.grsu.liceum.entity.Role;
 import by.grsu.liceum.exception.AccountWithIdNotFoundException;
+import by.grsu.liceum.exception.FoundedAccountHasNoAdminPermitionsException;
 import by.grsu.liceum.exception.InstitutionWithIdNotFoundException;
 import by.grsu.liceum.exception.InvalidPermissionsException;
 import by.grsu.liceum.exception.InvalidRatingAmountException;
 import by.grsu.liceum.exception.NotEnoughBalanceError;
+import by.grsu.liceum.exception.RoleWithNameNotFoundException;
 import by.grsu.liceum.repository.AccountRepository;
 import by.grsu.liceum.repository.ImageRepository;
 import by.grsu.liceum.repository.InstitutionRepository;
@@ -77,7 +79,7 @@ public class AdminServiceImpl implements AdminService {
         TransactionCreationDto creationDto = TransactionCreationDto.builder()
                 .cardId(account.getCard().getId())
                 .balance(ratingDto.getValue())
-                .status(TransactionStatusConstant.TRANSACTION_STATUS_ADMIN_ACCRUAL_STATUS.getValue()) //todo transaction_statuses enum
+                .status(TransactionStatusConstant.TRANSACTION_STATUS_ADMIN_ACCRUAL_STATUS.getValue())
                 .build();
 
         return transactionService.createTransaction(institutionId, creationDto);
@@ -111,7 +113,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    @Cacheable(value = "admins")
+    @Cacheable("admins")
     public List<AdminShortcutDto> findAllAdmins() {
         return accountRepository.findAllByRoles_Name(RoleConstant.ROLE_ADMIN.getValue()).stream()
                 .map(AdminDtoMapper::convertEntityToShortcutDto)
@@ -119,7 +121,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    @Cacheable(value = "admins")
+    @Cacheable("admins")
     public List<AdminShortcutDto> findAllAdminsByCity(String cityName) {
         return accountRepository.findAllByRoles_NameAndInstitution_City(RoleConstant.ROLE_ADMIN.getValue(), cityName).stream()
                 .map(AdminDtoMapper::convertEntityToShortcutDto)
@@ -129,7 +131,10 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public AdminFullDto findAdminById(UUID id) {
         Account account = Optional.ofNullable(accountRepository.findById(id))
-                .orElseThrow(() -> new AccountWithIdNotFoundException(id)); //todo mb check of role
+                .orElseThrow(() -> new AccountWithIdNotFoundException(id));
+
+        if (account.getRoles().stream().noneMatch(x -> x.getName().equals(RoleConstant.ROLE_ADMIN.getValue())))
+            throw new FoundedAccountHasNoAdminPermitionsException(account.getId(), account.getRoles());
 
         return AdminDtoMapper.convertEntityToFullDto(account);
     }
@@ -141,7 +146,8 @@ public class AdminServiceImpl implements AdminService {
         Institution institution = Optional.ofNullable(institutionRepository.findById(institutionId))
                 .orElseThrow(() -> new InstitutionWithIdNotFoundException(institutionId));
 
-        Role role = roleRepository.findByName(RoleConstant.ROLE_ADMIN.getValue());//todo optional
+        Role role = Optional.ofNullable(roleRepository.findByName(RoleConstant.ROLE_ADMIN.getValue()))
+                .orElseThrow(() -> new RoleWithNameNotFoundException(RoleConstant.ROLE_ADMIN.getValue()));
 
         String password = Generator.generatePassword(RoleConstant.ROLE_ADMIN.getValue());
 
@@ -195,9 +201,13 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @CacheEvict("admins")
     public void deleteAdminById(UUID id) {
-        findAdminById(id);
+        Account admin = Optional.ofNullable(accountRepository.findById(id))
+                .orElseThrow(() -> new AccountWithIdNotFoundException(id));
 
-        accountRepository.deleteById(id); //todo check of role mb
+        if (admin.getRoles().stream().noneMatch(x -> x.getName().equals(RoleConstant.ROLE_ADMIN.getValue())))
+            throw new FoundedAccountHasNoAdminPermitionsException(admin.getId(), admin.getRoles());
+
+        accountRepository.deleteById(id);
     }
 
     @Override
