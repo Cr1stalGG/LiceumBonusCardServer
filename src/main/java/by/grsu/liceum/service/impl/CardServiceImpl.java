@@ -9,6 +9,8 @@ import by.grsu.liceum.repository.CardRepository;
 import by.grsu.liceum.service.CardService;
 import by.grsu.liceum.utils.Generator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@EnableCaching
 @RequiredArgsConstructor
 public class CardServiceImpl implements CardService {
     private final CardRepository cardRepository;
@@ -33,6 +36,7 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
+    @Cacheable(value = "cards")
     public List<CardDto> findAll(UUID institutionId) {
         return cardRepository.findAllByAccount_Institution_Id(institutionId).stream()
                 .map(CardDtoMapper::convertEntityToDto)

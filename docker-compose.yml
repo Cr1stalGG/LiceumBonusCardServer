@@ -24,6 +24,18 @@ services:
       MINIO_ROOT_PASSWORD: pass1234
     command: server --console-address ":9001" /data
 
+  redis:
+    image: 'redis:latest'
+    container_name: redis
+#    environment:
+#      - REDIS_PASSWORD=my_redis_password
+#      - REDIS_USER=my_user
+#      - REDIS_USER_PASSWORD=my_user_password
+    ports:
+      - "6380:6379"
+    volumes:
+      - local_redisdata:/var/lib/redisdata/data
+
   app:
     build: .
     deploy:
@@ -35,6 +47,7 @@ services:
     depends_on:
       - db
       - minio
+      - redis
     restart: always
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
@@ -78,5 +91,6 @@ services:
 
 volumes:
   local_pgdata:
+  local_redisdata:
   local_grafana_data:
   minio_storage: {}

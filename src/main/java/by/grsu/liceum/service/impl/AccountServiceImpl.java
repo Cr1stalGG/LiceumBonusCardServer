@@ -33,6 +33,8 @@ import by.grsu.liceum.utils.Generator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -46,6 +48,7 @@ import java.util.UUID;
 
 @Slf4j
 @Service
+@EnableCaching
 @PropertySource("classpath:business_settings.properties")
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
@@ -70,6 +73,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @Cacheable(value = "accounts")
     public List<AccountShortcutDto> findAll(UUID institutionId) {
         return accountRepository.findAllByInstitution_Id(institutionId).stream()
                 .map(AccountDtoMapper::convertEntityToShortcutDto)

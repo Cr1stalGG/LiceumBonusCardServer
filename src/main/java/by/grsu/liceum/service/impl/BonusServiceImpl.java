@@ -33,6 +33,8 @@ import by.grsu.liceum.utils.Generator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -45,6 +47,7 @@ import java.util.UUID;
 
 @Slf4j
 @Service
+@EnableCaching
 @PropertySource("classpath:business_settings.properties")
 @RequiredArgsConstructor
 public class BonusServiceImpl implements BonusService {
@@ -56,6 +59,7 @@ public class BonusServiceImpl implements BonusService {
     private final ResponseRepository responseRepository;
 
     @Override
+    @Cacheable(value = "bonuses")
     public List<BonusShortcutDto> findAllByInstitutionId(UUID institutionId) {
         return bonusRepository.findAllByInstitution_Id(institutionId).stream()
                 .filter(x -> x.getCount() > 0)

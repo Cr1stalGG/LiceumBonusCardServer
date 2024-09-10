@@ -19,11 +19,11 @@ import by.grsu.liceum.repository.ActivityRepository;
 import by.grsu.liceum.repository.InstitutionRepository;
 import by.grsu.liceum.repository.SolvedActivityRepository;
 import by.grsu.liceum.service.SolvedActivityService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -33,6 +33,7 @@ import java.util.UUID;
 
 @Slf4j
 @Service
+@EnableCaching
 @RequiredArgsConstructor
 public class SolvedActivityServiceImpl implements SolvedActivityService {
     private final SolvedActivityRepository solvedActivityRepository;

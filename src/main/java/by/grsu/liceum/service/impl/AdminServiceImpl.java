@@ -30,6 +30,8 @@ import by.grsu.liceum.utils.Generator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -39,6 +41,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@EnableCaching
 @PropertySource("classpath:business_settings.properties")
 @RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService {
@@ -105,6 +108,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    @Cacheable(value = "admins")
     public List<AdminShortcutDto> findAllAdmins() {
         return accountRepository.findAllByRoles_Name(RoleConstant.ROLE_ADMIN.getValue()).stream()
                 .map(AdminDtoMapper::convertEntityToShortcutDto)
@@ -112,6 +116,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    @Cacheable(value = "admins")
     public List<AdminShortcutDto> findAllAdminsByCity(String cityName) {
         return accountRepository.findAllByRoles_NameAndInstitution_City(RoleConstant.ROLE_ADMIN.getValue(), cityName).stream()
                 .map(AdminDtoMapper::convertEntityToShortcutDto)

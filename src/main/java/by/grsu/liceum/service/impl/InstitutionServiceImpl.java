@@ -15,6 +15,8 @@ import by.grsu.liceum.repository.InstitutionRepository;
 import by.grsu.liceum.service.InstitutionService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,12 +25,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@EnableCaching
 @RequiredArgsConstructor
 public class InstitutionServiceImpl implements InstitutionService {
     private final InstitutionRepository institutionRepository;
     private final ImageRepository imageRepository;
 
     @Override
+    @Cacheable(value = "institutions")
     public List<InstitutionShortcutDto> findAllInstitutions() {
         return institutionRepository.findAll().stream()
                 .map(InstitutionDtoMapper::convertEntityToShortcutDto)
@@ -36,6 +40,7 @@ public class InstitutionServiceImpl implements InstitutionService {
     }
 
     @Override
+    @Cacheable(value = "institutions")
     public List<InstitutionShortcutDto> findAllInstitutionsByCity(String city) {
         return institutionRepository.findAllByCity(city).stream()
                 .map(InstitutionDtoMapper::convertEntityToShortcutDto)
@@ -43,6 +48,7 @@ public class InstitutionServiceImpl implements InstitutionService {
     }
 
     @Override
+    @Cacheable(value = "institutions")
     public List<InstitutionShortcutDto> findAllInstitutionsByNameLike(String name) {
         return institutionRepository.findAllByNameLike(name).stream()
                 .map(InstitutionDtoMapper::convertEntityToShortcutDto)

@@ -14,6 +14,8 @@ import by.grsu.liceum.repository.ActivityTypeRepository;
 import by.grsu.liceum.service.ActivityService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,12 +23,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@EnableCaching
 @RequiredArgsConstructor
 public class ActivityServiceImpl implements ActivityService {
     private final ActivityRepository activityRepository;
     private final ActivityTypeRepository activityTypeRepository;
 
     @Override
+    @Cacheable(value = "activities")
     public List<ActivityShortcutDto> findAll(UUID institutionId) {
         return activityRepository.findAllByActivityType_Institution_Id(institutionId).stream()
                 .map(ActivityDtoMapper::convertEntityToShortcutDto)
@@ -34,6 +38,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
+    @Cacheable(value = "activities")
     public ActivityFullDto findById(UUID institutionId, UUID id) {
         Activity activity = Optional.ofNullable(activityRepository.findById(id))
                 .orElseThrow(() -> new ActivityWithIdNotFoundException(id));
