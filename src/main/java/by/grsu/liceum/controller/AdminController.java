@@ -9,6 +9,7 @@ import by.grsu.liceum.service.AdminService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.simpleframework.xml.Path;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,6 +39,7 @@ public class AdminController {
     }
 
     @PutMapping("/{adminId}/images")
+    @CacheEvict("admins")
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     public AdminFullDto setImage(@PathVariable("institutionId") UUID institutionId, @PathVariable("adminId") UUID adminId, @RequestBody @Valid ImageCreationDto creationDto){
         return adminService.setImage(institutionId, adminId, creationDto);

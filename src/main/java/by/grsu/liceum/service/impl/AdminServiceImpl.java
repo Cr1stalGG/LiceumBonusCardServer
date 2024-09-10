@@ -111,7 +111,6 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    @Cacheable("admins")
     public List<AdminShortcutDto> findAllAdmins() {
         return accountRepository.findAllByRoles_Name(RoleConstant.ROLE_ADMIN.getValue()).stream()
                 .map(AdminDtoMapper::convertEntityToShortcutDto)
@@ -119,7 +118,6 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    @Cacheable("admins")
     public List<AdminShortcutDto> findAllAdminsByCity(String cityName) {
         return accountRepository.findAllByRoles_NameAndInstitution_City(RoleConstant.ROLE_ADMIN.getValue(), cityName).stream()
                 .map(AdminDtoMapper::convertEntityToShortcutDto)
@@ -138,7 +136,6 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    @CacheEvict("admins")
     @Transactional
     public AdminFullDto createAdmin(UUID institutionId) {
         Institution institution = Optional.ofNullable(institutionRepository.findById(institutionId))
@@ -196,7 +193,6 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    @CacheEvict("admins")
     public void deleteAdminById(UUID id) {
         Account admin = Optional.ofNullable(accountRepository.findById(id))
                 .orElseThrow(() -> new AccountWithIdNotFoundException(id));

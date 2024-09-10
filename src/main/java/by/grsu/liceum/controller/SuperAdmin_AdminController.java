@@ -4,6 +4,8 @@ import by.grsu.liceum.dto.account.admin.AdminFullDto;
 import by.grsu.liceum.dto.account.admin.AdminShortcutDto;
 import by.grsu.liceum.service.AdminService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,12 +25,14 @@ public class SuperAdmin_AdminController {
     private final AdminService adminService;
 
     @GetMapping
+    @Cacheable("admins")
     @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
     public List<AdminShortcutDto> findAllAdmins(){
         return adminService.findAllAdmins();
     }
 
     @GetMapping("/city/{city}")
+    @Cacheable("admins")
     @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
     public List<AdminShortcutDto> findAllAdminsByCity(@PathVariable("city") String city){
         return adminService.findAllAdminsByCity(city);
@@ -41,6 +45,7 @@ public class SuperAdmin_AdminController {
     }
 
     @PostMapping("/{institutionId}")
+    @CacheEvict("admins")
     @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
     public AdminFullDto createAdmin(@PathVariable("institutionId") UUID institutionId){
         return adminService.createAdmin(institutionId);
