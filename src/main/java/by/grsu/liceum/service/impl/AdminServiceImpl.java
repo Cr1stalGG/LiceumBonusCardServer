@@ -30,6 +30,7 @@ import by.grsu.liceum.utils.Generator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.PropertySource;
@@ -60,6 +61,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
+    @CacheEvict("accounts")
     public TransactionDto addRating(UUID institutionId, RatingDto ratingDto) {
         if(ratingDto.getValue() < this.minRatingValue || ratingDto.getValue() > this.maxRatingValue)
             throw new InvalidRatingAmountException(this.minRatingValue, this.maxRatingValue, ratingDto.getValue());
@@ -83,6 +85,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
+    @CacheEvict("accounts")
     public TransactionDto getRating(UUID institutionId, RatingDto ratingDto) {
         if(ratingDto.getValue() < this.minRatingValue || ratingDto.getValue() > this.maxRatingValue)
             throw new InvalidRatingAmountException(this.minRatingValue, this.maxRatingValue, ratingDto.getValue());
@@ -132,6 +135,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    @CacheEvict("admins")
     @Transactional
     public AdminFullDto createAdmin(UUID institutionId) {
         Institution institution = Optional.ofNullable(institutionRepository.findById(institutionId))
@@ -167,6 +171,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
+    @CacheEvict("admins")
     public AdminFullDto regeneratePassword(UUID institutionId, UUID adminId) {
         Account account = Optional.ofNullable(accountRepository.findById(adminId))
                 .orElseThrow(() -> new AccountWithIdNotFoundException(adminId));
@@ -188,6 +193,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    @CacheEvict("admins")
     public void deleteAdminById(UUID id) {
         findAdminById(id);
 
@@ -196,6 +202,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
+    @CacheEvict("admins")
     public AdminFullDto setImage(UUID institutionId, UUID accountId, ImageCreationDto creationDto) {
         Account account = Optional.ofNullable(accountRepository.findById(accountId))
                 .orElseThrow(() -> new AccountWithIdNotFoundException(accountId));

@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 @Builder
@@ -15,7 +16,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminShortcutDto {
+public class AdminShortcutDto implements Serializable {
     private UUID uuid;
     private String login;
     private InstitutionShortcutDto institution;
