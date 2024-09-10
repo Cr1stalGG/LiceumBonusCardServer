@@ -33,6 +33,7 @@ import by.grsu.liceum.utils.Generator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.PropertySource;
@@ -73,7 +74,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    @Cacheable(value = "accounts")
+    @Cacheable("accounts")
     public List<AccountShortcutDto> findAll(UUID institutionId) {
         return accountRepository.findAllByInstitution_Id(institutionId).stream()
                 .map(AccountDtoMapper::convertEntityToShortcutDto)
@@ -81,6 +82,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @CacheEvict("accounts")
     @Transactional
     public AccountCreationResponse createUserWithRole(UUID institutionId, AccountCreationDto creationDto) {
         Institution institution = Optional.ofNullable(institutionRepository.findById(institutionId))
@@ -137,6 +139,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @CacheEvict("accounts")
     @Transactional
     public AccountFullDto setImage(UUID institutionId, UUID accountId, ImageCreationDto creationDto) {
         Account account = Optional.ofNullable(accountRepository.findById(accountId))
@@ -155,6 +158,7 @@ public class AccountServiceImpl implements AccountService {
 
     //@Scheduled(cron = "${scheduler.cron.interval.accounts}") todo real
     @Scheduled(fixedDelay = 120_000L) //todo test
+    @CacheEvict("accounts")
     @Transactional
     public void accountsGradeUpOrDelete(){
         log.info("=======DELETE ALL ACCOUNTS GRADE OFF=======");
@@ -209,6 +213,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @CacheEvict("accounts")
     public void deleteById(UUID institutionId, UUID id) {
         Account account = Optional.ofNullable(accountRepository.findById(id))
                 .orElseThrow(() -> new AccountWithIdNotFoundException(id));

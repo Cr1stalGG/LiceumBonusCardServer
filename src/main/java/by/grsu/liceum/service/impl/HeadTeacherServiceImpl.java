@@ -41,7 +41,7 @@ public class HeadTeacherServiceImpl implements HeadTeacherService {
     private int maxRatingValue;
 
     @Override
-    @Cacheable(value = "groups")
+    @Cacheable("groups")
     public List<GroupShortcutDto> findAll(UUID institutionId) {
         return groupRepository.findAllByMembers_Institution_Id(institutionId).stream()
                 .map(GroupDtoMapper::convertEntityToShortcutDto)

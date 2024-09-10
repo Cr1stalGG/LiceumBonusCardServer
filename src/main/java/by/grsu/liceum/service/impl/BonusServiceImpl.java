@@ -33,6 +33,7 @@ import by.grsu.liceum.utils.Generator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.PropertySource;
@@ -59,7 +60,7 @@ public class BonusServiceImpl implements BonusService {
     private final ResponseRepository responseRepository;
 
     @Override
-    @Cacheable(value = "bonuses")
+    @Cacheable("bonuses")
     public List<BonusShortcutDto> findAllByInstitutionId(UUID institutionId) {
         return bonusRepository.findAllByInstitution_Id(institutionId).stream()
                 .filter(x -> x.getCount() > 0)
@@ -79,6 +80,7 @@ public class BonusServiceImpl implements BonusService {
     }
 
     @Override
+    @CacheEvict("bonuses")
     @Transactional
     public BonusFullDto createBonus(UUID institutionId, BonusCreationDto creationDto) {
         Institution institution = Optional.ofNullable(institutionRepository.findById(institutionId))
@@ -132,6 +134,7 @@ public class BonusServiceImpl implements BonusService {
 
     //@Scheduled(cron = "${scheduler.cron.interval.bonuses}") - real
     @Scheduled(fixedDelay = 120_000L) // test every minute
+    @CacheEvict("bonuses")
     @Transactional
     public void checkIfBonuseTimeEnded(){
         log.info("=======DELETE ALL USELESS BONUSES(time out off)=======");
@@ -189,6 +192,7 @@ public class BonusServiceImpl implements BonusService {
 
 
     @Override
+    @CacheEvict("bonuses")
     public void deleteById(UUID institutionId, UUID id) {
         Bonus bonus = Optional.ofNullable(bonusRepository.findById(id))
                 .orElseThrow(() -> new BonusWithIdNotFoundException(id));

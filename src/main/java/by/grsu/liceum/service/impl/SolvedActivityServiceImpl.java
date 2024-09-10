@@ -8,7 +8,6 @@ import by.grsu.liceum.dto.transaction.TransactionCreationDto;
 import by.grsu.liceum.entity.Account;
 import by.grsu.liceum.entity.Activity;
 import by.grsu.liceum.entity.SolvedActivity;
-import by.grsu.liceum.entity.Transaction;
 import by.grsu.liceum.exception.AccountWithIdNotFoundException;
 import by.grsu.liceum.exception.ActivityWithIdNotFoundException;
 import by.grsu.liceum.exception.CountOfMembersIsExpiredException;

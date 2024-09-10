@@ -63,7 +63,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
-    @CacheEvict("accounts")
     public TransactionDto addRating(UUID institutionId, RatingDto ratingDto) {
         if(ratingDto.getValue() < this.minRatingValue || ratingDto.getValue() > this.maxRatingValue)
             throw new InvalidRatingAmountException(this.minRatingValue, this.maxRatingValue, ratingDto.getValue());
@@ -87,7 +86,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
-    @CacheEvict("accounts")
     public TransactionDto getRating(UUID institutionId, RatingDto ratingDto) {
         if(ratingDto.getValue() < this.minRatingValue || ratingDto.getValue() > this.maxRatingValue)
             throw new InvalidRatingAmountException(this.minRatingValue, this.maxRatingValue, ratingDto.getValue());
@@ -177,7 +175,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
-    @CacheEvict("admins")
     public AdminFullDto regeneratePassword(UUID institutionId, UUID adminId) {
         Account account = Optional.ofNullable(accountRepository.findById(adminId))
                 .orElseThrow(() -> new AccountWithIdNotFoundException(adminId));
