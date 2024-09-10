@@ -4,9 +4,11 @@ import by.grsu.liceum.dto.mapper.SolvedActivityDtoMapper;
 import by.grsu.liceum.dto.solved_activity.SolveActivityRequest;
 import by.grsu.liceum.dto.solved_activity.SolvedActivityFullDto;
 import by.grsu.liceum.dto.solved_activity.SolvedActivityShortcutDto;
+import by.grsu.liceum.dto.transaction.TransactionCreationDto;
 import by.grsu.liceum.entity.Account;
 import by.grsu.liceum.entity.Activity;
 import by.grsu.liceum.entity.SolvedActivity;
+import by.grsu.liceum.entity.Transaction;
 import by.grsu.liceum.exception.AccountWithIdNotFoundException;
 import by.grsu.liceum.exception.ActivityWithIdNotFoundException;
 import by.grsu.liceum.exception.CountOfMembersIsExpiredException;
@@ -19,6 +21,8 @@ import by.grsu.liceum.repository.ActivityRepository;
 import by.grsu.liceum.repository.InstitutionRepository;
 import by.grsu.liceum.repository.SolvedActivityRepository;
 import by.grsu.liceum.service.SolvedActivityService;
+import by.grsu.liceum.service.TransactionService;
+import by.grsu.liceum.service.enums.TransactionStatusConstant;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -40,6 +44,7 @@ public class SolvedActivityServiceImpl implements SolvedActivityService {
     private final AccountRepository accountRepository;
     private final ActivityRepository activityRepository;
     private final InstitutionRepository institutionRepository;
+    private final TransactionService transactionService;
 
     @Override
     public List<SolvedActivityShortcutDto> findAllByInstitutionId(UUID institutionId) {
@@ -116,7 +121,15 @@ public class SolvedActivityServiceImpl implements SolvedActivityService {
                 .activity(activity)
                 .timeOfSolving(new Date(System.currentTimeMillis()))
                 .build();
-        //todo create transaction
+
+        TransactionCreationDto creationDto = TransactionCreationDto.builder()
+                .balance(activity.getActivityType().getCost())
+                .status(TransactionStatusConstant.TRANSACTION_STATUS_ACTIVITY_ACCRUAL_STATUS.getValue())
+                .cardId(account.getCard().getId())
+                .build();
+
+        transactionService.createTransaction(institutionId, creationDto);
+
         solvedActivityRepository.save(solvedActivity);
 
         account.getSolvedActivities().add(solvedActivity);
