@@ -59,6 +59,8 @@ services:
       - SPRING_MINIO_HOST=http://minio:9001/
       - SPRING_MINIO_USERNAME=superadmin
       - SPRING_MINIO_PASSWORD=pass123
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
 
   nginx:
     image: liceum_server/nginx:vtest7
