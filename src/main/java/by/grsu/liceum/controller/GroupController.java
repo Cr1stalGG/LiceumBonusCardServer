@@ -6,6 +6,7 @@ import by.grsu.liceum.dto.group.GroupFullDto;
 import by.grsu.liceum.service.GroupService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +31,7 @@ public class GroupController {
     }
 
     @PostMapping
+    @CacheEvict(value = "groups", key = "#institutionId", allEntries = true)
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_HEAD_TEACHER', 'ROLE_TEACHER')")
     public GroupFullDto createNewGroup(@PathVariable("institutionId")UUID institutionId, @RequestBody @Valid GroupCreationDto creationDto){
         return groupService.createNewGroup(institutionId, creationDto);
@@ -42,6 +44,7 @@ public class GroupController {
     }
 
     @DeleteMapping("/{id}")
+    @CacheEvict(value = "groups", key = "#institutionId", allEntries = true)
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_HEAD_TEACHER', 'ROLE_TEACHER')")
     void deleteGroupById(@PathVariable("institutionId")UUID institutionId, @PathVariable("id") UUID id){
         groupService.deleteGroupById(institutionId, id);

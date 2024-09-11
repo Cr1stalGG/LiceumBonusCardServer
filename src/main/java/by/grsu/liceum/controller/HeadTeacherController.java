@@ -6,6 +6,7 @@ import by.grsu.liceum.dto.transaction.TransactionDto;
 import by.grsu.liceum.service.HeadTeacherService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,7 @@ public class HeadTeacherController {
     private final HeadTeacherService headTeacherService;
 
     @GetMapping
+    @Cacheable(value = "groups", key = "#institutionId")
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_HEAD_TEACHER')")
     public List<GroupShortcutDto> findGroupsOfInstitution(@PathVariable("institutionId") UUID institutionId){
         return headTeacherService.findAll(institutionId);

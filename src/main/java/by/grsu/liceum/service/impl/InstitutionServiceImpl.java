@@ -15,8 +15,6 @@ import by.grsu.liceum.repository.InstitutionRepository;
 import by.grsu.liceum.service.InstitutionService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +31,6 @@ public class InstitutionServiceImpl implements InstitutionService {
     private final ImageRepository imageRepository;
 
     @Override
-    @Cacheable("institutions")
     public List<InstitutionShortcutDto> findAllInstitutions() {
         return institutionRepository.findAll().stream()
                 .map(InstitutionDtoMapper::convertEntityToShortcutDto)
@@ -41,7 +38,6 @@ public class InstitutionServiceImpl implements InstitutionService {
     }
 
     @Override
-    @Cacheable("institutions")
     public List<InstitutionShortcutDto> findAllInstitutionsByCity(String city) {
         return institutionRepository.findAllByCity(city).stream()
                 .map(InstitutionDtoMapper::convertEntityToShortcutDto)
@@ -49,7 +45,6 @@ public class InstitutionServiceImpl implements InstitutionService {
     }
 
     @Override
-    @Cacheable("institutions")
     public List<InstitutionShortcutDto> findAllInstitutionsByNameLike(String name) {
         return institutionRepository.findAllByNameLike(name).stream()
                 .map(InstitutionDtoMapper::convertEntityToShortcutDto)
@@ -65,7 +60,6 @@ public class InstitutionServiceImpl implements InstitutionService {
     }
 
     @Override
-    @CacheEvict("institutions")
     @Transactional
     public InstitutionFullDto createInstitution(InstitutionCreationDto creationDto) {
         Institution institution = Institution.builder()
@@ -80,13 +74,11 @@ public class InstitutionServiceImpl implements InstitutionService {
     }
 
     @Override
-    @CacheEvict("institutions")
     public InstitutionFullDto updateInstitution(UUID id, InstitutionUpdateDto updateDto) {
         return null; //todo
     }
 
     @Override
-    @CacheEvict("institutions")
     @Transactional
     public InstitutionFullDto setImage(UUID id, ImageCreationDto imageCreationDto) {
         Institution institution = Optional.ofNullable(institutionRepository.findById(id))
@@ -101,7 +93,6 @@ public class InstitutionServiceImpl implements InstitutionService {
     }
 
     @Override
-    @CacheEvict("institutions")
     public void deleteInstitutionById(UUID id) {
         findInstitutionById(id);
 

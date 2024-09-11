@@ -4,11 +4,9 @@ import by.grsu.liceum.dto.account.admin.AdminFullDto;
 import by.grsu.liceum.dto.account.admin.RatingDto;
 import by.grsu.liceum.dto.image.ImageCreationDto;
 import by.grsu.liceum.dto.transaction.TransactionDto;
-import by.grsu.liceum.service.AccountService;
 import by.grsu.liceum.service.AdminService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.simpleframework.xml.Path;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,7 +37,7 @@ public class AdminController {
     }
 
     @PutMapping("/{adminId}/images")
-    @CacheEvict("admins")
+    @CacheEvict(value = "admins", key = "#institutionId", allEntries = true)
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     public AdminFullDto setImage(@PathVariable("institutionId") UUID institutionId, @PathVariable("adminId") UUID adminId, @RequestBody @Valid ImageCreationDto creationDto){
         return adminService.setImage(institutionId, adminId, creationDto);

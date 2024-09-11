@@ -14,8 +14,6 @@ import by.grsu.liceum.repository.ActivityTypeRepository;
 import by.grsu.liceum.service.ActivityService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +29,6 @@ public class ActivityServiceImpl implements ActivityService {
     private final ActivityTypeRepository activityTypeRepository;
 
     @Override
-    @Cacheable("activities")
     public List<ActivityShortcutDto> findAll(UUID institutionId) {
         return activityRepository.findAllByActivityType_Institution_Id(institutionId).stream()
                 .map(ActivityDtoMapper::convertEntityToShortcutDto)
@@ -39,7 +36,6 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    @Cacheable("activities")
     public ActivityFullDto findById(UUID institutionId, UUID id) {
         Activity activity = Optional.ofNullable(activityRepository.findById(id))
                 .orElseThrow(() -> new ActivityWithIdNotFoundException(id));
@@ -51,7 +47,6 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    @CacheEvict("activities")
     @Transactional
     public ActivityFullDto createActivity(UUID institutionId, ActivityCreationDto creationDto) {
         Activity activity = ActivityDtoMapper.convertDtoToEntity(creationDto);
@@ -68,7 +63,6 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    @CacheEvict("activities")
     public void deleteById(UUID institutionId, UUID id) {
         Activity activity = Optional.ofNullable(activityRepository.findById(id))
                 .orElseThrow(() -> new ActivityWithIdNotFoundException(id));

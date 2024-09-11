@@ -17,7 +17,6 @@ import by.grsu.liceum.repository.GroupRepository;
 import by.grsu.liceum.service.GroupService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -42,7 +41,6 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    @CacheEvict("groups")
     @Transactional
     public GroupFullDto createNewGroup(UUID institutionId, GroupCreationDto creationDto) {
         if(creationDto == null)
@@ -109,7 +107,6 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    @CacheEvict("groups")
     public void deleteGroupById(UUID institutionId, UUID id) {
         Group group = Optional.ofNullable(groupRepository.findById(id))
             .orElseThrow(() -> new GroupWithIdNotFoundException(id));

@@ -45,7 +45,7 @@ public class SuperAdmin_AdminController {
     }
 
     @PostMapping("/{institutionId}")
-    @CacheEvict("admins")
+    @CacheEvict(value = "admins", key = "#institutionId", allEntries = true)
     @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
     public AdminFullDto createAdmin(@PathVariable("institutionId") UUID institutionId){
         return adminService.createAdmin(institutionId);
@@ -58,6 +58,7 @@ public class SuperAdmin_AdminController {
     }
 
     @DeleteMapping("/{id}")
+    @CacheEvict(value = "admins", allEntries = true)
     @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
     public void deleteById(@PathVariable("id") UUID id){
         adminService.deleteAdminById(id);

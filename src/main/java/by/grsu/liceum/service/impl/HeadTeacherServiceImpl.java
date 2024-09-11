@@ -17,7 +17,6 @@ import by.grsu.liceum.service.enums.TransactionStatusConstant;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
@@ -41,7 +40,6 @@ public class HeadTeacherServiceImpl implements HeadTeacherService {
     private int maxRatingValue;
 
     @Override
-    @Cacheable("groups")
     public List<GroupShortcutDto> findAll(UUID institutionId) {
         return groupRepository.findAllByMembers_Institution_Id(institutionId).stream()
                 .map(GroupDtoMapper::convertEntityToShortcutDto)

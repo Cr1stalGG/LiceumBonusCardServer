@@ -9,8 +9,6 @@ import by.grsu.liceum.repository.CardRepository;
 import by.grsu.liceum.service.CardService;
 import by.grsu.liceum.utils.Generator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +35,6 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    @Cacheable("cards")
     public List<CardDto> findAll(UUID institutionId) {
         return cardRepository.findAllByAccount_Institution_Id(institutionId).stream()
                 .map(CardDtoMapper::convertEntityToDto)
@@ -45,7 +42,6 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    @CacheEvict("cards")
     public Card generateCard() {
         Card card = Card.builder()
                 .number(Generator.generateCardNumber())
@@ -57,7 +53,6 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    @CacheEvict("cards")
     public void deleteById(UUID institutionId, UUID id) {
         Card card = Optional.ofNullable(cardRepository.findById(id))
                 .orElseThrow(() -> new CardWithIdNotFoundException(id));
