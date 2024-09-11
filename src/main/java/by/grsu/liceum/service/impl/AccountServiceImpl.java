@@ -155,6 +155,7 @@ public class AccountServiceImpl implements AccountService {
 
     //@Scheduled(cron = "${scheduler.cron.interval.accounts}") todo real
     @Scheduled(fixedDelay = 120_000L) //todo test
+    @CacheEvict(value = "accounts", allEntries = true)
     @Transactional
     public void accountsGradeUpOrDelete(){
         log.info("=======DELETE ALL ACCOUNTS GRADE OFF=======");
