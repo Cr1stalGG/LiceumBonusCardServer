@@ -26,11 +26,7 @@ services:
 
   redis:
     image: 'redis:latest'
-    container_name: redis
-#    environment:
-#      - REDIS_PASSWORD=my_redis_password
-#      - REDIS_USER=my_user
-#      - REDIS_USER_PASSWORD=my_user_password
+    container_name: 'redis'
     ports:
       - "6380:6379"
     volumes:
@@ -64,8 +60,9 @@ services:
 
   nginx:
     image: liceum_server/nginx:vtest7
+    container_name: 'nginx'
     build:
-      dockerfile: nginx/Dockerfile
+      dockerfile: env/nginx/Dockerfile
       context: .
     ports:
       - '8080:8080'
@@ -75,19 +72,19 @@ services:
 
   prometheus:
     image: prom/prometheus
-    container_name: prometheus
+    container_name: 'prometheus'
     volumes:
-      - ./env/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./env/metrics/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - '9090:9090'
 
   grafana:
     image: grafana/grafana
-    container_name: grafana
+    container_name: 'grafana'
     ports:
       - '3000:3000'
     env_file:
-      - ./env/grafana.env
+      - env/metrics/grafana.env
     volumes:
       - local_grafana_data:/var/lib/grafana/data
 
