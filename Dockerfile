@@ -5,6 +5,7 @@ LABEL Maintaner = "Aliaksandr Savitski"
 COPY pom.xml .
 COPY src src
 
+RUN mvn dependency:purge-local-repository
 RUN mvn clean package -DskipTests #delete skipping tests in runtime
 
 FROM openjdk:20
