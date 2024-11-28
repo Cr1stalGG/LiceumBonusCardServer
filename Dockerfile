@@ -5,7 +5,7 @@ LABEL Maintaner = "Aliaksandr Savitski"
 COPY pom.xml .
 COPY src src
 
-RUN mvn clean package -DskipTests #delete skipping tests in runtime
+RUN mvn package -DskipTests #delete skipping tests in runtime
 
 FROM openjdk:17
 
