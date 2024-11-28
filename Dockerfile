@@ -5,10 +5,9 @@ LABEL Maintaner = "Aliaksandr Savitski"
 COPY pom.xml .
 COPY src src
 
-RUN mvn dependency:purge-local-repository
 RUN mvn clean package -DskipTests #delete skipping tests in runtime
 
-FROM openjdk:20
+FROM openjdk:17
 
 COPY --from=build target/LiceumBonusCardServer-0.0.1-SNAPSHOT.jar ./backend.jar
 
